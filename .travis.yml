@@ -19,9 +19,9 @@ addons:
       project:
         name: "timcogames/Sway.Framework"
       notification_email: victor-timoshin@hotmail.com
-      build_command_prepend: "cov-configure --comptype gcc --compiler gcc-5"
-      build_command: "make VERBOSE=1"
-      branch_pattern: coverity_scan
+      build_command_prepend: "./configure"
+      build_command: "make"
+      branch_pattern: master
 
 before_install:
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
