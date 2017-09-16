@@ -29,7 +29,7 @@ install:
 
 script:
   - make
-  - ./src/tests
+  - ./tests
   - sudo bash ./codecov.sh
 
 after_success:
