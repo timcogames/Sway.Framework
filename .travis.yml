@@ -4,6 +4,10 @@ language: cpp
 compiler: gcc
 dist: trusty
 
+env:
+  global:
+   - secure: "AgHX8cRVKqLXZS7HKK4W0C0MnVu3eUioNlbMvvvpDobJR5st0nxNSQz7dLN0EcLbbvJlAFGQl1rg9zo+Z4DvrHDX5sn3We8UPt4EMC1qmVyPvpMaai0cQ+lDpIj0VsumqsdfWE2z+ALdkQ0irNrk7Bavz7kKgnhDDIaZFm93QuXwE0zYhg4PABe/XdFt6ZGVwXEUUXUr05fDhNbAF34JFhejt9+JxKlrDoY5EKlERFtFHPVtEanm/m8MCkptT2ozwilqAJ9mYSlUtyMzVVpcvlIl7SPVfz9JW85hPGDonEZQlTxIvdoDFlqw1bxlqCSy4q4AJVpHFI/0KGk0F1eis1cOXkMstOAoyPsREekBATNTikvm7gglnFuWSP0vkvRqnnmk6HoxQcgJ43079ADFx9MHFWCljhJ6GtJVW5Mysbsj57ipaRAQyADHC2Ckk6o22SDjF4GhncsoJ4qHYJZbvig7b5nsyb/kQODKagi075oG2ZPjy6TvC7iAY6c4YHkh92DZqZ9myRC5d8tiiNsssQXVBq5jC5MySzfoeOOJhCJkPXogvM6bWTCjxDSAjCMeCa3hXYJmAZ1wo3vFFzSYybT3h17gC8pJHxZoIb4XxPybdHk1sc0dvEWhjSQqIicZ+Cw7514x5Qh/SsBVhk3YYOjRu8Qmbu8fL+37bMJwYHA="
+
 branches:
   only:
   - master
@@ -22,6 +26,7 @@ addons:
 before_install:
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
   - sudo apt-get update -qq
+  - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 
 install: 
   - sudo apt-get install -qq g++-5
