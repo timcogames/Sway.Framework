@@ -13,7 +13,7 @@ addons:
     packages: libboost-all-dev
     coverity_scan:
       project:
-        name: "Sway.Framework"
+        name: "timcogames/Sway.Framework"
       notification_email: victor-timoshin@hotmail.com
       build_command_prepend: "cov-configure --comptype gcc --compiler gcc-5"
       build_command: "make VERBOSE=1"
