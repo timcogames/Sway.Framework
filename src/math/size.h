@@ -7,6 +7,8 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(math)
 
+template<typename T> class TRect;
+
 template <typename T>
 class TSize
 {
@@ -49,16 +51,21 @@ class TSize
 	/*!
 	 * \brief Получает значение ширины.
 	 *
-	 * \sa getH()
+	 * \sa TSize::getH()
 	 */
 	T getW() const { return _w; }
 
 	/*!
 	 * \brief Получает значение высоты.
 	 *
-	 * \sa getW()
+	 * \sa TSize::getW()
 	 */
 	T getH() const { return _h; }
+
+	TRect<T> toRect() const
+	{
+		return TRect<T>((T)0, (T)0, _w, _h);
+	}
 
   private:
 	T _w, _h;
