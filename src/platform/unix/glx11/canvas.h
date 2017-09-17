@@ -4,6 +4,8 @@
 #include "glx11prereqs.h"
 #include "windowconfig.h"
 
+#include "rendercontext.h"
+
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
 
@@ -95,7 +97,7 @@ class Canvas
 	 * \param sizeHints Минимальный/максимальный размер окна.
 	 * \param resizable Возможность изменения размера.
 	 */
-	void setSizeHints(const math::TSize<s32> &size, const math::TSizeHints<s32> &sizeHints, bool resizable);
+	void setSizeHints(math::TSize<s32> size, math::TSizeHints<s32> sizeHints, bool resizable);
 
 	/*!
 	 * \brief Показывает окно.
@@ -130,6 +132,8 @@ class Canvas
 	::Display *_display; /*!< Идентификатор сервера. */
 	::Window _root;      /*!< Идентификатор корневого окна. */
 	::Window _window;    /*!< Идентификатор окна. */
+
+	RenderContext *_context;
 };
 
 NAMESPACE_END(glx11)

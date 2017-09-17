@@ -9,7 +9,7 @@ NAMESPACE_BEGIN(glx11)
  * Выполняет инициализацию нового экземпляра класса.
  */
 Canvas::Canvas()
-	: _display(NULL), _window(None)
+	: _display(NULL), _window(None), _context(NULL)
 {
 	/* Открывает соединение с сервером. */
 	_display = XOpenDisplay(NULL);
@@ -35,26 +35,29 @@ Canvas::~Canvas()
  */
 void Canvas::create(const WindowConfig &config)
 {
-	/* Получаем предварительные сведения. */
-	int screen = DefaultScreen(_display);
-	int depth = DefaultDepth(_display, screen);
-	Colormap colormap = DefaultColormap(_display, screen);
-	Visual *visual = DefaultVisual(_display, screen);
+	_context = new RenderContext();
+	XVisualInfo *visualInfo = _context->chooseBestFBConfig(_display);
 
-	u64 windowMask = CWBackPixel | CWColormap | CWEventMask;
+	_root = RootWindow(_display, visualInfo->screen);
+	_context->createContext(_display);
+	
+	Colormap colormap = XCreateColormap(_display, _root, visualInfo->visual, AllocNone);
+	u64 windowMask = CWBorderPixel | CWColormap | CWEventMask;
 
 	XSetWindowAttributes attrs;
 	attrs.colormap = colormap;
-	attrs.background_pixel = BlackPixel(_display, screen);
+	attrs.background_pixmap = None;
+	attrs.border_pixel = 0;
 	attrs.event_mask = ExposureMask | StructureNotifyMask;
 
-	_root = RootWindow(_display, screen);
-	_window = XCreateWindow(_display, _root, 0, 0, config.size.getW(), config.size.getH(), 0, depth, InputOutput, visual, windowMask, &attrs);
+	_window = XCreateWindow(_display, _root, 0, 0, config.size.getW(), config.size.getH(), 
+		0, visualInfo->depth, InputOutput, visualInfo->visual, windowMask, &attrs);
 
 	if (_window == None)
 		throw std::invalid_argument("Failed create window.");
 
 	XFreeColormap(_display, colormap);
+	XFree(visualInfo);
 
 	setTitle(config.title);
 	setSizeHints(config.size, config.sizeHints, config.resizable);
@@ -65,6 +68,8 @@ void Canvas::create(const WindowConfig &config)
  */
 void Canvas::destroy()
 {
+	_context->destroyContext(_display);
+
 	if (_window)
 	{
 		XDestroyWindow(_display, _window);
@@ -84,6 +89,29 @@ void Canvas::processEvents()
 
 	while (_waitEvent(atomDeleteWindow, true))
 	{
+		if (NOT _context->makeCurrent(_display, _window))
+		{
+		}
+		
+		glClearColor(0, 0.5, 1, 1);
+		glClear(GL_COLOR_BUFFER_BIT);
+	
+		glBegin(GL_TRIANGLES);
+			glColor3f(1.0f, 0.0f, 0.0f);
+			glVertex3f(0.0f, -1.0f, 0.0f);
+
+			glColor3f(0.0f, 1.0f, 0.0f);
+			glVertex3f(-1.0f, 1.0f, 0.0f);
+			
+			glColor3f(0.0f, 0.0f, 1.0f);
+			glVertex3f(1.0f, 1.0f, 0.0f);
+		glEnd();
+	
+		_context->swapBuffers(_display, _window);
+		
+		if (NOT _context->releaseCurrent(_display))
+		{
+		}
 	}
 
 	hide();
@@ -205,7 +233,7 @@ void Canvas::getSize(s32 *w, s32 *h)
  * \param sizeHints Минимальный/максимальный размер окна.
  * \param resizable Возможность изменения размера.
  */
-void Canvas::setSizeHints(const math::TSize<s32> &size, const math::TSizeHints<s32> &sizeHints, bool resizable)
+void Canvas::setSizeHints(math::TSize<s32> size, math::TSizeHints<s32> sizeHints, bool resizable)
 {
 	XSizeHints *hints = XAllocSizeHints();
 
