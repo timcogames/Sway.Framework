@@ -42,7 +42,8 @@ class RenderContext
 	 *
 	 * \param display Идентификатор сервера.
 	 * \param window Идентификатор окна.
-	 * \sa RenderContext::releaseCurrent(Display *)
+	 *
+	 * \sa RenderContext::releaseCurrent(::Display *)
 	 */
 	bool makeCurrent(::Display *display, ::Window window);
 	
@@ -50,7 +51,8 @@ class RenderContext
 	 * \brief Освобождаем контекст.
 	 *
 	 * \param display Идентификатор сервера.
-	 * \sa RenderContext::makeCurrent(Display *, Window)
+	 *
+	 * \sa RenderContext::makeCurrent(::Display *, ::Window)
 	 */
 	bool releaseCurrent(::Display *display);
 

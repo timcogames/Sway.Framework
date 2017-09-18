@@ -61,6 +61,8 @@ void Canvas::create(const WindowConfig &config)
 
 	setTitle(config.title);
 	setSizeHints(config.size, config.sizeHints, config.resizable);
+
+	_viewport = new gl::Viewport();
 }
 
 /*!
@@ -68,7 +70,10 @@ void Canvas::create(const WindowConfig &config)
  */
 void Canvas::destroy()
 {
+	SAFE_DELETE(_viewport);
+
 	_context->destroyContext(_display);
+	SAFE_DELETE(_context);
 
 	if (_window)
 	{
@@ -122,7 +127,14 @@ bool Canvas::_waitEvent(Atom atomDeleteWindow, bool keepgoing)
 	XEvent event;
 	XNextEvent(_display, &event);
 
-	if (event.type == ClientMessage)
+	if (event.type == Expose)
+	{
+		XWindowAttributes attrs;
+		XGetWindowAttributes(_display, _window, &attrs);
+
+		_viewport->set(attrs.width, attrs.height);
+	}
+	else if (event.type == ClientMessage)
 	{
 		if (event.xclient.format == 32 && event.xclient.data.l[0] == (signed)atomDeleteWindow)
 			keepgoing = false;

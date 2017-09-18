@@ -5,6 +5,7 @@
 #include "windowconfig.h"
 
 #include "rendercontext.h"
+#include "../../../gl/viewport.h"
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
@@ -134,6 +135,7 @@ class Canvas
 	::Window _window;    /*!< Идентификатор окна. */
 
 	RenderContext *_context;
+	gl::Viewport *_viewport;
 };
 
 NAMESPACE_END(glx11)

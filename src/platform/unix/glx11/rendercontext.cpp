@@ -64,7 +64,8 @@ void RenderContext::destroyContext(::Display *display)
  *
  * \param display Идентификатор сервера.
  * \param window Идентификатор окна.
- * \sa RenderContext::releaseCurrent(Display *)
+ *
+ * \sa RenderContext::releaseCurrent(::Display *)
  */
 bool RenderContext::makeCurrent(::Display *display, ::Window window)
 {
@@ -78,7 +79,8 @@ bool RenderContext::makeCurrent(::Display *display, ::Window window)
  * \brief Освобождаем контекст.
  *
  * \param display Идентификатор сервера.
- * \sa RenderContext::makeCurrent(Display *, Window)
+ *
+ * \sa RenderContext::makeCurrent(::Display *, ::Window)
  */
 bool RenderContext::releaseCurrent(::Display *display)
 {
