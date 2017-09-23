@@ -38,6 +38,12 @@ class Mouse : public foundation::Object
 	void hide(bool hide);
 
   private:
+	/*!
+	 * \fn void Mouse::_initialize()
+	 * \brief Инициализация устройства.
+	 *
+	 * \note Внутренний метод, вызывается в конструкторе.
+	 */
 	void _initialize();
 
   private:

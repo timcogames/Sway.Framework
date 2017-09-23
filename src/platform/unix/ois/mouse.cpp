@@ -37,6 +37,12 @@ Mouse::~Mouse()
     static_cast<InputManager *>(getContext())->_setMouseUsed(false);
 }
 
+/*!
+ * \fn void Mouse::_initialize()
+ * \brief Инициализация устройства.
+ *
+ * \note Внутренний метод, вызывается в конструкторе.
+ */
 void Mouse::_initialize()
 {
     if (_display)

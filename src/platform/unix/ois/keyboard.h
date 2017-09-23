@@ -36,6 +36,12 @@ class Keyboard : public foundation::Object
 	void capture();
 
   private:
+	/*!
+	 * \fn void Keyboard::_initialize()
+	 * \brief Инициализация устройства.
+	 *
+	 * \note Внутренний метод, вызывается в конструкторе.
+	 */
 	void _initialize();
 
   private:

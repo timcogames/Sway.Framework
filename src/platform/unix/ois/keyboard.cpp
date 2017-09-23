@@ -37,6 +37,12 @@ Keyboard::~Keyboard()
 	static_cast<InputManager *>(getContext())->_setKeyboardUsed(false);
 }
 
+/*!
+ * \fn void Keyboard::_initialize()
+ * \brief Инициализация устройства.
+ *
+ * \note Внутренний метод, вызывается в конструкторе.
+ */
 void Keyboard::_initialize()
 {
 	if (_display)

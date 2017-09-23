@@ -35,17 +35,19 @@ class InputManager : public foundation::Context
 	 */
 	virtual ~InputManager();
 
+	/*!
+	 * \brief Создает объект устройства ввода.
+	 *
+	 * \param type Тип устройства.
+	 */
 	foundation::Object *createInputObject(DeviceTypes type);
 
 	/*!
-	 * \fn void InputManager::_initialize(ParamList &)
 	 * \brief Инициализация.
 	 *
 	 * \param params Список параметров.
-	 *
-	 * \note Внутренний метод.
 	 */
-	void _initialize(ParamList &params);
+	void initialize(ParamList &params);
 
 	::Window _getWindow() { return _window; }
 
@@ -56,7 +58,7 @@ class InputManager : public foundation::Context
   private:
 	::Window _window;
 	bool _keyboardUsed; /*!< Используется ли клавиатура. */
-	bool _mouseUsed;
+	bool _mouseUsed; /*!< Используется ли мышка. */
 };
 
 NAMESPACE_END(ois)

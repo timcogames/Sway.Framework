@@ -24,8 +24,14 @@ InputManager::InputManager()
  */
 InputManager::~InputManager()
 {
+	// Empty
 }
 
+/*!
+ * \brief Создает объект устройства ввода.
+ *
+ * \param type Тип устройства.
+ */
 foundation::Object *InputManager::createInputObject(DeviceTypes type)
 {
 	foundation::Object *inputObject = NULL;
@@ -49,14 +55,11 @@ foundation::Object *InputManager::createInputObject(DeviceTypes type)
 }
 
 /*!
- * \fn void InputManager::_initialize(ParamList &)
  * \brief Инициализация.
  *
  * \param params Список параметров.
- *
- * \note Внутренний метод.
  */
-void InputManager::_initialize(ParamList &params)
+void InputManager::initialize(ParamList &params)
 {
 	ParamList::iterator iter = params.find("WINDOW");
 	if (iter == params.end())

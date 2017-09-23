@@ -5,8 +5,8 @@ languages:
     
     production:
       exclude:
-        - /tests/.*
+        - /src/tests/.*
 
     test:
       include:
-        - /tests/.*
+        - /src/tests/.*
