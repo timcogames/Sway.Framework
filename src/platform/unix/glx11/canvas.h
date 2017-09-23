@@ -134,6 +134,8 @@ class Canvas
 	::Window _root;      /*!< Идентификатор корневого окна. */
 	::Window _window;    /*!< Идентификатор окна. */
 
+	ois::InputManager *_inputManager;
+	ois::Keyboard *_keyboard;
 	RenderContext *_context;
 	gl::Viewport *_viewport;
 };

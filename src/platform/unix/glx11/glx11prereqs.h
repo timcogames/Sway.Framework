@@ -8,6 +8,10 @@
 #include "../../../math/size.h"
 #include "../../../math/sizehints.h"
 
+#include "../ois/inputmanager.h"
+#include "../ois/keyboard.h"
+#include "../ois/mouse.h"
+
 #include <stdexcept> // std::runtime_error
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>

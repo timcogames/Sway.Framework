@@ -1,4 +1,5 @@
 #include "canvas.h"
+#include <sstream> // std::ostringstream
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
@@ -63,6 +64,16 @@ void Canvas::create(const WindowConfig &config)
 	setSizeHints(config.size, config.sizeHints, config.resizable);
 
 	_viewport = new gl::Viewport();
+
+	std::ostringstream wnd;
+	wnd << this->getId();
+
+	ois::ParamList params;
+	params.insert(make_pair(std::string("WINDOW"), wnd.str()));
+	
+	_inputManager = new ois::InputManager();
+	_inputManager->_initialize(params);
+	_keyboard = static_cast<ois::Keyboard*>(_inputManager->createInputObject(ois::kDeviceType_Keyboard));
 }
 
 /*!
@@ -126,6 +137,8 @@ bool Canvas::_waitEvent(Atom atomDeleteWindow, bool keepgoing)
 {
 	XEvent event;
 	XNextEvent(_display, &event);
+
+	_keyboard->capture();
 
 	if (event.type == Expose)
 	{

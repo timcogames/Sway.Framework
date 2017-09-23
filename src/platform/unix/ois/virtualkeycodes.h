@@ -1,0 +1,122 @@
+#ifndef SWAY_PLATFORM_UNIX_OIS_VIRTUALKEYCODES_H
+#define SWAY_PLATFORM_UNIX_OIS_VIRTUALKEYCODES_H
+
+#include "../../../defines.h"
+
+NAMESPACE_BEGIN(sway)
+NAMESPACE_BEGIN(ois)
+
+enum VirtualKeyCodes {
+	kVirtualKeyCode_Unknown = 0,
+
+	kVirtualKeyCode_0 = 48,
+	kVirtualKeyCode_1 = 49,
+	kVirtualKeyCode_2 = 50,
+	kVirtualKeyCode_3 = 51,
+	kVirtualKeyCode_4 = 52,
+	kVirtualKeyCode_5 = 53,
+	kVirtualKeyCode_6 = 54,
+	kVirtualKeyCode_7 = 55,
+	kVirtualKeyCode_8 = 56,
+	kVirtualKeyCode_9 = 57,
+
+	kVirtualKeyCode_A = 65,
+	kVirtualKeyCode_B = 66,
+	kVirtualKeyCode_C = 67,
+	kVirtualKeyCode_D = 68,
+	kVirtualKeyCode_E = 69,
+	kVirtualKeyCode_F = 70,
+	kVirtualKeyCode_G = 71,
+	kVirtualKeyCode_H = 72,
+	kVirtualKeyCode_I = 73,
+	kVirtualKeyCode_J = 74,
+	kVirtualKeyCode_K = 75,
+	kVirtualKeyCode_L = 76,
+	kVirtualKeyCode_M = 77,
+	kVirtualKeyCode_N = 78,
+	kVirtualKeyCode_O = 79,
+	kVirtualKeyCode_P = 80,
+	kVirtualKeyCode_Q = 81,
+	kVirtualKeyCode_R = 82,
+	kVirtualKeyCode_S = 83,
+	kVirtualKeyCode_T = 84,
+	kVirtualKeyCode_U = 85,
+	kVirtualKeyCode_V = 86,
+	kVirtualKeyCode_W = 87,
+	kVirtualKeyCode_X = 88,
+	kVirtualKeyCode_Y = 89,
+	kVirtualKeyCode_Z = 90,
+
+	kVirtualKeyCode_F1 = 112,
+	kVirtualKeyCode_F2 = 113,
+	kVirtualKeyCode_F3 = 114,
+	kVirtualKeyCode_F4 = 115,
+	kVirtualKeyCode_F5 = 116,
+	kVirtualKeyCode_F6 = 117,
+	kVirtualKeyCode_F7 = 118,
+	kVirtualKeyCode_F8 = 119,
+	kVirtualKeyCode_F9 = 120,
+	kVirtualKeyCode_F10 = 121,
+	kVirtualKeyCode_F11 = 122,
+	kVirtualKeyCode_F12 = 123,
+
+	kVirtualKeyCode_Backspace = 8,
+	kVirtualKeyCode_Tab = 9,
+	kVirtualKeyCode_Enter = 13,
+	kVirtualKeyCode_CapsLock = 20,
+	kVirtualKeyCode_Escape = 27,
+	kVirtualKeyCode_Space = 32,
+	kVirtualKeyCode_App = 93,
+	kVirtualKeyCode_Semicolon = 186,
+	kVirtualKeyCode_Add = 187,
+	kVirtualKeyCode_Comma = 188,
+	kVirtualKeyCode_Subtract = 189,
+	kVirtualKeyCode_Period = 190,
+	kVirtualKeyCode_Slash = 191,
+	kVirtualKeyCode_Tilde = 192,
+	kVirtualKeyCode_LeftBracket = 219,
+	kVirtualKeyCode_Backslash = 220,
+	kVirtualKeyCode_RightBracket = 221,
+	kVirtualKeyCode_Apostrophe = 222,
+
+	kVirtualKeyCode_Shift = 16,
+	kVirtualKeyCode_Ctrl = 17,
+	kVirtualKeyCode_LeftWin = 91,
+	kVirtualKeyCode_RightWin = 92,
+	kVirtualKeyCode_LeftAlt = 164,
+	kVirtualKeyCode_RightAlt = 165,
+
+	kVirtualKeyCode_Insert = 45,
+	kVirtualKeyCode_Delete = 46,
+	kVirtualKeyCode_Home = 36,
+	kVirtualKeyCode_End = 35,
+	kVirtualKeyCode_PageUp = 33,
+	kVirtualKeyCode_PageDown = 34,
+
+	kVirtualKeyCode_Up = 38,
+	kVirtualKeyCode_Down = 40,
+	kVirtualKeyCode_Right = 39,
+	kVirtualKeyCode_Left = 37,
+
+	kVirtualKeyCode_NumLock = 144,
+	kVirtualKeyCode_NumPad_Divide = 111,
+	kVirtualKeyCode_NumPad_Multiply = 106,
+	kVirtualKeyCode_NumPad_Subtract = 109,
+	kVirtualKeyCode_NumPad_Add = 107,
+	kVirtualKeyCode_NumPad_Decimal = 110,
+	kVirtualKeyCode_NumPad_0 = 96,
+	kVirtualKeyCode_NumPad_1 = 97,
+	kVirtualKeyCode_NumPad_2 = 98,
+	kVirtualKeyCode_NumPad_3 = 99,
+	kVirtualKeyCode_NumPad_4 = 100,
+	kVirtualKeyCode_NumPad_5 = 101,
+	kVirtualKeyCode_NumPad_6 = 102,
+	kVirtualKeyCode_NumPad_7 = 103,
+	kVirtualKeyCode_NumPad_8 = 104,
+	kVirtualKeyCode_NumPad_9 = 105,
+};
+
+NAMESPACE_END(ois)
+NAMESPACE_END(sway)
+
+#endif // SWAY_PLATFORM_UNIX_OIS_VIRTUALKEYCODES_H
