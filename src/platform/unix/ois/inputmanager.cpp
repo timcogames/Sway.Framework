@@ -70,5 +70,34 @@ void InputManager::initialize(ParamList &params)
 	_window = strtoull(iter->second.c_str(), 0, 10);
 }
 
+/*!
+ * \brief Устанавливает логическое значение использования клавиатуры.
+ *
+ * \param used Обрабатывать события от клавиатуры?
+ *
+ * \note Внутренний метод.
+ */
+void InputManager::_setKeyboardUsed(bool used)
+{
+	_keyboardUsed = used;
+}
+
+/*!
+ * \brief Устанавливает логическое значение использования мышки.
+ *
+ * \param used Обрабатывать события от мышки?
+ *
+ * \note Внутренний метод.
+ */
+void InputManager::_setMouseUsed(bool used)
+{
+	_mouseUsed = used;
+}
+
+::Window InputManager::_getWindow()
+{
+	return _window;
+}
+
 NAMESPACE_END(ois)
 NAMESPACE_END(sway)

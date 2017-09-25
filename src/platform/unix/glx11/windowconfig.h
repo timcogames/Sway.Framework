@@ -9,6 +9,7 @@ NAMESPACE_BEGIN(glx11)
 struct WindowConfig
 {
 	lpcstr title;                    /*!< Заголовок окна. */
+	math::TPoint<s32> position;      /*!< Позиция окна. */
 	math::TSize<s32> size;           /*!< Размер окна. */
 	math::TSizeHints<s32> sizeHints; /*!< Минимальный/максимальный размер окна. */
 	bool resizable;                  /*!< Возможность изменения размера. */

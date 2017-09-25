@@ -49,14 +49,30 @@ class InputManager : public foundation::Context
 	 */
 	void initialize(ParamList &params);
 
-	::Window _getWindow() { return _window; }
+	/*!
+	 * \brief Устанавливает логическое значение использования клавиатуры.
+	 *
+	 * \param used Обрабатывать события от клавиатуры?
+	 *
+	 * \note Внутренний метод.
+	 */
+	void _setKeyboardUsed(bool used);
 
-	void _setKeyboardUsed(bool used) { _keyboardUsed = used; }
+	/*!
+	 * \brief Устанавливает логическое значение использования мышки.
+	 *
+	 * \param used Обрабатывать события от мышки?
+	 *
+	 * \note Внутренний метод.
+	 */
+	void _setMouseUsed(bool used);
 
-	void _setMouseUsed(bool used) { _mouseUsed = used; }
+	::Window _getWindow();
 
   private:
 	::Window _window;
+
+  public:
 	bool _keyboardUsed; /*!< Используется ли клавиатура. */
 	bool _mouseUsed; /*!< Используется ли мышка. */
 };

@@ -4,6 +4,8 @@
 #include "glx11prereqs.h"
 
 #include "windowconfig.h"
+#include "windowevents.h"
+#include "windowlistener.h"
 #include "canvas.h"
 
 #endif // SWAY_PLATFORM_UNIX_GLX11_GLX11_H

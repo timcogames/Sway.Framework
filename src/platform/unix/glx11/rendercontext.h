@@ -2,11 +2,12 @@
 #define SWAY_PLATFORM_UNIX_GLX11_RENDERCONTEXT_H
 
 #include "glx11prereqs.h"
+#include <boost/noncopyable.hpp> // boost::noncopyable
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
 
-class RenderContext
+class RenderContext : private boost::noncopyable
 {
   public:
 	/*!

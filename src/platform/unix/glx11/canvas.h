@@ -3,15 +3,26 @@
 
 #include "glx11prereqs.h"
 #include "windowconfig.h"
+#include "windowinternaldata.h"
+#include "windowlistener.h"
 
 #include "rendercontext.h"
-#include "../../../gl/viewport.h"
+#include <boost/function.hpp> // boost::function
+#include <boost/bind.hpp> // boost::bind
+#include <boost/noncopyable.hpp> // boost::noncopyable
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
 
-class Canvas
+class Canvas : private boost::noncopyable
 {
+  public:
+	boost::function<void(const WindowEventCreate &)> onCreate;
+	boost::function<void(const WindowEventResize &)> onResize;
+	boost::function<void(const WindowEventPaint &)> onPaint;
+	boost::function<void(const WindowEventGeneric &)> onGainFocus;
+	boost::function<void(const WindowEventGeneric &)> onLostFocus;
+
   public:
 	/*!
 	 * \brief Конструктор класса.
@@ -30,19 +41,21 @@ class Canvas
 	/*!
 	 * \brief Создает окно.
 	 *
-	 * \param config Конфигурация окна.
+	 * \param initialConfig Конфигурация окна.
 	 */
-	void create(const WindowConfig &config);
+	void create(const WindowConfig &initialConfig);
 
 	/*!
 	 * \brief Уничтожает окно.
 	 */
 	void destroy();
 
+	void connect(WindowListener *listener);
+
 	/*!
 	 * \brief Обрабатывает события.
 	 */
-	void processEvents();
+	bool eventLoop(ois::InputManager *inputManager, bool keepgoing);
 
 	/*!
 	 * \brief Устанавливает заголовок окна.
@@ -122,22 +135,45 @@ class Canvas
 	bool visible() const;
 
 	/*!
+	 * \brief Переключает в полноэкранный/оконный режим.
+	 *
+	 * \param fullscreen Включить полноэкранный режим?
+	 */
+	void toggleFullscreen(bool fullscreen);
+
+	/*!
 	 * \brief Получает уникальный идентификатор окна.
 	 */
-	u32 getId() const;
+	u32 getWindowId() const;
+
+  public:
+	void makeCurrent()
+	{
+		if (NOT _renderContext->makeCurrent(_internalData.display, _internalData.window))
+		{
+		}
+	}
+
+	void swapBuffers()
+	{
+		_renderContext->swapBuffers(_internalData.display, _internalData.window);
+	}
+
+	void releaseCurrent()
+	{
+		if (NOT _renderContext->releaseCurrent(_internalData.display))
+		{
+		}
+	}
 
   private:
-	bool _waitEvent(Atom atomDeleteWindow, bool keepgoing);
+	WindowInternalData _internalData;
 
-  private:
-	::Display *_display; /*!< Идентификатор сервера. */
-	::Window _root;      /*!< Идентификатор корневого окна. */
-	::Window _window;    /*!< Идентификатор окна. */
+	Atom _wmState;
+	Atom _wmStateFullscreen;
+	Atom _wmDeleteWindow;
 
-	ois::InputManager *_inputManager;
-	ois::Keyboard *_keyboard;
-	RenderContext *_context;
-	gl::Viewport *_viewport;
+	RenderContext *_renderContext;
 };
 
 NAMESPACE_END(glx11)

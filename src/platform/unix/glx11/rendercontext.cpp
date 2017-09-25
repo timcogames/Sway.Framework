@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
+#include <cassert>
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
@@ -13,7 +14,7 @@ NAMESPACE_BEGIN(glx11)
  * Выполняет инициализацию нового экземпляра класса.
  */
 RenderContext::RenderContext()
-	: _context(NULL), _fbconfig(NULL)
+	: _context(nullptr), _fbconfig(nullptr)
 {
 	// Empty
 }
@@ -35,7 +36,11 @@ RenderContext::~RenderContext()
  */
 void RenderContext::createContext(::Display *display)
 {
+	assert(display);
+	
 	_context = glXCreateNewContext(display, _fbconfig, GLX_RGBA_TYPE, 0, True);
+	if (NOT _context)
+		throw std::runtime_error("Cannot create context.");
 
 	if (NOT glXIsDirect(display, _context))
 		printf("Indirect GLX rendering context obtained.\n");
@@ -48,6 +53,8 @@ void RenderContext::createContext(::Display *display)
  */
 void RenderContext::destroyContext(::Display *display)
 {
+	assert(display);
+
 	if (_context)
 	{
 		if (NOT releaseCurrent(display))
@@ -69,6 +76,9 @@ void RenderContext::destroyContext(::Display *display)
  */
 bool RenderContext::makeCurrent(::Display *display, ::Window window)
 {
+	assert(display);
+	assert(window);
+
 	if (glXGetCurrentContext() != _context)
 		return glXMakeCurrent(display, window, _context);
 
@@ -84,7 +94,9 @@ bool RenderContext::makeCurrent(::Display *display, ::Window window)
  */
 bool RenderContext::releaseCurrent(::Display *display)
 {
-	return glXMakeCurrent(display, None, NULL);
+	assert(display);
+
+	return glXMakeCurrent(display, None, nullptr);
 }
 
 /*!
@@ -95,11 +107,16 @@ bool RenderContext::releaseCurrent(::Display *display)
  */
 void RenderContext::swapBuffers(::Display *display, ::Window window)
 {
+	assert(display);
+	assert(window);
+
 	glXSwapBuffers(display, window);
 }
 
 XVisualInfo *RenderContext::chooseBestFBConfig(::Display* display)
 {
+	assert(display);
+
 	const int attributes[] = {
 		GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
 		GLX_DOUBLEBUFFER, True,

@@ -1,5 +1,6 @@
 #include "canvas.h"
-#include <sstream> // std::ostringstream
+#include "windowevents.h"
+#include <cassert>
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
@@ -10,12 +11,16 @@ NAMESPACE_BEGIN(glx11)
  * Выполняет инициализацию нового экземпляра класса.
  */
 Canvas::Canvas()
-	: _display(NULL), _window(None), _context(NULL)
+	: _renderContext(nullptr)
 {
 	/* Открывает соединение с сервером. */
-	_display = XOpenDisplay(NULL);
-	if (_display == NULL)
+	_internalData.display = XOpenDisplay(nullptr);
+	if (_internalData.display == nullptr)
 		throw std::runtime_error("Unable to open new X connection.");
+
+	_wmState = XInternAtom(_internalData.display, "_NET_WM_STATE", False);
+	_wmStateFullscreen = XInternAtom(_internalData.display, "_NET_WM_STATE_FULLSCREEN", False);
+	_wmDeleteWindow = XInternAtom(_internalData.display, "WM_DELETE_WINDOW", False);
 }
 
 /*!
@@ -26,23 +31,26 @@ Canvas::Canvas()
 Canvas::~Canvas()
 {
 	/* Закрываем соединение с сервером. */
-	XCloseDisplay(_display);
+	XCloseDisplay(_internalData.display);
 }
 
 /*!
  * \brief Создает окно.
  *
- * \param config Конфигурация окна.
+ * \param initialConfig Конфигурация окна.
  */
-void Canvas::create(const WindowConfig &config)
+void Canvas::create(const WindowConfig &initialConfig)
 {
-	_context = new RenderContext();
-	XVisualInfo *visualInfo = _context->chooseBestFBConfig(_display);
+	_internalData.config = initialConfig;
 
-	_root = RootWindow(_display, visualInfo->screen);
-	_context->createContext(_display);
-	
-	Colormap colormap = XCreateColormap(_display, _root, visualInfo->visual, AllocNone);
+	_renderContext = new RenderContext();
+
+	XVisualInfo *visualInfo = _renderContext->chooseBestFBConfig(_internalData.display);
+
+	_internalData.rootWindow = RootWindow(_internalData.display, visualInfo->screen);
+	_renderContext->createContext(_internalData.display);
+
+	Colormap colormap = XCreateColormap(_internalData.display, _internalData.rootWindow, visualInfo->visual, AllocNone);
 	u64 windowMask = CWBorderPixel | CWColormap | CWEventMask;
 
 	XSetWindowAttributes attrs;
@@ -51,29 +59,19 @@ void Canvas::create(const WindowConfig &config)
 	attrs.border_pixel = 0;
 	attrs.event_mask = ExposureMask | StructureNotifyMask;
 
-	_window = XCreateWindow(_display, _root, 0, 0, config.size.getW(), config.size.getH(), 
+	_internalData.window = XCreateWindow(_internalData.display, _internalData.rootWindow, 0, 0, initialConfig.size.getW(), initialConfig.size.getH(),
 		0, visualInfo->depth, InputOutput, visualInfo->visual, windowMask, &attrs);
 
-	if (_window == None)
+	if (_internalData.window == None)
 		throw std::invalid_argument("Failed create window.");
 
-	XFreeColormap(_display, colormap);
+	XFreeColormap(_internalData.display, colormap);
 	XFree(visualInfo);
 
-	setTitle(config.title);
-	setSizeHints(config.size, config.sizeHints, config.resizable);
+	XSetWMProtocols(_internalData.display, _internalData.window, &_wmDeleteWindow, 1);
 
-	_viewport = new gl::Viewport();
-
-	std::ostringstream wnd;
-	wnd << this->getId();
-
-	ois::ParamList params;
-	params.insert(make_pair(std::string("WINDOW"), wnd.str()));
-	
-	_inputManager = new ois::InputManager();
-	_inputManager->_initialize(params);
-	_keyboard = static_cast<ois::Keyboard*>(_inputManager->createInputObject(ois::kDeviceType_Keyboard));
+	setTitle(initialConfig.title);
+	setSizeHints(initialConfig.size, initialConfig.sizeHints, initialConfig.resizable);
 }
 
 /*!
@@ -81,76 +79,98 @@ void Canvas::create(const WindowConfig &config)
  */
 void Canvas::destroy()
 {
-	SAFE_DELETE(_viewport);
+	_renderContext->destroyContext(_internalData.display);
+	SAFE_DELETE(_renderContext);
 
-	_context->destroyContext(_display);
-	SAFE_DELETE(_context);
-
-	if (_window)
+	if (_internalData.window)
 	{
-		XDestroyWindow(_display, _window);
-		XFlush(_display);
+		XDestroyWindow(_internalData.display, _internalData.window);
+		XFlush(_internalData.display);
 	}
+}
+
+void Canvas::connect(WindowListener *listener)
+{
+	onCreate = boost::bind(&WindowListener::onCreate, listener, _1);
+	onResize = boost::bind(&WindowListener::onResize, listener, _1);
+	onPaint = boost::bind(&WindowListener::onPaint, listener, _1);
+	onGainFocus = boost::bind(&WindowListener::onGainFocus, listener, _1);
+	onLostFocus = boost::bind(&WindowListener::onLostFocus, listener, _1);
 }
 
 /*!
  * \brief Обрабатывает события.
  */
-void Canvas::processEvents()
+bool Canvas::eventLoop(ois::InputManager *inputManager, bool keepgoing)
 {
-	Atom atomDeleteWindow = XInternAtom(_display, "WM_DELETE_WINDOW", False);
-	XSetWMProtocols(_display, _window, &atomDeleteWindow, 1);
+	XEvent event = {};
+	XNextEvent(_internalData.display, &event);
 
-	show();
-
-	while (_waitEvent(atomDeleteWindow, true))
+	if (inputManager)
 	{
-		if (NOT _context->makeCurrent(_display, _window))
-		{
-		}
-		
-		glClearColor(0, 0.5, 1, 1);
-		glClear(GL_COLOR_BUFFER_BIT);
-	
-		glBegin(GL_TRIANGLES);
-			glColor3f(1.0f, 0.0f, 0.0f);
-			glVertex3f(0.0f, -1.0f, 0.0f);
+		if (inputManager->_keyboardUsed)
+			static_cast<ois::Keyboard *>(inputManager->getObject("Keyboard"))->capture();
 
-			glColor3f(0.0f, 1.0f, 0.0f);
-			glVertex3f(-1.0f, 1.0f, 0.0f);
-			
-			glColor3f(0.0f, 0.0f, 1.0f);
-			glVertex3f(1.0f, 1.0f, 0.0f);
-		glEnd();
-	
-		_context->swapBuffers(_display, _window);
-		
-		if (NOT _context->releaseCurrent(_display))
-		{
-		}
+		if (inputManager->_mouseUsed)
+			static_cast<ois::Mouse *>(inputManager->getObject("Mouse"))->capture();
 	}
 
-	hide();
-}
-
-bool Canvas::_waitEvent(Atom atomDeleteWindow, bool keepgoing)
-{
-	XEvent event;
-	XNextEvent(_display, &event);
-
-	_keyboard->capture();
-
-	if (event.type == Expose)
+	switch (event.type)
 	{
-		XWindowAttributes attrs;
-		XGetWindowAttributes(_display, _window, &attrs);
+	case CreateNotify:
+		if (onCreate)
+		{
+			WindowEventCreate create;
+			create.position.setX(event.xcreatewindow.x);
+			create.position.setY(event.xcreatewindow.y);
+			create.size.setW(event.xcreatewindow.width);
+			create.size.setH(event.xcreatewindow.height);
 
-		_viewport->set(attrs.width, attrs.height);
-	}
-	else if (event.type == ClientMessage)
-	{
-		if (event.xclient.format == 32 && event.xclient.data.l[0] == (signed)atomDeleteWindow)
+			onCreate(create);
+		}
+		break;
+
+	case ConfigureNotify:
+		if (onResize)
+		{
+			WindowEventResize resize;
+			resize.size.setW(event.xconfigure.width);
+			resize.size.setH(event.xconfigure.height);
+
+			onResize(resize);
+		}
+		break;
+
+	case Expose:
+		if (onPaint)
+		{
+			WindowEventPaint paint;
+			paint.position.setX(event.xexpose.x);
+			paint.position.setY(event.xexpose.y);
+			paint.size.setW(event.xexpose.width);
+			paint.size.setH(event.xexpose.height);
+
+			onPaint(paint);
+		}
+		break;
+
+	case FocusIn:
+		if (onGainFocus)
+			onGainFocus(WindowEventGeneric{});
+		break;
+
+	case FocusOut:
+		if (onLostFocus)
+			onLostFocus(WindowEventGeneric{});
+		break;
+
+	case ClientMessage:
+		if (event.xclient.format == 32 AND Atom(event.xclient.data.l[0]) == _wmDeleteWindow)
+		{
+			printf("exit");
 			keepgoing = false;
+		}
+		break;
 	}
 
 	return keepgoing;
@@ -163,8 +183,8 @@ bool Canvas::_waitEvent(Atom atomDeleteWindow, bool keepgoing)
  */
 void Canvas::setTitle(lpcstr title)
 {
-	XStoreName(_display, _window, title);
-	XFlush(_display);
+	XStoreName(_internalData.display, _internalData.window, title);
+	XFlush(_internalData.display);
 }
 
 /*!
@@ -182,19 +202,19 @@ void Canvas::setPosition(s32 x, s32 y)
 		s64 supplied;
 		XSizeHints *hints = XAllocSizeHints();
 
-		if (XGetWMNormalHints(_display, _window, hints, &supplied))
+		if (XGetWMNormalHints(_internalData.display, _internalData.window, hints, &supplied))
 		{
 			hints->flags |= PPosition;
 			hints->x = hints->y = 0;
 
-			XSetWMNormalHints(_display, _window, hints);
+			XSetWMNormalHints(_internalData.display, _internalData.window, hints);
 		}
 
 		XFree(hints);
 	}
 
-	XMoveWindow(_display, _window, x, y);
-	XFlush(_display);
+	XMoveWindow(_internalData.display, _internalData.window, x, y);
+	XFlush(_internalData.display);
 }
 
 /*!
@@ -210,7 +230,7 @@ void Canvas::getPosition(s32 *x, s32 *y)
 	::Window dummy;
 	s32 xpos, ypos;
 
-	XTranslateCoordinates(_display, _window, _root, 0, 0, &xpos, &ypos, &dummy);
+	XTranslateCoordinates(_internalData.display, _internalData.window, _internalData.rootWindow, 0, 0, &xpos, &ypos, &dummy);
 
 	if (x)
 		*x = xpos;
@@ -228,8 +248,8 @@ void Canvas::getPosition(s32 *x, s32 *y)
  */
 void Canvas::setSize(u32 w, u32 h)
 {
-	XResizeWindow(_display, _window, w, h);
-	XFlush(_display);
+	XResizeWindow(_internalData.display, _internalData.window, w, h);
+	XFlush(_internalData.display);
 }
 
 /*!
@@ -243,7 +263,7 @@ void Canvas::setSize(u32 w, u32 h)
 void Canvas::getSize(s32 *w, s32 *h)
 {
 	XWindowAttributes attrs;
-	XGetWindowAttributes(_display, _window, &attrs);
+	XGetWindowAttributes(_internalData.display, _internalData.window, &attrs);
 
 	if (w)
 		*w = attrs.width;
@@ -288,7 +308,7 @@ void Canvas::setSizeHints(math::TSize<s32> size, math::TSizeHints<s32> sizeHints
 	hints->flags |= PWinGravity;
 	hints->win_gravity = StaticGravity; /*!< Нет привязки. */
 
-	XSetWMNormalHints(_display, _window, hints);
+	XSetWMNormalHints(_internalData.display, _internalData.window, hints);
 	XFree(hints);
 }
 
@@ -299,11 +319,11 @@ void Canvas::setSizeHints(math::TSize<s32> size, math::TSizeHints<s32> sizeHints
  */
 void Canvas::show()
 {
-	if (visible())
-		return;
-
-	XMapRaised(_display, _window);
-	XFlush(_display);
+	if (NOT visible())
+	{
+		XMapRaised(_internalData.display, _internalData.window);
+		XFlush(_internalData.display);
+	}
 }
 
 /*!
@@ -313,8 +333,8 @@ void Canvas::show()
  */
 void Canvas::hide()
 {
-	XUnmapWindow(_display, _window);
-	XFlush(_display);
+	XUnmapWindow(_internalData.display, _internalData.window);
+	XFlush(_internalData.display);
 }
 
 /*!
@@ -325,16 +345,59 @@ void Canvas::hide()
 bool Canvas::visible() const
 {
 	XWindowAttributes attrs;
-	XGetWindowAttributes(_display, _window, &attrs);
+	XGetWindowAttributes(_internalData.display, _internalData.window, &attrs);
 	return attrs.map_state == IsViewable;
+}
+
+/*!
+ * \brief Переключает в полноэкранный/оконный режим.
+ *
+ * \param fullscreen Включить полноэкранный режим?
+ */
+void Canvas::toggleFullscreen(bool fullscreen)
+{
+    XWindowAttributes attrs;
+    XGetWindowAttributes(_internalData.display, _internalData.window, &attrs);
+
+    XEvent event;
+    memset(&event, 0, sizeof(event));
+    event.type = ClientMessage;
+    event.xclient.serial = 0;
+    event.xclient.send_event = True;
+    event.xclient.window = _internalData.window;
+    event.xclient.message_type = _wmState;
+    event.xclient.format = 32;
+
+    if (fullscreen)
+        event.xclient.data.l[0] = 1;
+    else
+        event.xclient.data.l[0] = 0;
+
+    event.xclient.data.l[1] = _wmStateFullscreen;
+    event.xclient.data.l[2] = 0;
+
+    long eventMask = SubstructureRedirectMask | SubstructureNotifyMask;
+
+    if (fullscreen)
+    {
+        XSendEvent(_internalData.display, _internalData.rootWindow, False, eventMask, &event);
+		XMoveResizeWindow(_internalData.display, _internalData.window, 
+			0, 0, _internalData.config.size.getW(), _internalData.config.size.getH());
+    }
+    else
+    {
+        XSendEvent(_internalData.display, _internalData.rootWindow, False, eventMask, &event);
+		XMoveResizeWindow(_internalData.display, _internalData.window, _internalData.config.position.getX(), 
+			_internalData.config.position.getY(), _internalData.config.size.getW(), _internalData.config.size.getH());
+    }
 }
 
 /*!
  * \brief Получает уникальный идентификатор окна.
  */
-u32 Canvas::getId() const
+u32 Canvas::getWindowId() const
 {
-	return _window;
+	return _internalData.window;
 }
 
 NAMESPACE_END(glx11)

@@ -7,6 +7,8 @@
 
 #include "../../../math/size.h"
 #include "../../../math/sizehints.h"
+#include "../../../math/point.h"
+#include "../../../math/rect.h"
 
 #include "../ois/inputmanager.h"
 #include "../ois/keyboard.h"
@@ -22,7 +24,12 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
 
+struct WindowEventGeneric;
+struct WindowEventCreate;
+struct WindowEventResize;
+struct WindowEventPaint;
 struct WindowConfig;
+struct WindowInternalData;
 
 class Canvas;
 
