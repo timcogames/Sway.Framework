@@ -45,40 +45,74 @@ public:
 	 * \param w Значение ширины.
 	 * \param h Значение высоты.
 	 */
-	void set(T x, T y, T width, T height)
+	void set(T x, T y, T w, T h)
 	{
-		_left = x;
-		_top = y;
-		_right = width;
-		_bottom = height;
+		_l = x;
+		_t = y;
+		_r = w;
+		_b = h;
 	}
 
-	void setOffset(T x, T y)
+	void offset(T x, T y)
 	{
-		_left += x;
-		_top += y;
-		_right += x;
-		_bottom += y;
+		_l += x;
+		_t += y;
+		_r += x;
+		_b += y;
+	}
+
+	/*!
+	 * \brief Устанавливает новое значение позиции прямоугольной области по оси X.
+	 *
+	 * \param x Значение координаты позиции по оси X.
+	 *
+	 * \sa TRect::setT() const, TRect::setR() const, TRect::setB() const, TRect::setW() const, TRect::setH() const
+	 */
+	void setL(T x)
+	{
+		_l = x;
 	}
 
 	T getL() const
 	{
-		return _left;
+		return _l;
+	}
+
+	/*!
+	 * \brief Устанавливает новое значение позиции прямоугольной области по оси Y.
+	 *
+	 * \param x Значение координаты позиции по оси Y.
+	 *
+	 * \sa TRect::setL() const, TRect::setR() const, TRect::setB() const, TRect::setW() const, TRect::setH() const
+	 */
+	void setT(T y)
+	{
+		_t = y;
 	}
 
 	T getT() const
 	{
-		return _top;
+		return _t;
+	}
+
+	void setR(T w)
+	{
+		_r = w;
 	}
 
 	T getR() const
 	{
-		return _left + _right;
+		return _l + _r;
+	}
+
+	void setB(T h)
+	{
+		_b = h;
 	}
 
 	T getB() const
 	{
-		return _top + _bottom;
+		return _t + _b;
 	}
 
 	/*!
@@ -88,7 +122,7 @@ public:
 	 */
 	T getW() const
 	{
-		return _right - _left;
+		return _r - _l;
 	}
 
 	/*!
@@ -98,7 +132,7 @@ public:
 	 */
 	T getH() const
 	{
-		return _bottom - _top;
+		return _b - _t;
 	}
 
 	bool isEmpty() const
@@ -108,7 +142,7 @@ public:
 
 	bool isValid() const
 	{
-		if ((_top > _bottom) OR (_left > _right))
+		if ((_t > _b) OR (_l > _r))
 			return false;
 
 		return true;
@@ -120,7 +154,7 @@ public:
 	}
 
 private:
-	T _left, _top, _right, _bottom;
+	T _l, _t, _r, _b;
 };
 
 NAMESPACE_END(math)

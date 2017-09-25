@@ -48,12 +48,22 @@ class TSize
 		_h = h;
 	}
 
+	void setW(T w)
+	{
+		_w = w;
+	}
+
 	/*!
 	 * \brief Получает значение ширины.
 	 *
 	 * \sa TSize::getH()
 	 */
 	T getW() const { return _w; }
+
+	void setH(T h)
+	{
+		_h = h;
+	}
 
 	/*!
 	 * \brief Получает значение высоты.
