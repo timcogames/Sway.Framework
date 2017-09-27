@@ -7,6 +7,13 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
 
+struct RenderContextData
+{
+	::Display *display;
+	::Window window;
+	GLXContext context;
+};
+
 class RenderContext : private boost::noncopyable
 {
   public:
@@ -28,47 +35,38 @@ class RenderContext : private boost::noncopyable
 	 * \brief Создает контекст визуализации.
 	 *
 	 * \param display Идентификатор сервера.
+	 * \param window Идентификатор окна.
 	 */
-	void createContext(::Display *display);
+	void createContext(::Display *display, ::Window window);
 
 	/*!
 	 * \brief Уничтожает контекст визуализации.
-	 *
-	 * \param display Идентификатор сервера.
 	 */
-	void destroyContext(::Display *display);
+	void destroyContext();
 
 	/*!
 	 * \brief Прикрепляет контекст к окну.
 	 *
-	 * \param display Идентификатор сервера.
-	 * \param window Идентификатор окна.
-	 *
-	 * \sa RenderContext::releaseCurrent(::Display *)
+	 * \sa RenderContext::doneCurrent()
 	 */
-	bool makeCurrent(::Display *display, ::Window window);
+	bool makeCurrent();
 	
 	/*!
 	 * \brief Освобождаем контекст.
 	 *
-	 * \param display Идентификатор сервера.
-	 *
-	 * \sa RenderContext::makeCurrent(::Display *, ::Window)
+	 * \sa RenderContext::makeCurrent()
 	 */
-	bool releaseCurrent(::Display *display);
+	bool doneCurrent();
 
 	/*!
 	 * \brief Обмен буферов.
-	 *
-	 * \param display Идентификатор сервера.
-	 * \param window Идентификатор окна.
 	 */
-	void swapBuffers(::Display *display, ::Window window);
+	void swapBuffers();
 
-	XVisualInfo *chooseBestFBConfig(::Display* display);
+	XVisualInfo *chooseBestFBConfig(::Display *display);
 
 private:
-	GLXContext _context;
+	RenderContextData _contextData;
 	GLXFBConfig _fbconfig;
 };
 

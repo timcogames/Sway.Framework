@@ -6,7 +6,6 @@
 #include "../../../memory/safedeletemacros.h"
 
 #include "../../../math/size.h"
-#include "../../../math/sizehints.h"
 #include "../../../math/point.h"
 #include "../../../math/rect.h"
 
@@ -28,7 +27,7 @@ struct WindowEventGeneric;
 struct WindowEventCreate;
 struct WindowEventResize;
 struct WindowEventPaint;
-struct WindowConfig;
+struct WindowInitialParams;
 struct WindowInternalData;
 
 class Canvas;

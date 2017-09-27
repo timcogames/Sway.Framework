@@ -12,7 +12,7 @@ NAMESPACE_BEGIN(ois)
  * Выполняет инициализацию нового экземпляра класса.
  */
 Mouse::Mouse(InputManager *creator)
-    : foundation::Object(creator), _display(NULL), _window(None)
+    : foundation::Object(creator), _display(nullptr), _window(None)
 {
     static_cast<InputManager *>(getContext())->_setMouseUsed(true);
 
@@ -47,10 +47,10 @@ void Mouse::_initialize()
 {
     if (_display)
         XCloseDisplay(_display);
-    _display = NULL;
+    _display = nullptr;
 
     _window = static_cast<InputManager *>(getContext())->_getWindow();
-    if (NOT(_display = XOpenDisplay(NULL)))
+    if (NOT(_display = XOpenDisplay(nullptr)))
         return;
 
     XSelectInput(_display, _window, ButtonPressMask | ButtonReleaseMask | PointerMotionMask);

@@ -2,13 +2,13 @@
 #define SWAY_PLATFORM_UNIX_GLX11_CANVAS_H
 
 #include "glx11prereqs.h"
-#include "windowconfig.h"
+#include "windowinitialparams.h"
 #include "windowinternaldata.h"
 #include "windowlistener.h"
 
 #include "rendercontext.h"
-#include <boost/function.hpp> // boost::function
-#include <boost/bind.hpp> // boost::bind
+#include <boost/function.hpp>	// boost::function
+#include <boost/bind.hpp>		 // boost::bind
 #include <boost/noncopyable.hpp> // boost::noncopyable
 
 NAMESPACE_BEGIN(sway)
@@ -41,9 +41,9 @@ class Canvas : private boost::noncopyable
 	/*!
 	 * \brief Создает окно.
 	 *
-	 * \param initialConfig Конфигурация окна.
+	 * \param params Параметры окна.
 	 */
-	void create(const WindowConfig &initialConfig);
+	void create(const WindowInitialParams &params);
 
 	/*!
 	 * \brief Уничтожает окно.
@@ -70,9 +70,11 @@ class Canvas : private boost::noncopyable
 	 * \param x Координата позиции окна по оси X.
 	 * \param y Координата позиции окна по оси Y.
 	 *
-	 * \sa Canvas::getPosition(s32 *, s32 *)
+	 * \sa Canvas::getPosition(s32 *, s32 *), Canvas::getPosition() const
 	 */
 	void setPosition(s32 x, s32 y);
+
+	//!@{
 
 	/*!
 	 * \brief Получает позицию окна.
@@ -80,9 +82,18 @@ class Canvas : private boost::noncopyable
 	 * \param x Возвращаемое значение координаты позиции окна по оси X.
 	 * \param y Возвращаемое значение координаты позиции окна по оси Y.
 	 *
-	 * \sa Canvas::setPosition(s32, s32)
+	 * \sa Canvas::getPosition() const, Canvas::setPosition(s32, s32)
 	 */
 	void getPosition(s32 *x, s32 *y);
+
+	/*!
+	 * \brief Получает позицию окна.
+	 *
+	 * \sa Canvas::getPosition(s32 *, s32 *), Canvas::setPosition(s32, s32)
+	 */
+	math::TPoint<s32> getPosition() const;
+
+	//!@}
 
 	/*!
 	 * \brief Устанавливает размер окна.
@@ -90,9 +101,11 @@ class Canvas : private boost::noncopyable
 	 * \param w Ширина окна.
 	 * \param h Высота окна.
 	 *
-	 * \sa Canvas::getSize(s32 *, s32 *)
+	 * \sa Canvas::getSize(s32 *, s32 *), Canvas::getSize() const
 	 */
 	void setSize(u32 w, u32 h);
+
+	//!@{
 
 	/*!
 	 * \brief Получает размер окна.
@@ -100,18 +113,26 @@ class Canvas : private boost::noncopyable
 	 * \param w Возвращаемое значение ширины окна.
 	 * \param h Возвращаемое значение высоты окна.
 	 *
-	 * \sa Canvas::setSize(s32, s32)
+	 * \sa Canvas::getSize() const, Canvas::setSize(s32, s32)
 	 */
 	void getSize(s32 *w, s32 *h);
 
 	/*!
+	 * \brief Получает размер окна.
+	 *
+	 * \sa Canvas::getSize(s32 *, s32 *), Canvas::setSize(s32, s32)
+	 */
+	math::TSize<s32> getSize() const;
+
+	//!@}
+
+	/*!
 	 * \brief Устанавливает поведение при смене размера.
 	 *
-	 * \param size Оригинальный размер окна.
-	 * \param sizeHints Минимальный/максимальный размер окна.
+	 * \param sizes Оригинальный/минимальный/максимальный размер окна.
 	 * \param resizable Возможность изменения размера.
 	 */
-	void setSizeHints(math::TSize<s32> size, math::TSizeHints<s32> sizeHints, bool resizable);
+	void setSizeHints(const math::TSize<s32> *sizes, bool resizable);
 
 	/*!
 	 * \brief Показывает окно.
@@ -146,25 +167,13 @@ class Canvas : private boost::noncopyable
 	 */
 	u32 getWindowId() const;
 
-  public:
-	void makeCurrent()
-	{
-		if (NOT _renderContext->makeCurrent(_internalData.display, _internalData.window))
-		{
-		}
+	RenderContext *getContext() {
+		return _renderContext;
 	}
 
-	void swapBuffers()
-	{
-		_renderContext->swapBuffers(_internalData.display, _internalData.window);
-	}
-
-	void releaseCurrent()
-	{
-		if (NOT _renderContext->releaseCurrent(_internalData.display))
-		{
-		}
-	}
+  private:
+	void _minSize(XSizeHints *hints, const math::TSize<s32> *sizes, bool resizable);
+	void _maxSize(XSizeHints *hints, const math::TSize<s32> *sizes, bool resizable);
 
   private:
 	WindowInternalData _internalData;

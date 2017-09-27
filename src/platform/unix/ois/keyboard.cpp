@@ -12,7 +12,7 @@ NAMESPACE_BEGIN(ois)
  * Выполняет инициализацию нового экземпляра класса.
  */
 Keyboard::Keyboard(InputManager *creator)
-	: foundation::Object(creator), _display(NULL), _window(None)
+	: foundation::Object(creator), _display(nullptr), _window(None)
 {
 	static_cast<InputManager *>(getContext())->_setKeyboardUsed(true);
 
@@ -47,10 +47,10 @@ void Keyboard::_initialize()
 {
 	if (_display)
 		XCloseDisplay(_display);
-	_display = NULL;
+	_display = nullptr;
 
 	_window = static_cast<InputManager *>(getContext())->_getWindow();
-	if (NOT(_display = XOpenDisplay(NULL)))
+	if (NOT(_display = XOpenDisplay(nullptr)))
 		return;
 
 	XSelectInput(_display, _window, KeyPressMask | KeyReleaseMask | KeymapStateMask);

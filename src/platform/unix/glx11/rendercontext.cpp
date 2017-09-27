@@ -14,7 +14,7 @@ NAMESPACE_BEGIN(glx11)
  * Выполняет инициализацию нового экземпляра класса.
  */
 RenderContext::RenderContext()
-	: _context(nullptr), _fbconfig(nullptr)
+	: _fbconfig(nullptr)
 {
 	// Empty
 }
@@ -33,54 +33,54 @@ RenderContext::~RenderContext()
  * \brief Создает контекст визуализации.
  *
  * \param display Идентификатор сервера.
+ * \param window Идентификатор окна.
  */
-void RenderContext::createContext(::Display *display)
+void RenderContext::createContext(::Display *display, ::Window window)
 {
 	assert(display);
+	assert(window);
+
+	_contextData.display = display;
+	_contextData.window = window;
 	
-	_context = glXCreateNewContext(display, _fbconfig, GLX_RGBA_TYPE, 0, True);
-	if (NOT _context)
+	_contextData.context = glXCreateNewContext(_contextData.display, _fbconfig, GLX_RGBA_TYPE, 0, True);
+	if (NOT _contextData.context)
 		throw std::runtime_error("Cannot create context.");
 
-	if (NOT glXIsDirect(display, _context))
+	if (NOT glXIsDirect(_contextData.display, _contextData.context))
 		printf("Indirect GLX rendering context obtained.\n");
 }
 
 /*!
  * \brief Уничтожает контекст визуализации.
- *
- * \param display Идентификатор сервера.
  */
-void RenderContext::destroyContext(::Display *display)
+void RenderContext::destroyContext()
 {
-	assert(display);
+	assert(_contextData.display);
 
-	if (_context)
+	if (_contextData.context)
 	{
-		if (NOT releaseCurrent(display))
+		if (NOT doneCurrent())
 		{
 			// Empty
 		}
 
-		glXDestroyContext(display, _context);
+		glXDestroyContext(_contextData.display, _contextData.context);
 	}
 }
 
 /*!
  * \brief Прикрепляет контекст к окну.
  *
- * \param display Идентификатор сервера.
- * \param window Идентификатор окна.
- *
- * \sa RenderContext::releaseCurrent(::Display *)
+ * \sa RenderContext::doneCurrent()
  */
-bool RenderContext::makeCurrent(::Display *display, ::Window window)
+bool RenderContext::makeCurrent()
 {
-	assert(display);
-	assert(window);
+	assert(_contextData.display);
+	assert(_contextData.window);
 
-	if (glXGetCurrentContext() != _context)
-		return glXMakeCurrent(display, window, _context);
+	if (glXGetCurrentContext() != _contextData.context)
+		return glXMakeCurrent(_contextData.display, _contextData.window, _contextData.context);
 
 	return false;
 }
@@ -88,32 +88,27 @@ bool RenderContext::makeCurrent(::Display *display, ::Window window)
 /*!
  * \brief Освобождаем контекст.
  *
- * \param display Идентификатор сервера.
- *
- * \sa RenderContext::makeCurrent(::Display *, ::Window)
+ * \sa RenderContext::makeCurrent()
  */
-bool RenderContext::releaseCurrent(::Display *display)
+bool RenderContext::doneCurrent()
 {
-	assert(display);
+	assert(_contextData.display);
 
-	return glXMakeCurrent(display, None, nullptr);
+	return glXMakeCurrent(_contextData.display, None, nullptr);
 }
 
 /*!
  * \brief Обмен буферов.
- *
- * \param display Идентификатор сервера.
- * \param window Идентификатор окна.
  */
-void RenderContext::swapBuffers(::Display *display, ::Window window)
+void RenderContext::swapBuffers()
 {
-	assert(display);
-	assert(window);
+	assert(_contextData.display);
+	assert(_contextData.window);
 
-	glXSwapBuffers(display, window);
+	glXSwapBuffers(_contextData.display, _contextData.window);
 }
 
-XVisualInfo *RenderContext::chooseBestFBConfig(::Display* display)
+XVisualInfo *RenderContext::chooseBestFBConfig(::Display *display)
 {
 	assert(display);
 
@@ -145,7 +140,7 @@ XVisualInfo *RenderContext::chooseBestFBConfig(::Display* display)
 			glXGetFBConfigAttrib(display, configs[i], GLX_SAMPLE_BUFFERS, &sampleBuffers);
 			glXGetFBConfigAttrib(display, configs[i], GLX_SAMPLES, &samples);
 
-			if (best < 0 OR(sampleBuffers AND(samples > bestNumSamples)))
+			if (best < 0 OR (sampleBuffers AND(samples > bestNumSamples)))
 				best = i, bestNumSamples = samples;
 		}
 

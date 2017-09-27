@@ -8,11 +8,9 @@ NAMESPACE_BEGIN(glx11)
 
 struct WindowInternalData
 {
-	::Display *display;  /*!< Идентификатор сервера. */
-	::Window rootWindow; /*!< Идентификатор корневого окна. */
-	::Window window;     /*!< Идентификатор окна. */
-	
-	WindowConfig config; /*!< Конфигурация окна. */
+	::Display *display;    /*!< Идентификатор сервера. */
+	::Window rootWindow;   /*!< Идентификатор корневого окна. */
+	::Window window;       /*!< Идентификатор окна. */
 };
 
 NAMESPACE_END(glx11)

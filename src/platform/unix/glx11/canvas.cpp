@@ -1,4 +1,6 @@
 #include "canvas.h"
+#include "windowsizes.h"
+#include "windowmodes.h"
 #include "windowevents.h"
 #include <cassert>
 
@@ -37,18 +39,15 @@ Canvas::~Canvas()
 /*!
  * \brief Создает окно.
  *
- * \param initialConfig Конфигурация окна.
+ * \param params Параметры окна.
  */
-void Canvas::create(const WindowConfig &initialConfig)
+void Canvas::create(const WindowInitialParams &params)
 {
-	_internalData.config = initialConfig;
-
 	_renderContext = new RenderContext();
 
 	XVisualInfo *visualInfo = _renderContext->chooseBestFBConfig(_internalData.display);
 
 	_internalData.rootWindow = RootWindow(_internalData.display, visualInfo->screen);
-	_renderContext->createContext(_internalData.display);
 
 	Colormap colormap = XCreateColormap(_internalData.display, _internalData.rootWindow, visualInfo->visual, AllocNone);
 	u64 windowMask = CWBorderPixel | CWColormap | CWEventMask;
@@ -59,8 +58,8 @@ void Canvas::create(const WindowConfig &initialConfig)
 	attrs.border_pixel = 0;
 	attrs.event_mask = ExposureMask | StructureNotifyMask;
 
-	_internalData.window = XCreateWindow(_internalData.display, _internalData.rootWindow, 0, 0, initialConfig.size.getW(), initialConfig.size.getH(),
-		0, visualInfo->depth, InputOutput, visualInfo->visual, windowMask, &attrs);
+	_internalData.window = XCreateWindow(_internalData.display, _internalData.rootWindow, 0, 0, 
+		params.sizes[kWindowSize].getW(), params.sizes[kWindowSize].getH(), 0, visualInfo->depth, InputOutput, visualInfo->visual, windowMask, &attrs);
 
 	if (_internalData.window == None)
 		throw std::invalid_argument("Failed create window.");
@@ -68,10 +67,12 @@ void Canvas::create(const WindowConfig &initialConfig)
 	XFreeColormap(_internalData.display, colormap);
 	XFree(visualInfo);
 
+	_renderContext->createContext(_internalData.display, _internalData.window);
+
 	XSetWMProtocols(_internalData.display, _internalData.window, &_wmDeleteWindow, 1);
 
-	setTitle(initialConfig.title);
-	setSizeHints(initialConfig.size, initialConfig.sizeHints, initialConfig.resizable);
+	setTitle(params.title);
+	setSizeHints(params.sizes, params.resizable);
 }
 
 /*!
@@ -79,7 +80,7 @@ void Canvas::create(const WindowConfig &initialConfig)
  */
 void Canvas::destroy()
 {
-	_renderContext->destroyContext(_internalData.display);
+	_renderContext->destroyContext();
 	SAFE_DELETE(_renderContext);
 
 	if (_internalData.window)
@@ -193,7 +194,7 @@ void Canvas::setTitle(lpcstr title)
  * \param x Координата позиции окна по оси X.
  * \param y Координата позиции окна по оси Y.
  *
- * \sa Canvas::getPosition(s32 *, s32 *)
+ * \sa Canvas::getPosition(s32 *, s32 *), Canvas::getPosition() const
  */
 void Canvas::setPosition(s32 x, s32 y)
 {
@@ -201,15 +202,12 @@ void Canvas::setPosition(s32 x, s32 y)
 	{
 		s64 supplied;
 		XSizeHints *hints = XAllocSizeHints();
+		XGetWMNormalHints(_internalData.display, _internalData.window, hints, &supplied);
 
-		if (XGetWMNormalHints(_internalData.display, _internalData.window, hints, &supplied))
-		{
-			hints->flags |= PPosition;
-			hints->x = hints->y = 0;
+		hints->flags |= PPosition;
+		hints->x = hints->y = 0;
 
-			XSetWMNormalHints(_internalData.display, _internalData.window, hints);
-		}
-
+		XSetWMNormalHints(_internalData.display, _internalData.window, hints);
 		XFree(hints);
 	}
 
@@ -223,7 +221,7 @@ void Canvas::setPosition(s32 x, s32 y)
  * \param x Возвращаемое значение координаты позиции окна по оси X.
  * \param y Возвращаемое значение координаты позиции окна по оси Y.
  *
- * \sa Canvas::setPosition(s32, s32)
+ * \sa Canvas::getPosition() const, Canvas::setPosition(s32, s32)
  */
 void Canvas::getPosition(s32 *x, s32 *y)
 {
@@ -239,12 +237,27 @@ void Canvas::getPosition(s32 *x, s32 *y)
 }
 
 /*!
+ * \brief Получает позицию окна.
+ *
+ * \sa Canvas::getPosition(s32 *, s32 *), Canvas::setPosition(s32, s32)
+ */
+math::TPoint<s32> Canvas::getPosition() const
+{
+	::Window dummy;
+	s32 xpos, ypos;
+
+	XTranslateCoordinates(_internalData.display, _internalData.window, _internalData.rootWindow, 0, 0, &xpos, &ypos, &dummy);
+
+	return math::TPoint<s32>(xpos, ypos);
+}
+
+/*!
  * \brief Устанавливает размер окна.
  *
  * \param w Ширина окна.
  * \param h Высота окна.
  *
- * \sa Canvas::getSize(s32 *, s32 *)
+ * \sa Canvas::getSize(s32 *, s32 *), Canvas::getSize() const
  */
 void Canvas::setSize(u32 w, u32 h)
 {
@@ -258,7 +271,7 @@ void Canvas::setSize(u32 w, u32 h)
  * \param w Возвращаемое значение ширины окна.
  * \param h Возвращаемое значение высоты окна.
  *
- * \sa Canvas::setSize(s32, s32)
+ * \sa Canvas::getSize() const, Canvas::setSize(s32, s32)
  */
 void Canvas::getSize(s32 *w, s32 *h)
 {
@@ -272,41 +285,62 @@ void Canvas::getSize(s32 *w, s32 *h)
 }
 
 /*!
+ * \brief Получает размер окна.
+ *
+ * \sa Canvas::getSize(s32 *, s32 *), Canvas::setSize(s32, s32)
+ */
+math::TSize<s32> Canvas::getSize() const
+{
+	XWindowAttributes attrs;
+	XGetWindowAttributes(_internalData.display, _internalData.window, &attrs);
+
+	return math::TSize<s32>(attrs.width, attrs.height);
+}
+
+void Canvas::_minSize(XSizeHints *hints, const math::TSize<s32> *sizes, bool resizable)
+{
+	hints->flags |= PMinSize;
+	
+	if (NOT resizable)
+		goto fixed;
+
+	if (sizes[kWindowSize_Min].getW() != DONT_CARE AND sizes[kWindowSize_Min].getH() != DONT_CARE) {
+		hints->max_width = sizes[kWindowSize_Min].getW();
+		hints->max_height = sizes[kWindowSize_Min].getH();
+	}
+
+	fixed:
+		hints->max_width = sizes[kWindowSize].getW();
+		hints->max_height = sizes[kWindowSize].getH();
+}
+
+void Canvas::_maxSize(XSizeHints *hints, const math::TSize<s32> *sizes, bool resizable) {
+	hints->flags |= PMaxSize;
+
+	if (NOT resizable)
+		goto fixed;
+
+	if (sizes[kWindowSize_Max].getW() != DONT_CARE AND sizes[kWindowSize_Max].getH() != DONT_CARE) {
+		hints->max_width = sizes[kWindowSize_Max].getW();
+		hints->max_height = sizes[kWindowSize_Max].getH();
+	}
+
+	fixed:
+		hints->max_width = sizes[kWindowSize].getW();
+		hints->max_height = sizes[kWindowSize].getH();
+}
+
+/*!
  * \brief Устанавливает поведение при смене размера.
  *
- * \param size Оригинальный размер окна.
- * \param sizeHints Минимальный/максимальный размер окна.
+ * \param sizes Оригинальный/минимальный/максимальный размер окна.
  * \param resizable Возможность изменения размера.
  */
-void Canvas::setSizeHints(math::TSize<s32> size, math::TSizeHints<s32> sizeHints, bool resizable)
-{
+void Canvas::setSizeHints(const math::TSize<s32> *sizes, bool resizable) {
 	XSizeHints *hints = XAllocSizeHints();
-
-	if (resizable)
-	{
-		if (sizeHints.min.getW() != DONT_CARE AND sizeHints.min.getH() != DONT_CARE)
-		{
-			hints->flags |= PMinSize;
-			hints->min_width = sizeHints.min.getW();
-			hints->min_height = sizeHints.min.getH();
-		}
-
-		if (sizeHints.max.getW() != DONT_CARE AND sizeHints.max.getH() != DONT_CARE)
-		{
-			hints->flags |= PMaxSize;
-			hints->max_width = sizeHints.max.getW();
-			hints->max_height = sizeHints.max.getH();
-		}
-	}
-	else
-	{
-		hints->flags |= (PMinSize | PMaxSize);
-		hints->min_width = hints->max_width = size.getW();
-		hints->min_height = hints->max_height = size.getH();
-	}
-
-	hints->flags |= PWinGravity;
-	hints->win_gravity = StaticGravity; /*!< Нет привязки. */
+	
+	_minSize(hints, sizes, resizable);
+	_maxSize(hints, sizes, resizable);
 
 	XSetWMNormalHints(_internalData.display, _internalData.window, hints);
 	XFree(hints);
@@ -356,40 +390,19 @@ bool Canvas::visible() const
  */
 void Canvas::toggleFullscreen(bool fullscreen)
 {
-    XWindowAttributes attrs;
-    XGetWindowAttributes(_internalData.display, _internalData.window, &attrs);
+	XEvent event;
+	memset(&event, 0, sizeof(event));
+	event.type = ClientMessage;
+	event.xclient.serial = 0;
+	event.xclient.send_event = True;
+	event.xclient.window = _internalData.window;
+	event.xclient.message_type = _wmState;
+	event.xclient.format = 32;
+	event.xclient.data.l[0] = fullscreen ? kWindowMode_Fullscreen : kWindowMode_Windowed;
+	event.xclient.data.l[1] = _wmStateFullscreen;
+	event.xclient.data.l[2] = 0;
 
-    XEvent event;
-    memset(&event, 0, sizeof(event));
-    event.type = ClientMessage;
-    event.xclient.serial = 0;
-    event.xclient.send_event = True;
-    event.xclient.window = _internalData.window;
-    event.xclient.message_type = _wmState;
-    event.xclient.format = 32;
-
-    if (fullscreen)
-        event.xclient.data.l[0] = 1;
-    else
-        event.xclient.data.l[0] = 0;
-
-    event.xclient.data.l[1] = _wmStateFullscreen;
-    event.xclient.data.l[2] = 0;
-
-    long eventMask = SubstructureRedirectMask | SubstructureNotifyMask;
-
-    if (fullscreen)
-    {
-        XSendEvent(_internalData.display, _internalData.rootWindow, False, eventMask, &event);
-		XMoveResizeWindow(_internalData.display, _internalData.window, 
-			0, 0, _internalData.config.size.getW(), _internalData.config.size.getH());
-    }
-    else
-    {
-        XSendEvent(_internalData.display, _internalData.rootWindow, False, eventMask, &event);
-		XMoveResizeWindow(_internalData.display, _internalData.window, _internalData.config.position.getX(), 
-			_internalData.config.position.getY(), _internalData.config.size.getW(), _internalData.config.size.getH());
-    }
+	XSendEvent(_internalData.display, _internalData.rootWindow, False, SubstructureNotifyMask | SubstructureRedirectMask, &event);
 }
 
 /*!

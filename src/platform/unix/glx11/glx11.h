@@ -3,7 +3,7 @@
 
 #include "glx11prereqs.h"
 
-#include "windowconfig.h"
+#include "windowinitialparams.h"
 #include "windowevents.h"
 #include "windowlistener.h"
 #include "canvas.h"
