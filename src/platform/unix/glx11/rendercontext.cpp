@@ -40,14 +40,14 @@ void RenderContext::createContext(::Display *display, ::Window window)
 	assert(display);
 	assert(window);
 
-	_contextData.display = display;
-	_contextData.window = window;
+	_internalData.display = display;
+	_internalData.window = window;
 	
-	_contextData.context = glXCreateNewContext(_contextData.display, _fbconfig, GLX_RGBA_TYPE, 0, True);
-	if (NOT _contextData.context)
+	_internalData.context = glXCreateNewContext(_internalData.display, _fbconfig, GLX_RGBA_TYPE, 0, True);
+	if (NOT _internalData.context)
 		throw std::runtime_error("Cannot create context.");
 
-	if (NOT glXIsDirect(_contextData.display, _contextData.context))
+	if (NOT glXIsDirect(_internalData.display, _internalData.context))
 		printf("Indirect GLX rendering context obtained.\n");
 }
 
@@ -56,16 +56,16 @@ void RenderContext::createContext(::Display *display, ::Window window)
  */
 void RenderContext::destroyContext()
 {
-	assert(_contextData.display);
+	assert(_internalData.display);
 
-	if (_contextData.context)
+	if (_internalData.context)
 	{
 		if (NOT doneCurrent())
 		{
 			// Empty
 		}
 
-		glXDestroyContext(_contextData.display, _contextData.context);
+		glXDestroyContext(_internalData.display, _internalData.context);
 	}
 }
 
@@ -76,11 +76,11 @@ void RenderContext::destroyContext()
  */
 bool RenderContext::makeCurrent()
 {
-	assert(_contextData.display);
-	assert(_contextData.window);
+	assert(_internalData.display);
+	assert(_internalData.window);
 
-	if (glXGetCurrentContext() != _contextData.context)
-		return glXMakeCurrent(_contextData.display, _contextData.window, _contextData.context);
+	if (glXGetCurrentContext() != _internalData.context)
+		return glXMakeCurrent(_internalData.display, _internalData.window, _internalData.context);
 
 	return false;
 }
@@ -92,27 +92,27 @@ bool RenderContext::makeCurrent()
  */
 bool RenderContext::doneCurrent()
 {
-	assert(_contextData.display);
+	assert(_internalData.display);
 
-	return glXMakeCurrent(_contextData.display, None, nullptr);
+	return glXMakeCurrent(_internalData.display, None, nullptr);
 }
 
 /*!
  * \brief Обмен буферов.
  */
-void RenderContext::swapBuffers()
+void RenderContext::swap()
 {
-	assert(_contextData.display);
-	assert(_contextData.window);
+	assert(_internalData.display);
+	assert(_internalData.window);
 
-	glXSwapBuffers(_contextData.display, _contextData.window);
+	glXSwapBuffers(_internalData.display, _internalData.window);
 }
 
 XVisualInfo *RenderContext::chooseBestFBConfig(::Display *display)
 {
 	assert(display);
 
-	const int attributes[] = {
+	const int attrs[] = {
 		GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
 		GLX_DOUBLEBUFFER, True,
 		GLX_RED_SIZE, 0,
@@ -126,25 +126,20 @@ XVisualInfo *RenderContext::chooseBestFBConfig(::Display *display)
 		None, None};
 
 	int numConfigs;
-	GLXFBConfig *configs = glXChooseFBConfig(display, DefaultScreen(display), attributes, &numConfigs);
+	//GLXFBConfig *configs = glXGetFBConfigs(display, DefaultScreen(display), &numConfigs);
+	GLXFBConfig *configs = glXChooseFBConfig(display, DefaultScreen(display), attrs, &numConfigs);
 	if (NOT configs)
 		throw std::runtime_error("Failed to retrieve a framebuffer configurations.");
 
 	int best = -1, bestNumSamples = -1;
 	for (int i = 0; i < numConfigs; ++i)
 	{
-		XVisualInfo *visualInfo = glXGetVisualFromFBConfig(display, configs[i]);
-		if (visualInfo)
-		{
-			int sampleBuffers, samples;
-			glXGetFBConfigAttrib(display, configs[i], GLX_SAMPLE_BUFFERS, &sampleBuffers);
-			glXGetFBConfigAttrib(display, configs[i], GLX_SAMPLES, &samples);
+		int numMultisample, numSamples;
+		glXGetFBConfigAttrib(display, configs[i], GLX_SAMPLE_BUFFERS, &numMultisample);
+		glXGetFBConfigAttrib(display, configs[i], GLX_SAMPLES, &numSamples);
 
-			if (best < 0 OR (sampleBuffers AND(samples > bestNumSamples)))
-				best = i, bestNumSamples = samples;
-		}
-
-		XFree(visualInfo);
+		if (best < 0 OR (numMultisample AND (numSamples > bestNumSamples)))
+			best = i, bestNumSamples = numSamples;
 	}
 
 	_fbconfig = configs[best];

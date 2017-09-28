@@ -17,14 +17,25 @@ struct FrameBufferConfig
 	s32 doubleBuffer;
 	s32 stereo;
 	s32 auxBuffers;
+	
+	//!@{
+	// name colorbuffer
 	s32 redSize;
 	s32 greenSize;
 	s32 blueSize;
 	s32 alphaSize;
+	//!@}
+
+	//!@{
 	s32 depthSize;
 	s32 stencilSize;
+	//!@}
+
+	//!@{
+	// name ms
 	s32 numMultisample;
 	s32 numSamples;
+	//!@}
 };
 
 NAMESPACE_END(glx11)

@@ -1,24 +1,16 @@
-#ifndef SWAY_OIS_MOUSE_H
-#define SWAY_OIS_MOUSE_H
+#ifndef SWAY_PLATFORM_UNIX_OIS_MOUSE_H
+#define SWAY_PLATFORM_UNIX_OIS_MOUSE_H
 
-#include <X11/X.h>
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xatom.h>
-
-#include "../../../foundation/object.h"
-#include "../../../foundation/declareobjectmacros.h"
-#include "../../../defines.h"
+#include "oisprereqs.h"
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(ois)
 
-class InputManager;
 class Mouse : public foundation::Object
 {
 	DECLARE_OBJECT(Mouse, foundation::Object)
 
-  public:
+public:
 	/*!
 	 * \brief Конструктор класса.
 	 *
@@ -37,7 +29,7 @@ class Mouse : public foundation::Object
 
 	void hide(bool hide);
 
-  private:
+private:
 	/*!
 	 * \fn void Mouse::_initialize()
 	 * \brief Инициализация устройства.
@@ -46,7 +38,7 @@ class Mouse : public foundation::Object
 	 */
 	void _initialize();
 
-  private:
+private:
 	::Display *_display;
 	::Window _window;
 	bool _grab;
@@ -55,4 +47,4 @@ class Mouse : public foundation::Object
 NAMESPACE_END(ois)
 NAMESPACE_END(sway)
 
-#endif // SWAY_OIS_MOUSE_H
+#endif // SWAY_PLATFORM_UNIX_OIS_MOUSE_H

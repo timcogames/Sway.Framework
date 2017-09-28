@@ -1,5 +1,9 @@
-#include "inputmanager.h"
 #include "keyboard.h"
+#include "keyboardlistener.h"
+#include "keyboardevents.h"
+#include "keycodes.h"
+#include "keymappinglist.h"
+#include "inputmanager.h"
 
 #include <iostream>
 
@@ -59,28 +63,57 @@ void Keyboard::_initialize()
 		XGrabKeyboard(_display, _window, True, GrabModeAsync, GrabModeAsync, CurrentTime);
 }
 
+void Keyboard::connect(KeyboardListener *listener)
+{
+	onKeyPressed = boost::bind(&KeyboardListener::onKeyPressed, listener, _1);
+	onKeyReleased = boost::bind(&KeyboardListener::onKeyReleased, listener, _1);
+}
+
 void Keyboard::capture()
 {
-	KeySym keysym = NoSymbol;
 	XEvent event = {};
 
 	while (XPending(_display) > 0)
 	{
 		XNextEvent(_display, &event);
 
-		if (event.type == KeyPress)
+		if (event.type == KeyPress AND onKeyPressed)
+			_injectKeyDown(event);
+		else if (event.type == KeyRelease AND onKeyReleased)
+			_injectKeyUp(event);
+	}
+}
+
+void Keyboard::_injectKeyDown(XEvent event)
+{
+	KeySym key = NoSymbol;
+	XLookupString(&event.xkey, 0, 0, &key, 0);
+
+	for (const KeyMapping &mapping : XtoKeycode)
+	{
+		if (mapping.keysym == key)
 		{
-			u8 buffer[6] = {0, 0, 0, 0, 0, 0};
-			int len = XLookupString(&event.xkey, (lpstr)buffer, 6, &keysym, 0);
-			if (len > 0)
-				std::cout << "Key pressed: " << buffer << " - " << len << " - " << keysym << '\n';
+			InputEventKeyPress keyPress;
+			keyPress.keycode = mapping.keycode;
+
+			onKeyPressed(keyPress);
 		}
-		else if (event.type == KeyRelease)
+	}
+}
+
+void Keyboard::_injectKeyUp(XEvent event)
+{
+	KeySym key = NoSymbol;
+	XLookupString(&event.xkey, 0, 0, &key, 0);
+
+	for (const KeyMapping &mapping : XtoKeycode)
+	{
+		if (mapping.keysym == key)
 		{
-			u8 buffer[6] = {0, 0, 0, 0, 0, 0};
-			int len = XLookupString(&event.xkey, (lpstr)buffer, 6, &keysym, 0);
-			if (len > 0)
-				std::cout << "Key released: " << buffer << " - " << len << " - " << keysym << '\n';
+			InputEventKeyRelease keyRelease;
+			keyRelease.keycode = mapping.keycode;
+
+			onKeyReleased(keyRelease);
 		}
 	}
 }

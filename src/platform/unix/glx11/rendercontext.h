@@ -7,7 +7,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
 
-struct RenderContextData
+struct RenderContextInternalData
 {
 	::Display *display;
 	::Window window;
@@ -61,12 +61,12 @@ class RenderContext : private boost::noncopyable
 	/*!
 	 * \brief Обмен буферов.
 	 */
-	void swapBuffers();
+	void swap();
 
 	XVisualInfo *chooseBestFBConfig(::Display *display);
 
 private:
-	RenderContextData _contextData;
+	RenderContextInternalData _internalData;
 	GLXFBConfig _fbconfig;
 };
 

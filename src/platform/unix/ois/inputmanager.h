@@ -1,26 +1,17 @@
-#ifndef SWAY_OIS_INPUTMANAGER_H
-#define SWAY_OIS_INPUTMANAGER_H
+#ifndef SWAY_PLATFORM_UNIX_OIS_INPUTMANAGER_H
+#define SWAY_PLATFORM_UNIX_OIS_INPUTMANAGER_H
 
-#include <X11/X.h>
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xatom.h>
-#include <string>
-#include <map>
-
+#include "oisprereqs.h"
 #include "devicetypes.h"
 #include "keyboard.h"
 #include "mouse.h"
-
-#include "../../../foundation/context.h"
-#include "../../../defines.h"
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(ois)
 
 class InputManager : public foundation::Context
 {
-  public:
+public:
 	/*!
 	 * \brief Конструктор класса.
 	 *
@@ -69,10 +60,10 @@ class InputManager : public foundation::Context
 
 	::Window _getWindow();
 
-  private:
+private:
 	::Window _window;
 
-  public:
+public:
 	bool _keyboardUsed; /*!< Используется ли клавиатура. */
 	bool _mouseUsed; /*!< Используется ли мышка. */
 };
@@ -80,4 +71,4 @@ class InputManager : public foundation::Context
 NAMESPACE_END(ois)
 NAMESPACE_END(sway)
 
-#endif // SWAY_OIS_INPUTMANAGER_H
+#endif // SWAY_PLATFORM_UNIX_OIS_INPUTMANAGER_H

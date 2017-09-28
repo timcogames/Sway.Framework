@@ -7,8 +7,9 @@
 #include "windowlistener.h"
 
 #include "rendercontext.h"
-#include <boost/function.hpp>	// boost::function
-#include <boost/bind.hpp>		 // boost::bind
+
+#include <boost/function.hpp> // boost::function
+#include <boost/bind.hpp> // boost::bind
 #include <boost/noncopyable.hpp> // boost::noncopyable
 
 NAMESPACE_BEGIN(sway)

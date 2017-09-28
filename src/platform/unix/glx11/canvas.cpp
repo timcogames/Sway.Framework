@@ -47,9 +47,9 @@ void Canvas::create(const WindowInitialParams &params)
 
 	XVisualInfo *visualInfo = _renderContext->chooseBestFBConfig(_internalData.display);
 
-	_internalData.rootWindow = RootWindow(_internalData.display, visualInfo->screen);
+	_internalData.root = RootWindow(_internalData.display, visualInfo->screen);
 
-	Colormap colormap = XCreateColormap(_internalData.display, _internalData.rootWindow, visualInfo->visual, AllocNone);
+	Colormap colormap = XCreateColormap(_internalData.display, _internalData.root, visualInfo->visual, AllocNone);
 	u64 windowMask = CWBorderPixel | CWColormap | CWEventMask;
 
 	XSetWindowAttributes attrs;
@@ -58,7 +58,7 @@ void Canvas::create(const WindowInitialParams &params)
 	attrs.border_pixel = 0;
 	attrs.event_mask = ExposureMask | StructureNotifyMask;
 
-	_internalData.window = XCreateWindow(_internalData.display, _internalData.rootWindow, 0, 0, 
+	_internalData.window = XCreateWindow(_internalData.display, _internalData.root, 0, 0, 
 		params.sizes[kWindowSize].getW(), params.sizes[kWindowSize].getH(), 0, visualInfo->depth, InputOutput, visualInfo->visual, windowMask, &attrs);
 
 	if (_internalData.window == None)
@@ -228,7 +228,7 @@ void Canvas::getPosition(s32 *x, s32 *y)
 	::Window dummy;
 	s32 xpos, ypos;
 
-	XTranslateCoordinates(_internalData.display, _internalData.window, _internalData.rootWindow, 0, 0, &xpos, &ypos, &dummy);
+	XTranslateCoordinates(_internalData.display, _internalData.window, _internalData.root, 0, 0, &xpos, &ypos, &dummy);
 
 	if (x)
 		*x = xpos;
@@ -246,7 +246,7 @@ math::TPoint<s32> Canvas::getPosition() const
 	::Window dummy;
 	s32 xpos, ypos;
 
-	XTranslateCoordinates(_internalData.display, _internalData.window, _internalData.rootWindow, 0, 0, &xpos, &ypos, &dummy);
+	XTranslateCoordinates(_internalData.display, _internalData.window, _internalData.root, 0, 0, &xpos, &ypos, &dummy);
 
 	return math::TPoint<s32>(xpos, ypos);
 }
@@ -402,7 +402,7 @@ void Canvas::toggleFullscreen(bool fullscreen)
 	event.xclient.data.l[1] = _wmStateFullscreen;
 	event.xclient.data.l[2] = 0;
 
-	XSendEvent(_internalData.display, _internalData.rootWindow, False, SubstructureNotifyMask | SubstructureRedirectMask, &event);
+	XSendEvent(_internalData.display, _internalData.root, False, SubstructureNotifyMask | SubstructureRedirectMask, &event);
 }
 
 /*!
