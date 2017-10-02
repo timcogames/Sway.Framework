@@ -6,46 +6,64 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(math)
 
-template<typename T> class TSize;
+template<typename type>
+class TSize;
 
-template<typename T>
+template<typename type>
 class TRect final
 {
 public:
 	/*!
-	 * \brief Конструктор класса.
+	 * \brief
+	 *   Конструктор класса.
 	 *
-	 * Выполняет инициализацию нового экземпляра класса.
+	 *   Выполняет инициализацию нового экземпляра класса.
 	 */
 	TRect()
 	{
-		set((T)0, (T)0, (T)0, (T)0);
+		set((type)0, (type)0, (type)0, (type)0);
 	}
 
 	/*!
-	 * \brief Конструктор класса.
+	 * \brief
+	 *   Конструктор класса.
 	 *
-	 * Выполняет инициализацию нового экземпляра класса.
+	 *   Выполняет инициализацию нового экземпляра класса.
 	 *
-	 * \param x Значение координаты по оси X.
-	 * \param y Значение координаты по оси Y.
-	 * \param w Значение ширины.
-	 * \param h Значение высоты.
+	 * \param x
+	 *   Значение координаты по оси X.
+	 * 
+	 * \param y
+	 *   Значение координаты по оси Y.
+	 * 
+	 * \param w
+	 *   Значение ширины.
+	 * 
+	 * \param h
+	 *   Значение высоты.
 	 */
-	explicit TRect(T x, T y, T w, T h)
+	explicit TRect(type x, type y, type w, type h)
 	{
 		set(x, y, w, h);
 	}
 
 	/*!
-	 * \brief Устанавливает новые значения.
+	 * \brief
+	 *   Устанавливает новые значения.
 	 *
-	 * \param x Значение координаты по оси X.
-	 * \param y Значение координаты по оси Y.
-	 * \param w Значение ширины.
-	 * \param h Значение высоты.
+	 * \param x
+	 *   Значение координаты по оси X.
+	 * 
+	 * \param y
+	 *   Значение координаты по оси Y.
+	 * 
+	 * \param w
+	 *   Значение ширины.
+	 * 
+	 * \param h
+	 *   Значение высоты.
 	 */
-	void set(T x, T y, T w, T h)
+	void set(type x, type y, type w, type h)
 	{
 		_l = x;
 		_t = y;
@@ -53,7 +71,7 @@ public:
 		_b = h;
 	}
 
-	void offset(T x, T y)
+	void offset(type x, type y)
 	{
 		_l += x;
 		_t += y;
@@ -62,82 +80,108 @@ public:
 	}
 
 	/*!
-	 * \brief Устанавливает новое значение позиции прямоугольной области по оси X.
+	 * \brief
+	 *   Устанавливает новое значение позиции прямоугольной области по оси X.
 	 *
-	 * \param x Значение координаты позиции по оси X.
+	 * \param x
+	 *   Значение координаты позиции по оси X.
 	 *
-	 * \sa TRect::setT() const, TRect::setR() const, TRect::setB() const, TRect::setW() const, TRect::setH() const
+	 * \sa
+	 *   TRect::setT() const
+	 *   TRect::setR() const
+	 *   TRect::setB() const
+	 *   TRect::setW() const
+	 *   TRect::setH() const
 	 */
-	void setL(T x)
+	void setL(type x)
 	{
 		_l = x;
 	}
 
-	T getL() const
+	type getL() const
 	{
 		return _l;
 	}
 
 	/*!
-	 * \brief Устанавливает новое значение позиции прямоугольной области по оси Y.
+	 * \brief
+	 *   Устанавливает новое значение позиции прямоугольной области по оси Y.
 	 *
-	 * \param x Значение координаты позиции по оси Y.
+	 * \param x
+	 *   Значение координаты позиции по оси Y.
 	 *
-	 * \sa TRect::setL() const, TRect::setR() const, TRect::setB() const, TRect::setW() const, TRect::setH() const
+	 * \sa
+	 *   TRect::setL() const
+	 *   TRect::setR() const
+	 *   TRect::setB() const
+	 *   TRect::setW() const
+	 *   TRect::setH() const
 	 */
-	void setT(T y)
+	void setT(type y)
 	{
 		_t = y;
 	}
 
-	T getT() const
+	type getT() const
 	{
 		return _t;
 	}
 
-	void setR(T w)
+	void setR(type w)
 	{
 		_r = w;
 	}
 
-	T getR() const
+	type getR() const
 	{
 		return _l + _r;
 	}
 
-	void setB(T h)
+	void setB(type h)
 	{
 		_b = h;
 	}
 
-	T getB() const
+	type getB() const
 	{
 		return _t + _b;
 	}
 
 	/*!
-	 * \brief Получает ширину прямоугольной области.
+	 * \brief
+	 *   Получает ширину прямоугольной области.
 	 *
-	 * \sa TRect::getL() const, TRect::getT() const, TRect::getR() const, TRect::getB() const, TRect::getH() const
+	 * \sa
+	 *   TRect::getL() const
+	 *   TRect::getT() const
+	 *   TRect::getR() const
+	 *   TRect::getB() const
+	 *   TRect::getH() const
 	 */
-	T getW() const
+	type getW() const
 	{
 		return _r - _l;
 	}
 
 	/*!
-	 * \brief Получает высоту прямоугольной области.
+	 * \brief
+	 *   Получает высоту прямоугольной области.
 	 *
-	 * \sa TRect::getL() const, TRect::getT() const, TRect::getR() const, TRect::getB() const, TRect::getW() const
+	 * \sa
+	 *   TRect::getL() const
+	 *   TRect::getT() const
+	 *   TRect::getR() const
+	 *   TRect::getB() const
+	 *   TRect::getW() const
 	 */
-	T getH() const
+	type getH() const
 	{
 		return _b - _t;
 	}
 
 	bool isEmpty() const
 	{
-		return ((getW() <= (T)0) OR (getH() <= (T)0));
+		return ((getW() <= (type)0) OR (getH() <= (type)0));
 	}
 
 	bool isValid() const
@@ -148,13 +192,13 @@ public:
 		return true;
 	}
 
-	TSize<T> toSize() const
+	TSize<type> toSize() const
 	{
-		return TSize<T>(getW(), getH());
+		return TSize<type>(getW(), getH());
 	}
 
 private:
-	T _l, _t, _r, _b;
+	type _l, _t, _r, _b;
 };
 
 NAMESPACE_END(math)
