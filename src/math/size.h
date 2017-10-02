@@ -11,14 +11,14 @@ template<typename type>
 class TRect;
 
 template <typename type>
-class TSize
+class TSize final
 {
 public:
 	/*!
 	 * \brief
-	 *     Конструктор класса.
+	 *   Конструктор класса.
 	 *
-	 *     Выполняет инициализацию нового экземпляра класса.
+	 *   Выполняет инициализацию нового экземпляра класса.
 	 */
 	TSize()
 	{
@@ -27,15 +27,15 @@ public:
 
 	/*!
 	 * \brief
-	 *     Конструктор класса.
+	 *   Конструктор класса.
 	 *
-	 *     Выполняет инициализацию нового экземпляра класса.
+	 *   Выполняет инициализацию нового экземпляра класса.
 	 *
 	 * \param w
-	 *     Значение ширины.
+	 *   Значение ширины.
 	 * 
 	 * \param h
-	 *     Значение высоты.
+	 *   Значение высоты.
 	 */
 	explicit TSize(type w, type h)
 	{
@@ -59,13 +59,13 @@ public:
 
 	/*!
 	 * \brief
-	 *     Устанавливает новые значения.
+	 *   Устанавливает новые значения.
 	 *
 	 * \param w
-	 *     Значение ширины.
+	 *   Значение ширины.
 	 * 
 	 * \param h
-	 *     Значение высоты.
+	 *   Значение высоты.
 	 */
 	void set(type w, type h)
 	{
@@ -80,10 +80,10 @@ public:
 
 	/*!
 	 * \brief
-	 *     Получает значение ширины.
+	 *   Получает значение ширины.
 	 *
 	 * \sa
-	 *     TSize::getH()
+	 *   TSize::getH()
 	 */
 	type getW() const { return _w; }
 
@@ -94,10 +94,10 @@ public:
 
 	/*!
 	 * \brief
-	 *     Получает значение высоты.
+	 *   Получает значение высоты.
 	 *
 	 * \sa
-	 *     TSize::getW()
+	 *   TSize::getW()
 	 */
 	type getH() const { return _h; }
 
@@ -106,12 +106,20 @@ public:
 		return TRect<type>((type)0, (type)0, _w, _h);
 	}
 
+	/*!
+	 * \brief 
+	 *   Оператор равенства. 
+	 */
 	template <typename other>
 	bool operator==(const TSize<other> &compare) const
 	{
 		return _w == compare.getW() AND _h == compare.getH();
 	}
 
+	/*!
+	 * \brief 
+	 *   Оператор неравенства. 
+	 */
 	template <typename other>
 	bool operator!=(const TSize<other> &compare) const
 	{

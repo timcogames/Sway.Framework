@@ -10,7 +10,9 @@ languages:
         - /src/*.inl
       exclude:
         - /src/tests/.*
+				- /src/.*\.tests.cpp
 
     test:
       include:
         - /src/tests/.*
+				- /src/.*\.tests.cpp
