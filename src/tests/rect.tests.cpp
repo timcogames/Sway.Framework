@@ -30,8 +30,8 @@ BOOST_AUTO_TEST_CASE(TRectTestCase_ComponentConstructor)
 
 	BOOST_CHECK_EQUAL(rect.getL(), x);
 	BOOST_CHECK_EQUAL(rect.getT(), y);
-	BOOST_CHECK_EQUAL(rect.getW(), w);
-	BOOST_CHECK_EQUAL(rect.getH(), h);
+	BOOST_CHECK_EQUAL(rect.getW(), w - x);
+	BOOST_CHECK_EQUAL(rect.getH(), h - y);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
