@@ -10,7 +10,7 @@ NAMESPACE_BEGIN(glx11)
 
 class FrameBuffer : private boost::noncopyable
 {
-  public:
+public:
 	/*!
 	 * \brief Конструктор класса.
 	 *
@@ -33,6 +33,10 @@ class FrameBuffer : private boost::noncopyable
 
 	void describeConfig(::Display *display, FrameBufferConfig config);
 
+private:
+	void _getConfigAttrs_Colorbuffer(::Display *display, GLXFBConfig fbconfig, FrameBufferConfig *config);
+
+	void _getConfigAttrs_Ms(::Display *display, GLXFBConfig fbconfig, FrameBufferConfig *config);
 private:
 	GLXFBConfig _fbconfig;
 	FrameBufferConfig _config;

@@ -10,15 +10,16 @@ class WindowListener
 {
 public:
 	/*!
-	 * \brief Виртуальный деструктор класса.
+	 * \brief
+	 *   Виртуальный деструктор класса.
 	 *
-	 * Освобождает захваченные ресурсы.
+	 *   Освобождает захваченные ресурсы.
 	 */
 	virtual ~WindowListener() {}
 
 	virtual void onCreate(const WindowEventCreate &) {}
 	virtual void onResize(const WindowEventResize &) {}
-	virtual void onPaint(const WindowEventPaint &) {}
+	virtual void onRedraw(const WindowEventRedraw &) {}
 	virtual void onGainFocus(const WindowEventGeneric &) {}
 	virtual void onLostFocus(const WindowEventGeneric &) {}
 };

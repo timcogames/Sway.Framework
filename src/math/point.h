@@ -1,7 +1,7 @@
 #ifndef SWAY_MATH_POINT_H
 #define SWAY_MATH_POINT_H
 
-#include "../defines.h"
+#include "mathprereqs.h"
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(math)

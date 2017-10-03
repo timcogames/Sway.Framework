@@ -1,14 +1,10 @@
 #ifndef SWAY_MATH_SIZE_H
 #define SWAY_MATH_SIZE_H
 
-#include "../defines.h"
-#include "../types.h"
+#include "mathprereqs.h"
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(math)
-
-template<typename type>
-class TRect;
 
 template <typename type>
 class TSize final
@@ -52,7 +48,7 @@ public:
 		set(ptr[0], ptr[1]);
 	}
 
-	explicit TSize(const TSize<type> &flatten)
+	TSize(const TSize<type> &flatten)
 	{
 		set(flatten.getW(), flatten.getH());
 	}

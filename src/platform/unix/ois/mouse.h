@@ -12,16 +12,18 @@ class Mouse : public foundation::Object
 
 public:
 	/*!
-	 * \brief Конструктор класса.
+	 * \brief
+	 *   Конструктор класса.
 	 *
-	 * Выполняет инициализацию нового экземпляра класса.
+	 *   Выполняет инициализацию нового экземпляра класса.
 	 */
 	Mouse(InputManager *creator);
 
 	/*!
-	 * \brief Деструктор класса.
+	 * \brief
+	 *   Деструктор класса.
 	 *
-	 * Освобождает захваченные ресурсы.
+	 *   Освобождает захваченные ресурсы.
 	 */
 	virtual ~Mouse();
 
@@ -31,12 +33,37 @@ public:
 
 private:
 	/*!
-	 * \fn void Mouse::_initialize()
-	 * \brief Инициализация устройства.
+	 * \fn
+	 *   void Mouse::_initialize()
+	 * 
+	 * \brief
+	 *   Инициализация устройства.
 	 *
-	 * \note Внутренний метод, вызывается в конструкторе.
+	 * \note
+	 *   Внутренний метод, вызывается в конструкторе.
 	 */
 	void _initialize();
+
+	void _injectMouseMove(XEvent event);
+	
+	/*!
+	 * \brief
+	 *   Функция, которая отправляет событие с кнопки мыши в приемник.
+	 * 
+	 * \param event
+	 *   Событие кнопки мыши.
+	 * 
+	 * \return
+	 *   - True, если устройство ввода обрабатывается приемником.
+	 *   - False, если устройство ввода не был обработан приемником.
+	 */
+	bool _injectMouseButtonDown(XEvent event);
+	
+	bool _injectMouseButtonUp(XEvent event);
+
+	bool _injectMouseButtonClick();
+
+	bool _injectMouseButtonDoubleClick();
 
 private:
 	::Display *_display;

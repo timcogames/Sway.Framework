@@ -17,154 +17,213 @@ NAMESPACE_BEGIN(glx11)
 
 class Canvas : private boost::noncopyable
 {
-  public:
+public:
 	boost::function<void(const WindowEventCreate &)> onCreate;
 	boost::function<void(const WindowEventResize &)> onResize;
-	boost::function<void(const WindowEventPaint &)> onPaint;
+	boost::function<void(const WindowEventRedraw &)> onRedraw;
 	boost::function<void(const WindowEventGeneric &)> onGainFocus;
 	boost::function<void(const WindowEventGeneric &)> onLostFocus;
 
-  public:
+public:
 	/*!
-	 * \brief Конструктор класса.
+	 * \brief
+	 *   Конструктор класса.
 	 *
-	 * Выполняет инициализацию нового экземпляра класса.
+	 *   Выполняет инициализацию нового экземпляра класса.
 	 */
 	Canvas();
 
 	/*!
-	 * \brief Деструктор класса.
+	 * \brief
+	 *   Деструктор класса.
 	 *
-	 * Освобождает захваченные ресурсы.
+	 *   Освобождает захваченные ресурсы.
 	 */
 	~Canvas();
 
+	//x_connect
+	//x_disconnect
+
 	/*!
-	 * \brief Создает окно.
+	 * \brief
+	 *   Создает окно.
 	 *
-	 * \param params Параметры окна.
+	 * \param params
+	 *   Параметры окна.
 	 */
 	void create(const WindowInitialParams &params);
 
 	/*!
-	 * \brief Уничтожает окно.
+	 * \brief
+	 *   Уничтожает окно.
 	 */
 	void destroy();
 
 	void connect(WindowListener *listener);
 
 	/*!
-	 * \brief Обрабатывает события.
+	 * \brief
+	 *   Обрабатывает события.
 	 */
 	bool eventLoop(ois::InputManager *inputManager, bool keepgoing);
 
 	/*!
-	 * \brief Устанавливает заголовок окна.
+	 * \brief
+	 *   Устанавливает заголовок окна.
 	 *
-	 * \param title Заголовок окна.
+	 * \param title
+	 *   Заголовок окна.
 	 */
 	void setTitle(lpcstr title);
 
 	/*!
-	 * \brief Устанавливает позицию окна.
+	 * \brief
+	 *   Устанавливает позицию окна.
 	 *
-	 * \param x Координата позиции окна по оси X.
-	 * \param y Координата позиции окна по оси Y.
+	 * \param x
+	 *   Координата позиции окна по оси X.
+	 * 
+	 * \param y
+	 *   Координата позиции окна по оси Y.
 	 *
-	 * \sa Canvas::getPosition(s32 *, s32 *), Canvas::getPosition() const
+	 * \sa
+	 *   Canvas::getPosition(s32 *, s32 *)
+	 *   Canvas::getPosition() const
 	 */
 	void setPosition(s32 x, s32 y);
 
 	//!@{
 
 	/*!
-	 * \brief Получает позицию окна.
+	 * \brief
+	 *   Получает позицию окна.
 	 *
-	 * \param x Возвращаемое значение координаты позиции окна по оси X.
-	 * \param y Возвращаемое значение координаты позиции окна по оси Y.
+	 * \param x
+	 *   Возвращаемое значение координаты позиции окна по оси X.
+	 * 
+	 * \param y
+	 *   Возвращаемое значение координаты позиции окна по оси Y.
 	 *
-	 * \sa Canvas::getPosition() const, Canvas::setPosition(s32, s32)
+	 * \sa
+	 *   Canvas::getPosition() const
+	 *   Canvas::setPosition(s32, s32)
 	 */
 	void getPosition(s32 *x, s32 *y);
 
 	/*!
-	 * \brief Получает позицию окна.
+	 * \brief
+	 *   Получает позицию окна.
 	 *
-	 * \sa Canvas::getPosition(s32 *, s32 *), Canvas::setPosition(s32, s32)
+	 * \sa
+	 *   Canvas::getPosition(s32 *, s32 *)
+	 *   Canvas::setPosition(s32, s32)
 	 */
 	math::TPoint<s32> getPosition() const;
 
 	//!@}
 
 	/*!
-	 * \brief Устанавливает размер окна.
+	 * \brief
+	 *   Устанавливает размер окна.
 	 *
-	 * \param w Ширина окна.
-	 * \param h Высота окна.
+	 * \param w
+	 *   Ширина окна.
+	 * 
+	 * \param h
+	 *   Высота окна.
 	 *
-	 * \sa Canvas::getSize(s32 *, s32 *), Canvas::getSize() const
+	 * \sa
+	 *   Canvas::getSize(s32 *, s32 *)
+	 *   Canvas::getSize() const
 	 */
 	void setSize(u32 w, u32 h);
 
 	//!@{
 
 	/*!
-	 * \brief Получает размер окна.
+	 * \brief
+	 *   Получает размер окна.
 	 *
-	 * \param w Возвращаемое значение ширины окна.
-	 * \param h Возвращаемое значение высоты окна.
+	 * \param w
+	 *   Возвращаемое значение ширины окна.
+	 * 
+	 * \param h
+	 *   Возвращаемое значение высоты окна.
 	 *
-	 * \sa Canvas::getSize() const, Canvas::setSize(s32, s32)
+	 * \sa
+	 *   Canvas::getSize() const
+	 *   Canvas::setSize(s32, s32)
 	 */
 	void getSize(s32 *w, s32 *h);
 
 	/*!
-	 * \brief Получает размер окна.
+	 * \brief
+	 *   Получает размер окна.
 	 *
-	 * \sa Canvas::getSize(s32 *, s32 *), Canvas::setSize(s32, s32)
+	 * \sa
+	 *   Canvas::getSize(s32 *, s32 *)
+	 *   Canvas::setSize(s32, s32)
 	 */
 	math::TSize<s32> getSize() const;
 
 	//!@}
 
 	/*!
-	 * \brief Устанавливает поведение при смене размера.
+	 * \brief
+	 *   Устанавливает поведение при смене размера.
 	 *
-	 * \param sizes Оригинальный/минимальный/максимальный размер окна.
-	 * \param resizable Возможность изменения размера.
+	 * \param sizes
+	 *   Оригинальный/минимальный/максимальный размер окна.
+	 * 
+	 * \param resizable
+	 *   Возможность изменения размера.
 	 */
 	void setSizeHints(const math::TSize<s32> *sizes, bool resizable);
 
 	/*!
-	 * \brief Показывает окно.
+	 * \brief
+	 *   Показывает окно.
 	 *
-	 * \sa Canvas::hide(), Canvas::visible()
+	 * \sa
+	 *   Canvas::hide()
+	 *   Canvas::visible()
 	 */
 	void show();
 
 	/*!
-	 * \brief Скрывает окно.
+	 * \brief
+	 *   Скрывает окно.
 	 *
-	 * \sa Canvas::show(), Canvas::visible()
+	 * \sa
+	 *   Canvas::show()
+	 *   Canvas::visible()
 	 */
 	void hide();
 
 	/*!
-	 * \brief Получает Boolean значение видимости окна.
+	 * \brief
+	 *   Получает Boolean значение видимости окна.
 	 *
-	 * \sa Canvas::show(), Canvas::hide()
+	 * \sa
+	 *   Canvas::show()
+	 *   Canvas::hide()
 	 */
 	bool visible() const;
 
 	/*!
-	 * \brief Переключает в полноэкранный/оконный режим.
+	 * \brief
+	 *   Переключает в полноэкранный/оконный режим.
 	 *
-	 * \param fullscreen Включить полноэкранный режим?
+	 * \param fullscreen
+	 *   Включить полноэкранный режим?
 	 */
-	void toggleFullscreen(bool fullscreen);
+	void setFullscreen(bool fullscreen);
+
+	void setMaximize(bool maximized);
 
 	/*!
-	 * \brief Получает уникальный идентификатор окна.
+	 * \brief
+	 *   Получает уникальный идентификатор окна.
 	 */
 	u32 getWindowId() const;
 
@@ -172,17 +231,12 @@ class Canvas : private boost::noncopyable
 		return _renderContext;
 	}
 
-  private:
+private:
 	void _minSize(XSizeHints *hints, const math::TSize<s32> *sizes, bool resizable);
 	void _maxSize(XSizeHints *hints, const math::TSize<s32> *sizes, bool resizable);
 
-  private:
+private:
 	WindowInternalData _internalData;
-
-	Atom _wmState;
-	Atom _wmStateFullscreen;
-	Atom _wmDeleteWindow;
-
 	RenderContext *_renderContext;
 };
 

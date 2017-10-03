@@ -4,70 +4,92 @@
 #include "glx11prereqs.h"
 #include <boost/noncopyable.hpp> // boost::noncopyable
 
+#include "framebufferconfig.h"
+
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
 
 struct RenderContextInternalData
 {
-	::Display *display;
-	::Window window;
-	GLXContext context;
+	::Display *xDisplay;
+	u32 visualId;
+	GLXFBConfig glxFBConfig;
+	GLXDrawable glxDrawable;
+	GLXContext glxContext;
 };
 
 class RenderContext : private boost::noncopyable
 {
-  public:
+public:
 	/*!
-	 * \brief Конструктор класса.
+	 * \brief
+	 *   Конструктор класса.
 	 *
-	 * Выполняет инициализацию нового экземпляра класса.
+	 *   Выполняет инициализацию нового экземпляра класса.
 	 */
 	RenderContext();
 
 	/*!
-	 * \brief Деструктор класса.
+	 * \brief
+	 *   Деструктор класса.
 	 *
-	 * Освобождает захваченные ресурсы.
+	 *   Освобождает захваченные ресурсы.
 	 */
 	~RenderContext();
 
-	/*!
-	 * \brief Создает контекст визуализации.
-	 *
-	 * \param display Идентификатор сервера.
-	 * \param window Идентификатор окна.
-	 */
-	void createContext(::Display *display, ::Window window);
+	bool checkGLXExtension(::Display *display);
+
+	bool checkGLXVersion(::Display *display);
 
 	/*!
-	 * \brief Уничтожает контекст визуализации.
+	 * \brief
+	 *   Создает контекст визуализации.
+	 *
+	 * \param window
+	 *   Идентификатор окна.
+	 */
+	void createContext(::Window window);
+
+	/*!
+	 * \brief
+	 *   Уничтожает контекст визуализации.
 	 */
 	void destroyContext();
 
 	/*!
-	 * \brief Прикрепляет контекст к окну.
+	 * \brief
+	 *   Прикрепляет контекст к окну.
 	 *
-	 * \sa RenderContext::doneCurrent()
+	 * \sa
+	 *   RenderContext::doneCurrent()
 	 */
 	bool makeCurrent();
 	
 	/*!
-	 * \brief Освобождаем контекст.
+	 * \brief
+	 *   Освобождаем контекст.
 	 *
-	 * \sa RenderContext::makeCurrent()
+	 * \sa
+	 *   RenderContext::makeCurrent()
 	 */
 	bool doneCurrent();
 
 	/*!
-	 * \brief Обмен буферов.
+	 * \brief
+	 *   Обмен буферов.
 	 */
-	void swap();
+	void present();
 
-	XVisualInfo *chooseBestFBConfig(::Display *display);
+	XVisualInfo selectBestVisual(::Display* display);
+
+	void chooseBestFBConfig(::Display *display);
+
+	XVisualInfo *getVisual();
+private:
+	void _getMultisampleVisualConfig(GLXFBConfig fbconfig, FrameBufferConfig *config);
 
 private:
 	RenderContextInternalData _internalData;
-	GLXFBConfig _fbconfig;
 };
 
 NAMESPACE_END(glx11)

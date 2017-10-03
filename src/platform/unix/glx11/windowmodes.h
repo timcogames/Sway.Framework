@@ -8,8 +8,8 @@ NAMESPACE_BEGIN(glx11)
 
 enum WindowModes
 {
-	kWindowMode_Windowed   = 0, /*!< Оконный режим. */
-	kWindowMode_Fullscreen = 1  /*!< Полноэкранный режим. */
+	kWindowMode_Windowed = 0,  /*!< Оконный режим. */
+	kWindowMode_Fullscreen = 1 /*!< Полноэкранный режим. */
 };
 
 NAMESPACE_END(glx11)

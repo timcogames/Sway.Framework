@@ -1,13 +1,10 @@
 #ifndef SWAY_MATH_RECT_H
 #define SWAY_MATH_RECT_H
 
-#include "../defines.h"
+#include "mathprereqs.h"
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(math)
-
-template<typename type>
-class TSize;
 
 template<typename type>
 class TRect final

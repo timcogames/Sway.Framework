@@ -11,9 +11,9 @@ inline ostream &operator<<(ostream &str, const sway::math::TSize<type> &size)
 template <typename type>
 inline string to_string(const sway::math::TSize<type>& size)
 {
-    stringstream stream;
-    stream << size;
-    return stream.str();
+	stringstream stream;
+	stream << size;
+	return stream.str();
 }
 
 NAMESPACE_END(std)

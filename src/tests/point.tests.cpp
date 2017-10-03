@@ -1,9 +1,6 @@
-#define BOOST_TEST_MODULE TPointTestModule
-#include <boost/test/included/unit_test.hpp>
+#include <boost/test/unit_test.hpp>
 
-#include "../math/point.h"
-#include "../defines.h"
-#include "../types.h"
+#include "../math/math.h"
 
 USING_NAMESPACE(sway)
 
@@ -12,7 +9,7 @@ BOOST_AUTO_TEST_SUITE(TPointTestSuite)
 /*!
  * Убеждаемся, что конструктор по умолчанию приводит все компоненты к нулю.
  */
-BOOST_AUTO_TEST_CASE(DefaultConstructor)
+BOOST_AUTO_TEST_CASE(TPointTestCase_DefaultConstructor)
 {
 	const math::TPoint<s32> point;
 
@@ -24,7 +21,7 @@ BOOST_AUTO_TEST_CASE(DefaultConstructor)
  * Убеждаемся, что конструктор устанавливает все значения компонентов в те, 
  * которые были заданы.
  */
-BOOST_AUTO_TEST_CASE(ComponentConstructor)
+BOOST_AUTO_TEST_CASE(TPointTestCase_ComponentConstructor)
 {
 	const s32 x = 1, y = 2;
 	const math::TPoint<s32> point(x, y);
@@ -33,7 +30,7 @@ BOOST_AUTO_TEST_CASE(ComponentConstructor)
 	BOOST_CHECK_EQUAL(point.getY(), y);
 }
 
-BOOST_AUTO_TEST_CASE(ScalarConstructor)
+BOOST_AUTO_TEST_CASE(TPointTestCase_ScalarConstructor)
 {
 	const s32 x = 1, y = 2;
 	const math::TPoint<s32> size(math::TPoint<s32>(x, y));
@@ -45,7 +42,7 @@ BOOST_AUTO_TEST_CASE(ScalarConstructor)
 /*!
  * Тест для оператора равенства.
  */
-BOOST_AUTO_TEST_CASE(EqualityOperator1)
+BOOST_AUTO_TEST_CASE(TPointTestCase_EqualityOperator1)
 {
 	const math::TPoint<s32> point1(0, 0), point2(0, 0);
 
@@ -55,7 +52,7 @@ BOOST_AUTO_TEST_CASE(EqualityOperator1)
 /*!
  * Тест для оператора равенства.
  */
-BOOST_AUTO_TEST_CASE(EqualityOperator2)
+BOOST_AUTO_TEST_CASE(TPointTestCase_EqualityOperator2)
 {
 	const math::TPoint<s32> point1(1, 0), point2(0, 0);
 
@@ -65,7 +62,7 @@ BOOST_AUTO_TEST_CASE(EqualityOperator2)
 /*!
  * Тест для оператора равенства.
  */
-BOOST_AUTO_TEST_CASE(EqualityOperator3)
+BOOST_AUTO_TEST_CASE(TPointTestCase_EqualityOperator3)
 {
 	const math::TPoint<s32> point1(0, 0), point2(0, 2);
 
@@ -75,7 +72,7 @@ BOOST_AUTO_TEST_CASE(EqualityOperator3)
 /*!
  * Тест для оператора неравенства.
  */
-BOOST_AUTO_TEST_CASE(NonEqualityOperator1)
+BOOST_AUTO_TEST_CASE(TPointTestCase_NonEqualityOperator1)
 {
 	const math::TPoint<s32> point1(1, 2), point2(1, 2);
 
@@ -85,7 +82,7 @@ BOOST_AUTO_TEST_CASE(NonEqualityOperator1)
 /*!
  * Тест для оператора неравенства.
  */
-BOOST_AUTO_TEST_CASE(NonEqualityOperator2)
+BOOST_AUTO_TEST_CASE(TPointTestCase_NonEqualityOperator2)
 {
 	const math::TPoint<s32> point1(1, 2), point2(0, 2);
 
@@ -95,7 +92,7 @@ BOOST_AUTO_TEST_CASE(NonEqualityOperator2)
 /*!
  * Тест для оператора неравенства.
  */
-BOOST_AUTO_TEST_CASE(NonEqualityOperator3)
+BOOST_AUTO_TEST_CASE(TPointTestCase_NonEqualityOperator3)
 {
 	const math::TPoint<s32> point1(1, 2), point2(1, 0);
 

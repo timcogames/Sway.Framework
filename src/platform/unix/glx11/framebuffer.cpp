@@ -73,13 +73,27 @@ XVisualInfo *FrameBuffer::getVisual(::Display *display)
 	return glXGetVisualFromFBConfig(display, _fbconfig);
 }
 
+void FrameBuffer::_getConfigAttrs_Colorbuffer(::Display *display, GLXFBConfig fbconfig, FrameBufferConfig *config)
+{
+	glXGetFBConfigAttrib(display, fbconfig, GLX_RED_SIZE, &config->redSize);
+	glXGetFBConfigAttrib(display, fbconfig, GLX_GREEN_SIZE, &config->greenSize);
+	glXGetFBConfigAttrib(display, fbconfig, GLX_BLUE_SIZE, &config->blueSize);
+	glXGetFBConfigAttrib(display, fbconfig, GLX_ALPHA_SIZE, &config->alphaSize);
+}
+
+void FrameBuffer::_getConfigAttrs_Ms(::Display *display, GLXFBConfig fbconfig, FrameBufferConfig *config)
+{
+	glXGetFBConfigAttrib(display, fbconfig, GLX_SAMPLE_BUFFERS, &config->numMultisample);
+	glXGetFBConfigAttrib(display, fbconfig, GLX_SAMPLES, &config->numSamples);
+}
+
 FrameBufferConfig FrameBuffer::getConfigAttrs(::Display *display, GLXFBConfig fbconfig)
 {
 	FrameBufferConfig config;
-	memset(config, 0, sizeof(struct FrameBufferConfig));
+	//memset(config, 0, sizeof(struct FrameBufferConfig));
 	
-	glXGetFBConfigAttrib(display, fbconfig, GLX_SAMPLE_BUFFERS, &config.sampleBuffers);
-	glXGetFBConfigAttrib(display, fbconfig, GLX_SAMPLES, &config.samples);
+	glXGetFBConfigAttrib(display, fbconfig, GLX_SAMPLE_BUFFERS, &config.numMultisample);
+	glXGetFBConfigAttrib(display, fbconfig, GLX_SAMPLES, &config.numSamples);
 	glXGetFBConfigAttrib(display, fbconfig, GLX_FBCONFIG_ID, &config.configId);
 	glXGetFBConfigAttrib(display, fbconfig, GLX_VISUAL_ID, &config.visualId);
 	glXGetFBConfigAttrib(display, fbconfig, GLX_X_VISUAL_TYPE, &config.visualType);
@@ -89,14 +103,13 @@ FrameBufferConfig FrameBuffer::getConfigAttrs(::Display *display, GLXFBConfig fb
 	glXGetFBConfigAttrib(display, fbconfig, GLX_DOUBLEBUFFER, &config.doubleBuffer);
 	glXGetFBConfigAttrib(display, fbconfig, GLX_STEREO, &config.stereo);
 	glXGetFBConfigAttrib(display, fbconfig, GLX_AUX_BUFFERS, &config.auxBuffers);
-	glXGetFBConfigAttrib(display, fbconfig, GLX_RED_SIZE, &config.redSize);
-	glXGetFBConfigAttrib(display, fbconfig, GLX_GREEN_SIZE, &config.greenSize);
-	glXGetFBConfigAttrib(display, fbconfig, GLX_BLUE_SIZE, &config.blueSize);
-	glXGetFBConfigAttrib(display, fbconfig, GLX_ALPHA_SIZE, &config.alphaSize);
+
+	_getConfigAttrs_Colorbuffer(display, fbconfig, &config);
+
 	glXGetFBConfigAttrib(display, fbconfig, GLX_DEPTH_SIZE, &config.depthSize);
 	glXGetFBConfigAttrib(display, fbconfig, GLX_STENCIL_SIZE, &config.stencilSize);
-	glXGetFBConfigAttrib(display, fbconfig, GLX_SAMPLE_BUFFERS, &config.numMultisample);
-	glXGetFBConfigAttrib(display, fbconfig, GLX_SAMPLES, &config.numSamples);
+	
+	_getConfigAttrs_Ms(display, fbconfig, &config);
 
 	return config;
 }

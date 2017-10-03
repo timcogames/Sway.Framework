@@ -33,7 +33,7 @@ public:
 
 	void connect(KeyboardListener *listener);
 
-  private:
+private:
 	/*!
 	 * \fn void Keyboard::_initialize()
 	 * \brief Инициализация устройства.
@@ -46,7 +46,7 @@ public:
 
 	void _injectKeyUp(XEvent event);
 
-  private:
+private:
 	::Display *_display;
 	::Window _window;
 

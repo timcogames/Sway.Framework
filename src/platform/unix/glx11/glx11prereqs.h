@@ -5,9 +5,7 @@
 #include "../../../defines.h"
 #include "../../../memory/safedeletemacros.h"
 
-#include "../../../math/size.h"
-#include "../../../math/point.h"
-#include "../../../math/rect.h"
+#include "../../../math/math.h"
 
 #include "../ois/inputmanager.h"
 #include "../ois/keyboard.h"
@@ -26,7 +24,7 @@ NAMESPACE_BEGIN(glx11)
 struct WindowEventGeneric;
 struct WindowEventCreate;
 struct WindowEventResize;
-struct WindowEventPaint;
+struct WindowEventRedraw;
 struct WindowInitialParams;
 struct WindowInternalData;
 

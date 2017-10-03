@@ -22,7 +22,7 @@ struct WindowEventResize
 	math::TSize<s32> size;
 };
 
-struct WindowEventPaint
+struct WindowEventRedraw
 {
 	math::TPoint<s32> position;
 	math::TSize<s32> size;

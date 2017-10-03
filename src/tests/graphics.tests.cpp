@@ -1,6 +1,4 @@
-#define BOOST_TEST_MODULE RenderSubsystemFixture
-
-#include <boost/test/included/unit_test.hpp>
+#include <boost/test/unit_test.hpp>
 #include <boost/make_shared.hpp>
 
 #include "../memory/safedeletemacros.h"

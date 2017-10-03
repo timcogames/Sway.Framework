@@ -10,7 +10,8 @@ enum WindowSizes
 {
 	kWindowSize = 0,
 	kWindowSize_Min = 1, /*!< Минимальный размер окна. */
-	kWindowSize_Max = 2  /*!< Максимальный размер окна. */
+	kWindowSize_Max = 2, /*!< Максимальный размер окна. */
+	kWindowSize_COUNT
 };
 
 NAMESPACE_END(glx11)
