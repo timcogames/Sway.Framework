@@ -9,14 +9,12 @@ NAMESPACE_BEGIN(glx11)
 
 struct WindowInternalData
 {
-	::Display *xDisplay;          /*!< Идентификатор сервера. */
-	int xScreen;
-	::Window xRoot;               /*!< Идентификатор корневого окна. */
-	XVisualInfo *xVisual;
+	::Display *xDisplay;      /*!< Идентификатор сервера. */
+	s32 xScreen;
+	::Window xRoot;           /*!< Идентификатор корневого окна. */
+	XVisualInfo xVisual;
 	Colormap xColormap;
-	::Window xWindow;             /*!< Идентификатор окна. */
-	math::TSize<s32> desktopSize;
-	float desktopRefreshRate;
+	::Window xWindow;         /*!< Идентификатор окна. */
 	Atom xAtoms[kAtom_COUNT];
 };
 

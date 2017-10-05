@@ -1,24 +1,18 @@
-#ifndef SWAY_PLATFORM_UNIX_GLX11_RENDERCONTEXT_H
-#define SWAY_PLATFORM_UNIX_GLX11_RENDERCONTEXT_H
+#ifndef SWAY_PLATFORM_UNIX_GLX11_SURFACECONTEXT_H
+#define SWAY_PLATFORM_UNIX_GLX11_SURFACECONTEXT_H
 
 #include "glx11prereqs.h"
 #include <boost/noncopyable.hpp> // boost::noncopyable
 
-#include "framebufferconfig.h"
+#include "surfaceinternaldata.h"
+#include "visualsupport.h"
+#include "visualattributes.h"
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
 
-struct RenderContextInternalData
-{
-	::Display *xDisplay;
-	u32 visualId;
-	GLXFBConfig glxFBConfig;
-	GLXDrawable glxDrawable;
-	GLXContext glxContext;
-};
-
-class RenderContext : private boost::noncopyable
+class Canvas;
+class SurfaceContext : private boost::noncopyable
 {
 public:
 	/*!
@@ -27,7 +21,7 @@ public:
 	 *
 	 *   Выполняет инициализацию нового экземпляра класса.
 	 */
-	RenderContext();
+	SurfaceContext(Canvas *canvas, VisualSupport *support, s32 visualId);
 
 	/*!
 	 * \brief
@@ -35,33 +29,30 @@ public:
 	 *
 	 *   Освобождает захваченные ресурсы.
 	 */
-	~RenderContext();
+	~SurfaceContext();
 
-	bool checkGLXExtension(::Display *display);
+	bool checkGLXExtension();
 
-	bool checkGLXVersion(::Display *display);
+	bool checkGLXVersion();
 
 	/*!
 	 * \brief
 	 *   Создает контекст визуализации.
-	 *
-	 * \param window
-	 *   Идентификатор окна.
 	 */
-	void createContext(::Window window);
+	void create();
 
 	/*!
 	 * \brief
 	 *   Уничтожает контекст визуализации.
 	 */
-	void destroyContext();
+	void destroy();
 
 	/*!
 	 * \brief
 	 *   Прикрепляет контекст к окну.
 	 *
 	 * \sa
-	 *   RenderContext::doneCurrent()
+	 *   SurfaceContext::doneCurrent()
 	 */
 	bool makeCurrent();
 	
@@ -70,7 +61,7 @@ public:
 	 *   Освобождаем контекст.
 	 *
 	 * \sa
-	 *   RenderContext::makeCurrent()
+	 *   SurfaceContext::makeCurrent()
 	 */
 	bool doneCurrent();
 
@@ -80,19 +71,11 @@ public:
 	 */
 	void present();
 
-	XVisualInfo selectBestVisual(::Display* display);
-
-	void chooseBestFBConfig(::Display *display);
-
-	XVisualInfo *getVisual();
 private:
-	void _getMultisampleVisualConfig(GLXFBConfig fbconfig, FrameBufferConfig *config);
-
-private:
-	RenderContextInternalData _internalData;
+	SurfaceInternalData _internalData;
 };
 
 NAMESPACE_END(glx11)
 NAMESPACE_END(sway)
 
-#endif // SWAY_PLATFORM_UNIX_GLX11_RENDERCONTEXT_H
+#endif // SWAY_PLATFORM_UNIX_GLX11_SURFACECONTEXT_H

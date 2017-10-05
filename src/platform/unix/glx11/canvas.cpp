@@ -14,11 +14,11 @@ NAMESPACE_BEGIN(glx11)
  *   Выполняет инициализацию нового экземпляра класса.
  */
 Canvas::Canvas()
-	: _renderContext(nullptr)
+	: _context(NULL)
 {
 	/* Открывает соединение с сервером. */
-	_internalData.xDisplay = XOpenDisplay(nullptr);
-	if (_internalData.xDisplay == nullptr)
+	_internalData.xDisplay = XOpenDisplay(NULL);
+	if (_internalData.xDisplay == NULL)
 		throw std::runtime_error("Unable to open new X connection.");
 
 	_internalData.xAtoms[kAtom_NET_WM_STATE] = XInternAtom(_internalData.xDisplay, "_NET_WM_STATE", False);
@@ -49,13 +49,12 @@ Canvas::~Canvas()
  */
 void Canvas::create(const WindowInitialParams &params)
 {
-	_renderContext = new RenderContext();
-	_renderContext->chooseBestFBConfig(_internalData.xDisplay);
+	_support = new VisualSupport();
 
-	_internalData.xVisual = _renderContext->getVisual();
+	_internalData.xVisual = _support->chooseBestSuitable(_internalData.xDisplay);
 	_internalData.xScreen = XDefaultScreen(_internalData.xDisplay);
 	_internalData.xRoot = RootWindow(_internalData.xDisplay, _internalData.xScreen);
-	_internalData.xColormap = XCreateColormap(_internalData.xDisplay, _internalData.xRoot, _internalData.xVisual->visual, AllocNone);
+	_internalData.xColormap = XCreateColormap(_internalData.xDisplay, _internalData.xRoot, _internalData.xVisual.visual, AllocNone);
 	
 	u64 windowMask = CWBorderPixel | CWColormap | CWEventMask;
 
@@ -63,22 +62,16 @@ void Canvas::create(const WindowInitialParams &params)
 	attrs.colormap = _internalData.xColormap;
 	attrs.background_pixmap = None;
 	attrs.border_pixel = 0;
-	attrs.event_mask =
-		KeyPressMask | KeyReleaseMask | // keyboard
-		ButtonPressMask | ButtonReleaseMask | // pointer aka. mouse clicked
-		EnterWindowMask | LeaveWindowMask   | // pointer aka. mouse leaves/enters window
-		PointerMotionMask | ButtonMotionMask | // pointer aka.mouse motion
-		StructureNotifyMask | // window size changed, mapping change (ConfigureNotify)
-		ExposureMask | // window exposure (paint)
-		FocusChangeMask; // lost, gain focus
+	attrs.event_mask = KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask | ButtonMotionMask | StructureNotifyMask | ExposureMask | FocusChangeMask;
 
 	_internalData.xWindow = XCreateWindow(_internalData.xDisplay, _internalData.xRoot, 0, 0, 
-		params.sizes[kWindowSize].getW(), params.sizes[kWindowSize].getH(), 0, _internalData.xVisual->depth, InputOutput, _internalData.xVisual->visual, windowMask, &attrs);
+		params.sizes[kWindowSize].getW(), params.sizes[kWindowSize].getH(), 0, _internalData.xVisual.depth, InputOutput, _internalData.xVisual.visual, windowMask, &attrs);
 
 	if (_internalData.xWindow == None)
 		throw std::invalid_argument("Failed create window.");
 
-	_renderContext->createContext(_internalData.xWindow);
+	_context = new SurfaceContext(this, _support, _internalData.xVisual.visualid);
+	_context->create();
 
 	XSetWMProtocols(_internalData.xDisplay, _internalData.xWindow, &_internalData.xAtoms[kAtom_WM_DELETE_WINDOW], 1);
 
@@ -92,8 +85,8 @@ void Canvas::create(const WindowInitialParams &params)
  */
 void Canvas::destroy()
 {
-	_renderContext->destroyContext();
-	SAFE_DELETE(_renderContext);
+	_context->destroy();
+	SAFE_DELETE(_context);
 
 	if (_internalData.xWindow)
 	{
@@ -105,12 +98,6 @@ void Canvas::destroy()
 	{
 		XFreeColormap(_internalData.xDisplay, _internalData.xColormap);
 		_internalData.xColormap = 0;
-	}
-
-	if (_internalData.xVisual)
-	{
-		XFree(_internalData.xVisual);
-		_internalData.xVisual = NULL;
 	}
 }
 
@@ -183,20 +170,17 @@ bool Canvas::eventLoop(ois::InputManager *inputManager, bool keepgoing)
 
 	case FocusIn:
 		if (onGainFocus)
-			onGainFocus(WindowEventGeneric{});
+			onGainFocus(WindowEventGeneric {});
 		break;
 
 	case FocusOut:
 		if (onLostFocus)
-			onLostFocus(WindowEventGeneric{});
+			onLostFocus(WindowEventGeneric {});
 		break;
 
 	case ClientMessage:
 		if (event.xclient.format == 32 AND Atom(event.xclient.data.l[0]) == _internalData.xAtoms[kAtom_WM_DELETE_WINDOW])
-		{
-			printf("exit");
 			keepgoing = false;
-		}
 		break;
 	}
 
@@ -498,13 +482,23 @@ void Canvas::setMaximize(bool maximized)
 	XSendEvent(_internalData.xDisplay, _internalData.xRoot, False, SubstructureRedirectMask, &event);
 }
 
+void *Canvas::getXDisplay() const
+{
+	return _internalData.xDisplay;
+}
+
 /*!
  * \brief
  *   Получает уникальный идентификатор окна.
  */
-u32 Canvas::getWindowId() const
+u32 Canvas::getXWindow() const
 {
 	return _internalData.xWindow;
+}
+
+SurfaceContext *Canvas::getContext()
+{
+	return _context;
 }
 
 NAMESPACE_END(glx11)

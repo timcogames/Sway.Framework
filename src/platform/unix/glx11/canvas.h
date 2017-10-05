@@ -6,7 +6,8 @@
 #include "windowinternaldata.h"
 #include "windowlistener.h"
 
-#include "rendercontext.h"
+#include "visualsupport.h"
+#include "surfacecontext.h"
 
 #include <boost/function.hpp> // boost::function
 #include <boost/bind.hpp> // boost::bind
@@ -221,23 +222,24 @@ public:
 
 	void setMaximize(bool maximized);
 
+	void *getXDisplay() const;
+
 	/*!
 	 * \brief
 	 *   Получает уникальный идентификатор окна.
 	 */
-	u32 getWindowId() const;
+	u32 getXWindow() const;
 
-	RenderContext *getContext() {
-		return _renderContext;
-	}
-
+	SurfaceContext *getContext();
+	
 private:
 	void _minSize(XSizeHints *hints, const math::TSize<s32> *sizes, bool resizable);
 	void _maxSize(XSizeHints *hints, const math::TSize<s32> *sizes, bool resizable);
 
-private:
+public:
 	WindowInternalData _internalData;
-	RenderContext *_renderContext;
+	VisualSupport *_support;
+	SurfaceContext *_context;
 };
 
 NAMESPACE_END(glx11)
