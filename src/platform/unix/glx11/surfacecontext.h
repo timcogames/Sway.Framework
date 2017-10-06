@@ -12,6 +12,14 @@ NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
 
 class Canvas;
+
+/*!
+ * \class
+ *   SurfaceContext
+ * 
+ * \brief
+ *   Контекст поверхности холста.
+ */
 class SurfaceContext : private boost::noncopyable
 {
 public:
@@ -32,8 +40,17 @@ public:
 	~SurfaceContext();
 
 	bool checkGLXExtension();
-
 	bool checkGLXVersion();
+	
+	void printServerVendor();
+	void printClientVendor();
+
+	void printServerVersion();
+	void printClientVersion();
+	
+	void printServerExtensions();
+	void printClientExtensions();
+	void printGLXExtensions();
 
 	/*!
 	 * \brief

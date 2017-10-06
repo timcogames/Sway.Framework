@@ -6,6 +6,13 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(math)
 
+/*!
+ * \class
+ *   TRect
+ * 
+ * \brief
+ *   Шаблонный класс прямоугольной области.
+ */
 template<typename type>
 class TRect final
 {
@@ -189,6 +196,10 @@ public:
 		return true;
 	}
 
+	/*!
+	 * \brief
+	 *   Преобразовывает в TSize<type> класс.
+	 */
 	TSize<type> toSize() const
 	{
 		return TSize<type>(getW(), getH());

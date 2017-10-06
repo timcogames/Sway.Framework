@@ -31,9 +31,6 @@ class KeyboardListener;
 class Keyboard;
 class Mouse;
 
-typedef std::multimap<u32, std::string> DeviceList;
-typedef std::multimap<std::string, std::string> ParamList;
-
 NAMESPACE_END(ois)
 NAMESPACE_END(sway)
 

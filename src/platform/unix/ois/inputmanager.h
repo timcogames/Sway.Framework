@@ -13,57 +13,77 @@ class InputManager : public foundation::Context
 {
 public:
 	/*!
-	 * \brief Конструктор класса.
+	 * \brief
+	 *   Конструктор класса.
 	 *
-	 * Выполняет инициализацию нового экземпляра класса.
+	 *   Выполняет инициализацию нового экземпляра класса.
+	 * 
+	 * \param window
+	 *   Уникальный идентификатор окна.
 	 */
-	InputManager();
+	InputManager(u32 window);
 
 	/*!
-	 * \brief Деструктор класса.
+	 * \brief
+	 *   Деструктор класса.
 	 *
-	 * Освобождает захваченные ресурсы.
+	 *   Освобождает захваченные ресурсы.
 	 */
 	virtual ~InputManager();
 
 	/*!
-	 * \brief Создает объект устройства ввода.
+	 * \brief
+	 *   Создает объект устройства ввода.
 	 *
-	 * \param type Тип устройства.
+	 * \param type
+	 *   Тип устройства.
 	 */
-	foundation::Object *createInputObject(DeviceTypes type);
+	foundation::Object *createDevice(DeviceTypes type);
+
+	foundation::Object *createKeyboard();
+	foundation::Object *createMouse();
 
 	/*!
-	 * \brief Инициализация.
+	 * \brief
+	 *   Проверяет устройство.
 	 *
-	 * \param params Список параметров.
+	 * \param type
+	 *   Тип устройства для проверки.
 	 */
-	void initialize(ParamList &params);
+	int hasFreeDevice(DeviceTypes type);
 
 	/*!
-	 * \brief Устанавливает логическое значение использования клавиатуры.
+	 * \brief
+	 *   Устанавливает логическое значение использования клавиатуры.
 	 *
-	 * \param used Обрабатывать события от клавиатуры?
+	 * \param used
+	 *   Обрабатывать события от клавиатуры?
 	 *
-	 * \note Внутренний метод.
+	 * \note
+	 *   Внутренний метод.
 	 */
-	void _setKeyboardUsed(bool used);
+	void setKeyboardUsed(bool used);
 
 	/*!
-	 * \brief Устанавливает логическое значение использования мышки.
+	 * \brief
+	 *   Устанавливает логическое значение использования мышки.
 	 *
-	 * \param used Обрабатывать события от мышки?
+	 * \param used
+	 *   Обрабатывать события от мышки?
 	 *
-	 * \note Внутренний метод.
+	 * \note
+	 *   Внутренний метод.
 	 */
-	void _setMouseUsed(bool used);
+	void setMouseUsed(bool used);
 
-	::Window _getWindow();
-
-private:
-	::Window _window;
+	/*!
+	 * \brief
+	 *   Получает идентификатор окна.
+	 */
+	::Window getWindow();
 
 public:
+	::Window _window; /*!< Идентификатор окна. */
 	bool _keyboardUsed; /*!< Используется ли клавиатура. */
 	bool _mouseUsed; /*!< Используется ли мышка. */
 };

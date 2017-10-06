@@ -8,18 +8,28 @@
 #define DONT_CARE -1
 
 /*!
- * \brief Открывает область пространства имен.
+ * \brief
+ *   Открывает область пространства имен.
  *
- * \param name Имя области пространства имен.
- * \sa USING_NAMESPACE, NAMESPACE_END
+ * \param name
+ *   Имя области пространства имен.
+ * 
+ * \sa
+ *   USING_NAMESPACE
+ *   NAMESPACE_END
  */
 #define NAMESPACE_BEGIN(name) namespace name {
 
 /*!
- * \brief Закрывает область пространства имен.
+ * \brief
+ *   Закрывает область пространства имен.
  *
- * \param name Имя области пространства имен.
- * \sa USING_NAMESPACE, NAMESPACE_BEGIN
+ * \param name
+ *   Имя области пространства имен.
+ * 
+ * \sa
+ *   USING_NAMESPACE
+ *   NAMESPACE_BEGIN
  */
 #define NAMESPACE_END(name) }
 

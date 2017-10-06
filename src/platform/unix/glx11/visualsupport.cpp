@@ -10,9 +10,10 @@ NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
 
 /*!
- * \brief Конструктор класса.
+ * \brief
+ *   Конструктор класса.
  *
- * Выполняет инициализацию нового экземпляра класса.
+ *   Выполняет инициализацию нового экземпляра класса.
  */
 VisualSupport::VisualSupport()
 {
@@ -20,9 +21,10 @@ VisualSupport::VisualSupport()
 }
 
 /*!
- * \brief Деструктор класса.
+ * \brief
+ *   Деструктор класса.
  *
- * Освобождает захваченные ресурсы.
+ *   Освобождает захваченные ресурсы.
  */
 VisualSupport::~VisualSupport()
 {
@@ -78,7 +80,7 @@ VisualAttributes VisualSupport::_getMultisampleAttrs(::Display *display, XVisual
 	return attrs;
 }
 
-GLXFBConfig VisualSupport::getFBConfig(void *display, u32 visualId)
+GLXFBConfig VisualSupport::getFrameBufferConfig(void *display, u32 visualId)
 {
 	const int attrs[] = {None};
 

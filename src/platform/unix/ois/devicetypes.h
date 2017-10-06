@@ -6,11 +6,17 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(ois)
 
+/*!
+ * \enum
+ *   DeviceTypes
+ * 
+ * \brief
+ *   Перечисление типов устройств ввода.
+ */
 enum DeviceTypes
 {
-	kDeviceType_Unknown = 0,  /*!< Неизвестное устройство. */
-	kDeviceType_Keyboard = 1, /*!< Клавиатура. */
-	kDeviceType_Mouse = 2     /*!< Мышка. */
+	kDeviceType_Keyboard = 0, /*!< Клавиатура. */
+	kDeviceType_Mouse = 1     /*!< Мышка. */
 };
 
 NAMESPACE_END(ois)

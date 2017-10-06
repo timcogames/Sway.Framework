@@ -6,6 +6,13 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
 
+/*!
+ * \enum
+ *   WindowModes
+ * 
+ * \brief
+ *   Перечисление режимов окна.
+ */
 enum WindowModes
 {
 	kWindowMode_Windowed = 0,  /*!< Оконный режим. */

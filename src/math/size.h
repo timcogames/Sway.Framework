@@ -6,6 +6,13 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(math)
 
+/*!
+ * \class
+ *   TSize
+ * 
+ * \brief
+ *   Шаблонный класс размера.
+ */
 template <typename type>
 class TSize final
 {
@@ -69,6 +76,16 @@ public:
 		_h = h;
 	}
 
+	/*!
+	 * \brief
+	 *   Устанавливает значение ширины.
+	 * 
+	 * \param w
+	 *   Новое значение ширины.
+	 *
+	 * \sa
+	 *   TSize::setH(type)
+	 */
 	void setW(type w)
 	{
 		_w = w;
@@ -83,6 +100,16 @@ public:
 	 */
 	type getW() const { return _w; }
 
+	/*!
+	 * \brief
+	 *   Устанавливает значение высоты.
+	 * 
+	 * \param h
+	 *   Новое значение высоты.
+	 *
+	 * \sa
+	 *   TSize::setW(type)
+	 */
 	void setH(type h)
 	{
 		_h = h;
@@ -97,6 +124,10 @@ public:
 	 */
 	type getH() const { return _h; }
 
+	/*!
+	 * \brief
+	 *   Преобразовывает в TRect<type> класс.
+	 */
 	TRect<type> toRect() const
 	{
 		return TRect<type>((type)0, (type)0, _w, _h);

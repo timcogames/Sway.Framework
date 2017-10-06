@@ -12,12 +12,16 @@ class ObjectMetadata
 {
   public:
 	/*!
-	 * \brief Конструктор класса.
+	 * \brief
+	 *   Конструктор класса.
 	 *
-	 * Выполняет инициализацию нового экземпляра класса.
+	 *   Выполняет инициализацию нового экземпляра класса.
 	 *
-	 * \param className Имя класса.
-	 * \param superclass Указатель на объект метаданных базового класса.
+	 * \param className
+	 *   Имя класса.
+	 * 
+	 * \param superclass
+	 *   Указатель на объект метаданных базового класса.
 	 */
 	ObjectMetadata(lpcstr className, const ObjectMetadata *superclass)
 		: _superclass(superclass), _className(className)
@@ -26,18 +30,20 @@ class ObjectMetadata
 	}
 
 	/*!
-	 * \brief Получает метаданные базового класса.
+	 * \brief
+	 *   Получает метаданные базового класса.
 	 */
 	const ObjectMetadata *getSuperclass() const { return _superclass; }
 
 	/*!
-	 * \brief Получает имя класса.
+	 * \brief
+	 *   Получает имя класса.
 	 */
 	const std::string &getClassName() const { return _className; }
 
   private:
 	const ObjectMetadata *_superclass; /*!< Метаданные базового класса. */
-	std::string _className;            /*!< Имя класса. */
+	std::string _className; /*!< Имя класса. */
 };
 
 NAMESPACE_END(foundation)

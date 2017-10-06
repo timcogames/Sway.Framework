@@ -11,22 +11,24 @@ NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(ois)
 
 /*!
- * \brief Конструктор класса.
+ * \brief
+ *   Конструктор класса.
  *
- * Выполняет инициализацию нового экземпляра класса.
+ *   Выполняет инициализацию нового экземпляра класса.
  */
 Keyboard::Keyboard(InputManager *creator)
-	: foundation::Object(creator), _display(nullptr), _window(None)
+	: foundation::Object(creator), _display(NULL), _window(None)
 {
-	static_cast<InputManager *>(getContext())->_setKeyboardUsed(true);
+	static_cast<InputManager *>(getContext())->setKeyboardUsed(true);
 
 	_initialize();
 }
 
 /*!
- * \brief Деструктор класса.
+ * \brief
+ *   Деструктор класса.
  *
- * Освобождает захваченные ресурсы.
+ *   Освобождает захваченные ресурсы.
  */
 Keyboard::~Keyboard()
 {
@@ -38,23 +40,27 @@ Keyboard::~Keyboard()
 		XCloseDisplay(_display);
 	}
 
-	static_cast<InputManager *>(getContext())->_setKeyboardUsed(false);
+	static_cast<InputManager *>(getContext())->setKeyboardUsed(false);
 }
 
 /*!
- * \fn void Keyboard::_initialize()
- * \brief Инициализация устройства.
+ * \fn
+ *   void Keyboard::_initialize()
+ * 
+ * \brief
+ *   Инициализация устройства.
  *
- * \note Внутренний метод, вызывается в конструкторе.
+ * \note
+ *   Внутренний метод, вызывается в конструкторе.
  */
 void Keyboard::_initialize()
 {
 	if (_display)
 		XCloseDisplay(_display);
-	_display = nullptr;
+	_display = NULL;
 
-	_window = static_cast<InputManager *>(getContext())->_getWindow();
-	if (NOT(_display = XOpenDisplay(nullptr)))
+	_window = static_cast<InputManager *>(getContext())->getWindow();
+	if (NOT(_display = XOpenDisplay(NULL)))
 		return;
 
 	XSelectInput(_display, _window, KeyPressMask | KeyReleaseMask | KeymapStateMask);

@@ -231,7 +231,7 @@ public:
 	u32 getXWindow() const;
 
 	SurfaceContext *getContext();
-	
+
 private:
 	void _minSize(XSizeHints *hints, const math::TSize<s32> *sizes, bool resizable);
 	void _maxSize(XSizeHints *hints, const math::TSize<s32> *sizes, bool resizable);

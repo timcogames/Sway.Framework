@@ -4,9 +4,10 @@ NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(foundation)
 
 /*!
- * \brief Конструктор класса.
+ * \brief
+ *   Конструктор класса.
  *
- * Выполняет инициализацию нового экземпляра класса.
+ *   Выполняет инициализацию нового экземпляра класса.
  */
 Context::Context()
 {
@@ -14,9 +15,10 @@ Context::Context()
 }
 
 /*!
- * \brief Деструктор класса.
+ * \brief
+ *   Деструктор класса.
  *
- * Освобождает захваченные ресурсы.
+ *   Освобождает захваченные ресурсы.
  */
 Context::~Context()
 {
@@ -24,10 +26,14 @@ Context::~Context()
 }
 
 /*!
- * \brief Регистрирует объект в контейнере текущего контекста.
+ * \brief
+ *   Регистрирует объект в контейнере текущего контекста.
  *
- * \param object Указатель на объект, который следует добавить в контейнер.
- * \sa Context::unregisterObject(const std::string &)
+ * \param object
+ *   Указатель на объект, который следует добавить в контейнер.
+ * 
+ * \sa
+ *   Context::unregisterObject(const std::string &)
  */
 void Context::registerObject(Object *object)
 {
@@ -38,10 +44,14 @@ void Context::registerObject(Object *object)
 }
 
 /*!
- * \brief Разрегистрирует объект из контейнера текущего контекста.
+ * \brief
+ *   Разрегистрирует объект из контейнера текущего контекста.
  *
- * \param objectType Тип объекта.
- * \sa Context::registerObject(Object *)
+ * \param objectType
+ *   Тип объекта.
+ * 
+ * \sa
+ *   Context::registerObject(Object *)
  */
 void Context::unregisterObject(const std::string &objectType)
 {
@@ -51,9 +61,11 @@ void Context::unregisterObject(const std::string &objectType)
 }
 
 /*!
- * \brief Получает объект из контейнера текущего контекста.
+ * \brief
+ *   Получает объект из контейнера текущего контекста.
  *
- * \param objectType Тип объекта.
+ * \param objectType
+ *   Тип объекта.
  */
 Object *Context::getObject(const std::string &objectType) const
 {
@@ -65,7 +77,8 @@ Object *Context::getObject(const std::string &objectType) const
 }
 
 /*!
- * \brief Получает количество зарегистрированных объектов.
+ * \brief
+ *   Получает количество зарегистрированных объектов.
  */
 u32 Context::getObjectCount() const
 {

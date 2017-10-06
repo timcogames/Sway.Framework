@@ -6,9 +6,16 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
 
+/*!
+ * \enum
+ *   WindowSizes
+ * 
+ * \brief
+ *   Перечисление размеров окна.
+ */
 enum WindowSizes
 {
-	kWindowSize = 0,
+	kWindowSize = 0,     /*!< Основной размер. */
 	kWindowSize_Min = 1, /*!< Минимальный размер окна. */
 	kWindowSize_Max = 2, /*!< Максимальный размер окна. */
 	kWindowSize_COUNT

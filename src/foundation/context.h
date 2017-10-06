@@ -18,44 +18,57 @@ class Context
 {
   public:
 	/*!
-	 * \brief Конструктор класса.
+	 * \brief
+	 *   Конструктор класса.
 	 *
-	 * Выполняет инициализацию нового экземпляра класса.
+	 *   Выполняет инициализацию нового экземпляра класса.
 	 */
 	Context();
 
 	/*!
-	 * \brief Деструктор класса.
+	 * \brief
+	 *   Деструктор класса.
 	 *
-	 * Освобождает захваченные ресурсы.
+	 *   Освобождает захваченные ресурсы.
 	 */
 	virtual ~Context();
 
 	/*!
-	 * \brief Регистрирует объект в контейнере текущего контекста.
+	 * \brief
+	 *   Регистрирует объект в контейнере текущего контекста.
 	 *
-	 * \param object Указатель на объект, который следует добавить в контейнер.
-	 * \sa Context::unregisterObject(const std::string &)
+	 * \param object
+	 *   Указатель на объект, который следует добавить в контейнер.
+	 * 
+	 * \sa
+	 *   Context::unregisterObject(const std::string &)
 	 */
 	virtual void registerObject(Object *object);
 
 	/*!
-	 * \brief Разрегистрирует объект из контейнера текущего контекста.
+	 * \brief
+	 *   Разрегистрирует объект из контейнера текущего контекста.
 	 *
-	 * \param objectType Тип объекта.
-	 * \sa Context::registerObject(Object *)
+	 * \param objectType
+	 *   Тип объекта.
+	 * 
+	 * \sa
+	 *   Context::registerObject(Object *)
 	 */
 	virtual void unregisterObject(const std::string &objectType);
 
 	/*!
-	 * \brief Получает объект из контейнера текущего контекста.
+	 * \brief
+	 *   Получает объект из контейнера текущего контекста.
 	 *
-	 * \param objectType Тип объекта.
+	 * \param objectType
+	 *   Тип объекта.
 	 */
 	virtual Object *getObject(const std::string &objectType) const;
 
 	/*!
-	 * \brief Получает количество зарегистрированных объектов.
+	 * \brief
+	 *   Получает количество зарегистрированных объектов.
 	 */
 	virtual u32 getObjectCount() const;
 

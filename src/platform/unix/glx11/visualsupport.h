@@ -12,22 +12,24 @@ class VisualSupport : private boost::noncopyable
 {
 public:
 	/*!
-	 * \brief Конструктор класса.
+	 * \brief
+	 *   Конструктор класса.
 	 *
-	 * Выполняет инициализацию нового экземпляра класса.
+	 *   Выполняет инициализацию нового экземпляра класса.
 	 */
 	VisualSupport();
 
 	/*!
-	 * \brief Деструктор класса.
+	 * \brief
+	 *   Деструктор класса.
 	 *
-	 * Освобождает захваченные ресурсы.
+	 *   Освобождает захваченные ресурсы.
 	 */
 	~VisualSupport();
 
 	XVisualInfo chooseBestSuitable(void *display);
 
-	GLXFBConfig getFBConfig(void *display, u32 visualId);
+	GLXFBConfig getFrameBufferConfig(void *display, u32 visualId);
 
 private:
 	VisualAttributes _getMultisampleAttrs(::Display *display, XVisualInfo visual);

@@ -19,7 +19,7 @@ SurfaceContext::SurfaceContext(Canvas *canvas, VisualSupport *support, s32 visua
 {
 	_internalData.xDisplay = static_cast<::Display *>(canvas->getXDisplay());
 	_internalData.glxDrawable = static_cast<::Window>(canvas->getXWindow());
-	_internalData.glxFBConfig = support->getFBConfig(_internalData.xDisplay, visualId);
+	_internalData.glxFBConfig = support->getFrameBufferConfig(_internalData.xDisplay, visualId);
 }
 
 /*!
@@ -38,7 +38,7 @@ bool SurfaceContext::checkGLXExtension()
 	int glxErrorBase, glxEventBase;
 	if (NOT glXQueryExtension(_internalData.xDisplay, &glxErrorBase, &glxEventBase))
 	{
-		printf("X display does not support the GLX extension.");
+		fprintf(stderr, "X display does not support the GLX extension.\n");
 		return false;
 	}
 
@@ -50,11 +50,51 @@ bool SurfaceContext::checkGLXVersion()
 	int glxVersionMajor, glxVersionMinor;
 	if (NOT glXQueryVersion(_internalData.xDisplay, &glxVersionMajor, &glxVersionMinor))
 	{
-		printf("Unable to retrieve GLX version.");
+		fprintf(stderr, "Unable to retrieve GLX version.\n");
 		return false;
 	}
 
+	printf("GLX version: %u.%u\n", glxVersionMajor, glxVersionMinor);
 	return true;
+}
+
+void SurfaceContext::printServerVendor()
+{
+	lpcstr serverVendor = glXQueryServerString(_internalData.xDisplay, XDefaultScreen(_internalData.xDisplay), GLX_VENDOR);
+	printf("Server glx vendor string: %s\n", serverVendor);
+}
+
+void SurfaceContext::printClientVendor()
+{
+	lpcstr clientVendor = glXGetClientString(_internalData.xDisplay, GLX_VENDOR);
+	printf("Client glx vendor string: %s\n", clientVendor);
+}
+
+void SurfaceContext::printServerVersion()
+{
+	lpcstr serverVersion = glXQueryServerString(_internalData.xDisplay, XDefaultScreen(_internalData.xDisplay), GLX_VERSION);
+	printf("Server glx version string: %s\n", serverVersion);
+}
+
+void SurfaceContext::printClientVersion()
+{
+	lpcstr clientVersion = glXGetClientString(_internalData.xDisplay, GLX_VERSION);
+	printf("Client glx version string: %s\n", clientVersion);
+}
+
+void SurfaceContext::printServerExtensions()
+{
+	//lpcstr serverExtensions = glXQueryServerString(_internalData.xDisplay, XDefaultScreen(_internalData.xDisplay), GLX_EXTENSIONS);
+}
+
+void SurfaceContext::printClientExtensions()
+{
+	//lpcstr clientExtensions = glXGetClientString(_internalData.xDisplay, GLX_EXTENSIONS);
+}
+
+void SurfaceContext::printGLXExtensions()
+{
+	//lpcstr glxExtensions = glXQueryExtensionsString(_internalData.xDisplay, XDefaultScreen(_internalData.xDisplay));
 }
 
 /*!

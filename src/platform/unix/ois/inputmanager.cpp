@@ -7,20 +7,24 @@ NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(ois)
 
 /*!
- * \brief Конструктор класса.
+ * \brief
+ *   Конструктор класса.
  *
- * Выполняет инициализацию нового экземпляра класса.
+ *   Выполняет инициализацию нового экземпляра класса.
+ * 
+ * \param window
+ *   Уникальный идентификатор окна.
  */
-InputManager::InputManager()
-	: _keyboardUsed(false), _mouseUsed(false)
+InputManager::InputManager(u32 window)
+	: _window(static_cast<::Window>(window)), _keyboardUsed(false), _mouseUsed(false)
 {
-	_window = 0;
 }
 
 /*!
- * \brief Деструктор класса.
+ * \brief
+ *   Деструктор класса.
  *
- * Освобождает захваченные ресурсы.
+ *   Освобождает захваченные ресурсы.
  */
 InputManager::~InputManager()
 {
@@ -28,73 +32,114 @@ InputManager::~InputManager()
 }
 
 /*!
- * \brief Создает объект устройства ввода.
+ * \brief
+ *   Создает объект устройства ввода.
  *
- * \param type Тип устройства.
+ * \param type
+ *   Тип устройства.
  */
-foundation::Object *InputManager::createInputObject(DeviceTypes type)
+foundation::Object *InputManager::createDevice(DeviceTypes type)
 {
-	foundation::Object *inputObject = NULL;
+	if (NOT _window AND hasFreeDevice(type))
+		return NULL;
+
+	foundation::Object *device = NULL;
 
 	switch(type)
 	{
-	  case kDeviceType_Keyboard:
-		inputObject = new Keyboard(this);
+	case kDeviceType_Keyboard:
+		device = createKeyboard();
 		break;
-	  case kDeviceType_Mouse:
-		inputObject = new Mouse(this);
+	case kDeviceType_Mouse:
+		device = createMouse();
 		break;
-	  case kDeviceType_Unknown:
+	default:
 		break;
 	}
 
-	if(inputObject)
-		this->registerObject(inputObject);
+	if (NOT device)
+		printf("No devices match requested type.\n");
 
-	return inputObject;
+	return device;
 }
 
-/*!
- * \brief Инициализация.
- *
- * \param params Список параметров.
- */
-void InputManager::initialize(ParamList &params)
+foundation::Object *InputManager::createKeyboard()
 {
-	ParamList::iterator iter = params.find("WINDOW");
-	if (iter == params.end())
-	{
-		return;
-	}
+	foundation::Object *device = new Keyboard(this);
+	if (NOT device)
+		return NULL;
 
-	_window = strtoull(iter->second.c_str(), 0, 10);
+	registerObject(device);
+
+	return device;
+}
+
+foundation::Object *InputManager::createMouse()
+{
+	foundation::Object *device = new Mouse(this);
+	if (NOT device)
+		return NULL;
+
+	registerObject(device);
+
+	return device;
 }
 
 /*!
- * \brief Устанавливает логическое значение использования клавиатуры.
+ * \brief
+ *   Проверяет устройство.
  *
- * \param used Обрабатывать события от клавиатуры?
- *
- * \note Внутренний метод.
+ * \param type
+ *   Тип устройства для проверки.
  */
-void InputManager::_setKeyboardUsed(bool used)
+int InputManager::hasFreeDevice(DeviceTypes type)
+{
+	switch(type)
+	{
+	case kDeviceType_Keyboard:
+		return _keyboardUsed;
+	case kDeviceType_Mouse:
+		return _mouseUsed;
+	default:
+		return 0;
+	}
+}
+
+/*!
+ * \brief
+ *   Устанавливает логическое значение использования клавиатуры.
+ *
+ * \param used
+ *   Обрабатывать события от клавиатуры?
+ *
+ * \note
+ *   Внутренний метод.
+ */
+void InputManager::setKeyboardUsed(bool used)
 {
 	_keyboardUsed = used;
 }
 
 /*!
- * \brief Устанавливает логическое значение использования мышки.
+ * \brief
+ *   Устанавливает логическое значение использования мышки.
  *
- * \param used Обрабатывать события от мышки?
+ * \param used
+ *   Обрабатывать события от мышки?
  *
- * \note Внутренний метод.
+ * \note
+ *   Внутренний метод.
  */
-void InputManager::_setMouseUsed(bool used)
+void InputManager::setMouseUsed(bool used)
 {
 	_mouseUsed = used;
 }
 
-::Window InputManager::_getWindow()
+/*!
+ * \brief
+ *   Получает идентификатор окна.
+ */
+::Window InputManager::getWindow()
 {
 	return _window;
 }

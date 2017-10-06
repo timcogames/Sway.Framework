@@ -9,8 +9,11 @@ NAMESPACE_BEGIN(foundation)
 class Context;
 
 /*!
- * \class Object
- * \brief Базовый класс для объектов.
+ * \class
+ *   Object
+ * 
+ * \brief
+ *   Базовый класс для объектов.
  */
 class Object
 {
@@ -18,11 +21,13 @@ class Object
 
   public:
 	/*!
-	 * \brief Конструктор класса.
+	 * \brief
+	 *   Конструктор класса.
 	 *
-	 * Выполняет инициализацию нового экземпляра класса.
+	 *   Выполняет инициализацию нового экземпляра класса.
 	 *
-	 * \param context Контекст.
+	 * \param context
+	 *   Контекст.
 	 */
 	Object(Context *context)
 		 : _context(context)
@@ -31,9 +36,10 @@ class Object
 	}
 
 	/*!
-	 * \brief Деструктор класса.
+	 * \brief
+	 *   Деструктор класса.
 	 *
-	 * Освобождает захваченные ресурсы.
+	 *   Освобождает захваченные ресурсы.
 	 */
 	virtual ~Object()
 	{
@@ -41,22 +47,26 @@ class Object
 	}
 
 	/*!
-	 * \brief Получает метаданные текущего класса.
+	 * \brief
+	 *   Получает метаданные текущего класса.
 	 */
 	static const ObjectMetadata *getObjectMetadata() { return 0; }
 
 	/*!
-	 * \brief Получает метаданные базового класса.
+	 * \brief
+	 *   Получает метаданные базового класса.
 	 */
 	virtual const ObjectMetadata *getSuperclass() const = 0;
 
 	/*!
-	 * \brief Получает имя класса.
+	 * \brief
+	 *   Получает имя класса.
 	 */
 	virtual const std::string &getClassName() const = 0;
 
 	/*!
-	 * \brief Получает контекст.
+	 * \brief
+	 *   Получает контекст.
 	 */
 	Context *getContext() const { return _context; }
 
