@@ -20,6 +20,16 @@ class TSize;
 template<typename type>
 class TRect;
 
+/*!
+ * \class
+ *   TColor
+ * 
+ * \brief
+ *   Шаблонный класс представения цвета.
+ */
+template<typename type>
+class TColor;
+
 NAMESPACE_END(math)
 NAMESPACE_END(sway)
 

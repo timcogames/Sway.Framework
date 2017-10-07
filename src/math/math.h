@@ -6,5 +6,6 @@
 #include "point.h"
 #include "size.h"
 #include "rect.h"
+#include "color.h"
 
 #endif // SWAY_MATH_MATH_H
