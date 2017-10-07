@@ -21,6 +21,13 @@ template<typename type>
 class TRect;
 
 /*!
+ * \brief
+ *   Шаблонный класс представления вектора из четырех компонентов.
+ */
+template<typename type>
+class TVector4;
+
+/*!
  * \class
  *   TColor
  * 
