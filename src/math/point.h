@@ -7,11 +7,8 @@ NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(math)
 
 /*!
- * \class
- *   TPoint
- * 
  * \brief
- *   Шаблонный класс точки.
+ *   Шаблонный класс представления точки.
  */
 template<typename type>
 class TPoint final

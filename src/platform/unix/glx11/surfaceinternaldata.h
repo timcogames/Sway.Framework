@@ -7,9 +7,6 @@ NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
 
 /*!
- * \struct
- *   SurfaceInternalData
- * 
  * \brief
  *   Внутренние данные поверхности холста.
  */

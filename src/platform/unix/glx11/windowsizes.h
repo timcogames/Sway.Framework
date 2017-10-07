@@ -7,9 +7,6 @@ NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
 
 /*!
- * \enum
- *   WindowSizes
- * 
  * \brief
  *   Перечисление размеров окна.
  */

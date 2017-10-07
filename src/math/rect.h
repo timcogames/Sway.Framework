@@ -7,11 +7,8 @@ NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(math)
 
 /*!
- * \class
- *   TRect
- * 
  * \brief
- *   Шаблонный класс прямоугольной области.
+ *   Шаблонный класс представления прямоугольной области.
  */
 template<typename type>
 class TRect final

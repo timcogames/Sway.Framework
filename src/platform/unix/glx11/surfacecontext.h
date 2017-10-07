@@ -14,9 +14,6 @@ NAMESPACE_BEGIN(glx11)
 class Canvas;
 
 /*!
- * \class
- *   SurfaceContext
- * 
  * \brief
  *   Контекст поверхности холста.
  */

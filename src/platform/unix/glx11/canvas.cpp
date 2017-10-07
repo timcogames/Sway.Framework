@@ -103,11 +103,11 @@ void Canvas::destroy()
 
 void Canvas::connect(WindowListener *listener)
 {
-	onCreate = boost::bind(&WindowListener::onCreate, listener, _1);
-	onResize = boost::bind(&WindowListener::onResize, listener, _1);
-	onRedraw = boost::bind(&WindowListener::onRedraw, listener, _1);
-	onGainFocus = boost::bind(&WindowListener::onGainFocus, listener, _1);
-	onLostFocus = boost::bind(&WindowListener::onLostFocus, listener, _1);
+	_onCreate = boost::bind(&WindowListener::onCreate, listener, _1);
+	_onResize = boost::bind(&WindowListener::onResize, listener, _1);
+	_onRedraw = boost::bind(&WindowListener::onRedraw, listener, _1);
+	_onGainFocus = boost::bind(&WindowListener::onGainFocus, listener, _1);
+	_onLostFocus = boost::bind(&WindowListener::onLostFocus, listener, _1);
 }
 
 /*!
@@ -131,7 +131,7 @@ bool Canvas::eventLoop(ois::InputManager *inputManager, bool keepgoing)
 	switch (event.type)
 	{
 	case CreateNotify:
-		if (onCreate)
+		if (_onCreate)
 		{
 			WindowEventCreate create;
 			create.position.setX(event.xcreatewindow.x);
@@ -139,24 +139,24 @@ bool Canvas::eventLoop(ois::InputManager *inputManager, bool keepgoing)
 			create.size.setW(event.xcreatewindow.width);
 			create.size.setH(event.xcreatewindow.height);
 
-			onCreate(create);
+			_onCreate(create);
 		}
 		break;
 
 	case ConfigureNotify:
-		if (onResize)
+		if (_onResize)
 		{
 			WindowEventResize resize;
 			resize.size.setW(event.xconfigure.width);
 			resize.size.setH(event.xconfigure.height);
 
-			onResize(resize);
+			_onResize(resize);
 		}
 		break;
 
 	case Expose:
 		//needRedraw = true;
-		if (onRedraw)
+		if (_onRedraw)
 		{
 			WindowEventRedraw redraw;
 			redraw.position.setX(event.xexpose.x);
@@ -164,18 +164,18 @@ bool Canvas::eventLoop(ois::InputManager *inputManager, bool keepgoing)
 			redraw.size.setW(event.xexpose.width);
 			redraw.size.setH(event.xexpose.height);
 
-			onRedraw(redraw);
+			_onRedraw(redraw);
 		}
 		break;
 
 	case FocusIn:
-		if (onGainFocus)
-			onGainFocus(WindowEventGeneric {});
+		if (_onGainFocus)
+			_onGainFocus(WindowEventGeneric {});
 		break;
 
 	case FocusOut:
-		if (onLostFocus)
-			onLostFocus(WindowEventGeneric {});
+		if (_onLostFocus)
+			_onLostFocus(WindowEventGeneric {});
 		break;
 
 	case ClientMessage:

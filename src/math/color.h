@@ -7,9 +7,6 @@ NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(math)
 
 /*!
- * \class
- *   TColor
- * 
  * \brief
  *   Шаблонный класс представления цвета.
  */

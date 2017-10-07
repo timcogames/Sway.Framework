@@ -7,11 +7,8 @@ NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(math)
 
 /*!
- * \class
- *   TSize
- * 
  * \brief
- *   Шаблонный класс размера.
+ *   Шаблонный класс представления размера.
  */
 template <typename type>
 class TSize final

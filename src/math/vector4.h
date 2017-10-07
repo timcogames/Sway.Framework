@@ -8,7 +8,7 @@ NAMESPACE_BEGIN(math)
 
 /*!
  * \brief
- *   Шаблонный класс представления цвета.
+ *   Шаблонный класс представления вектора из четырех компонентов.
  */
 template<typename type>
 class TVector4 final

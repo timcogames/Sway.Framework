@@ -9,9 +9,6 @@ NAMESPACE_BEGIN(foundation)
 class Context;
 
 /*!
- * \class
- *   Object
- * 
  * \brief
  *   Базовый класс для объектов.
  */

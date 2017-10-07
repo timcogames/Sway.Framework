@@ -19,13 +19,6 @@ NAMESPACE_BEGIN(glx11)
 class Canvas : private boost::noncopyable
 {
 public:
-	boost::function<void(const WindowEventCreate &)> onCreate;
-	boost::function<void(const WindowEventResize &)> onResize;
-	boost::function<void(const WindowEventRedraw &)> onRedraw;
-	boost::function<void(const WindowEventGeneric &)> onGainFocus;
-	boost::function<void(const WindowEventGeneric &)> onLostFocus;
-
-public:
 	/*!
 	 * \brief
 	 *   Конструктор класса.
@@ -235,6 +228,13 @@ public:
 private:
 	void _minSize(XSizeHints *hints, const math::TSize<s32> *sizes, bool resizable);
 	void _maxSize(XSizeHints *hints, const math::TSize<s32> *sizes, bool resizable);
+
+private:
+	boost::function<void(const WindowEventCreate &)> _onCreate;
+	boost::function<void(const WindowEventResize &)> _onResize;
+	boost::function<void(const WindowEventRedraw &)> _onRedraw;
+	boost::function<void(const WindowEventGeneric &)> _onGainFocus;
+	boost::function<void(const WindowEventGeneric &)> _onLostFocus;
 
 public:
 	WindowInternalData _internalData;

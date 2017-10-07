@@ -11,12 +11,20 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(math)
 
+/*!
+ * \brief
+ *   Шаблонный класс представления точки.
+ */
 template<typename type>
 class TPoint;
 
 template<typename type>
 class TSize;
 
+/*!
+ * \brief
+ *   Шаблонный класс представления прямоугольной области.
+ */
 template<typename type>
 class TRect;
 
@@ -28,11 +36,8 @@ template<typename type>
 class TVector4;
 
 /*!
- * \class
- *   TColor
- * 
  * \brief
- *   Шаблонный класс представения цвета.
+ *   Шаблонный класс представления цвета.
  */
 template<typename type>
 class TColor;

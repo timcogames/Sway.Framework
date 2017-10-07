@@ -7,6 +7,9 @@
 
 #define DONT_CARE -1
 
+#define SUCCESS_STATUS 1
+#define FAILURE_STATUS 0
+
 /*!
  * \brief
  *   Открывает область пространства имен.
@@ -38,5 +41,15 @@
 #define BLOCK_BEGIN for(;;) {
 #define BLOCK_END break; }
 #define NOOP(...) BLOCK_BEGIN BLOCK_END
+
+/*!
+ * \brief
+ *   Преобразует объект в строку.
+ *
+ * \param object
+ *   Объект который следует преобразовать в строку.
+ */
+#define STRINGIFY(object) #object
+#define CASE_TOSTRING(object) case object: return STRINGIFY(object)
 
 #endif // SWAY_DEFINES_H
