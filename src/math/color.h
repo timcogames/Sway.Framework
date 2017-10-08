@@ -22,7 +22,8 @@ public:
 	 */
 	TColor()
 	{
-		set((type)0, (type)0, (type)0);
+		_r = _g = _b = (type)0;
+		_a = (type)1;
 	}
 
 	/*!
@@ -126,6 +127,15 @@ public:
 	type getA() const
 	{
 		return _a;
+	}
+
+	/*!
+	 * \brief
+	 *   Преобразовывает в TVector4<type> класс.
+	 */
+	TVector4<type> toVec4() const
+	{
+		return TVector4<type>(_r, _g, _b, _a);
 	}
 
 private:

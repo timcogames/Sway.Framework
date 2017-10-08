@@ -22,7 +22,7 @@ public:
 	 */
 	TSize()
 	{
-		set((type)0, (type)0);
+		_w = _h = (type)0;
 	}
 
 	/*!

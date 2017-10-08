@@ -22,7 +22,7 @@ public:
 	 */
 	TRect()
 	{
-		set((type)0, (type)0, (type)0, (type)0);
+		_l = _t = _r = _b = (type)0;
 	}
 
 	/*!
@@ -68,10 +68,20 @@ public:
 	{
 		_l = x;
 		_t = y;
-		_r = w;
-		_b = h;
+		_r = x + w;
+		_b = y + h;
 	}
 
+	/*!
+	 * \brief
+	 *   Устанавливает смещение прямоугольной области.
+	 *
+	 * \param x
+	 *   Значение координаты по оси X.
+	 * 
+	 * \param y
+	 *   Значение координаты по оси Y.
+	 */
 	void offset(type x, type y)
 	{
 		_l += x;
@@ -135,7 +145,7 @@ public:
 
 	type getR() const
 	{
-		return _l + _r;
+		return _r;
 	}
 
 	void setB(type h)
@@ -145,7 +155,7 @@ public:
 
 	type getB() const
 	{
-		return _t + _b;
+		return _b;
 	}
 
 	/*!
@@ -180,6 +190,15 @@ public:
 		return _b - _t;
 	}
 
+	/*!
+	 * \brief
+	 *   Преобразовывает в TSize<type> класс.
+	 */
+	TSize<type> toSize() const
+	{
+		return TSize<type>(getW(), getH());
+	}
+
 	bool isEmpty() const
 	{
 		return ((getW() <= (type)0) OR (getH() <= (type)0));
@@ -191,15 +210,6 @@ public:
 			return false;
 
 		return true;
-	}
-
-	/*!
-	 * \brief
-	 *   Преобразовывает в TSize<type> класс.
-	 */
-	TSize<type> toSize() const
-	{
-		return TSize<type>(getW(), getH());
 	}
 
 private:
