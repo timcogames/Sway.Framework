@@ -206,10 +206,7 @@ public:
 
 	bool isValid() const
 	{
-		if ((_t > _b) OR (_l > _r))
-			return false;
-
-		return true;
+		return ((_t > _b) OR (_l > _r)) ? false : false;
 	}
 
 private:

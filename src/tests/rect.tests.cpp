@@ -67,4 +67,10 @@ BOOST_AUTO_TEST_CASE(TRectTestCase_ConvertToSize)
 	BOOST_CHECK_EQUAL(size.getH(), h);
 }
 
+BOOST_AUTO_TEST_CASE(TRectTestCase_IsEmpty)
+{
+	BOOST_CHECK(math::TRect<s32>(0, 0, 0, 32).isEmpty());
+	BOOST_CHECK(math::TRect<s32>(0, 0, 32, 0).isEmpty());
+}
+
 BOOST_AUTO_TEST_SUITE_END()
