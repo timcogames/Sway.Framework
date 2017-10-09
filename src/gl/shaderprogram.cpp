@@ -100,7 +100,7 @@ void ShaderProgram::use()
 		glUseProgramObjectARB(_program);
 
 		for (auto iter : _uniformVec4fSets)
-			glUniform4fARB(glGetUniformLocationARB(_programId, iter.first.c_str()), iter.second.getX(), iter.second.getY(), iter.second.getZ(), iter.second.getW());
+			glUniform4fARB(glGetUniformLocationARB(_program, iter.first.c_str()), iter.second.getX(), iter.second.getY(), iter.second.getZ(), iter.second.getW());
 	}
 }
 

@@ -11,6 +11,8 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(math)
 
+struct ColorVertex;
+
 /*!
  * \brief
  *   Шаблонный класс представления точки.
@@ -18,6 +20,10 @@ NAMESPACE_BEGIN(math)
 template<typename type>
 class TPoint;
 
+/*!
+ * \brief
+ *   Шаблонный класс представления размера.
+ */
 template<typename type>
 class TSize;
 
@@ -27,6 +33,13 @@ class TSize;
  */
 template<typename type>
 class TRect;
+
+/*!
+ * \brief
+ *   Шаблонный класс представления вектора из трех компонентов.
+ */
+template<typename type>
+class TVector3;
 
 /*!
  * \brief
