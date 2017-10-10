@@ -55,6 +55,13 @@ class TVector4;
 template<typename type>
 class TColor;
 
+/*!
+ * \brief
+ *   Шаблонный класс представления матрицы.
+ */
+template<typename type>
+class TMatrix4;
+
 NAMESPACE_END(math)
 NAMESPACE_END(sway)
 
