@@ -72,6 +72,7 @@ void Canvas::create(const WindowInitialParams &params)
 
 	_context = new SurfaceContext(this, _support, _internalData.xVisual.visualid);
 	_context->create();
+	_context->makeCurrent();
 
 	XSetWMProtocols(_internalData.xDisplay, _internalData.xWindow, &_internalData.xAtoms[kAtom_WM_DELETE_WINDOW], 1);
 

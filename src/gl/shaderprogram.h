@@ -1,14 +1,9 @@
 #ifndef SWAY_GL_SHADERPROGRAM_H
 #define SWAY_GL_SHADERPROGRAM_H
 
-#include "shadertypes.h"
-
 #include "../math/math.h"
-#include "../defines.h"
-#include "../types.h"
-
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "shadertypes.h"
+#include "glprereqs.h"
 
 #include <vector> // std::vector
 #include <string> // std::string
@@ -47,20 +42,44 @@ public:
 
 	/*!
 	 * \brief
-	 *   Создает шейдерную программу.
+	 *   Создает и выполняет компиляцию шейдерного объекта.
+	 * 
+	 * \param type
+	 *   Тип создаваемого шейдера.
+	 * 
+	 * \param source
+	 *   Исходный код шейдера.
 	 */
-	void create();
+	u32 compile(ShaderTypes type, lpcstr source);
 
-	void destroy();
-
-	u32 compile(ShaderTypes type, std::string shaderStr);
-
+	/*!
+	 * \brief
+	 *   Связывает шейдерные объекты с программным объектом.
+	 * 
+	 * \param shaders
+	 *   Дескрипторы связываемых шейдерных объектов.
+	 */
 	void attach(std::vector<u32> shaders);
 
+	/*!
+	 * \brief
+	 *   Отсоединяет шейдерный объект от программного объекта.
+	 * 
+	 * \param shaders
+	 *   Дескрипторы отвязываемых шейдерных объектов.
+	 */
 	void detach(std::vector<u32> shaders);
 	
+	/*!
+	 * \brief
+	 *   Компоновка шей­дерных объектов.
+	 */
 	void link();
 	
+	/*!
+	 * \brief
+	 *   Проверяет программный объект.
+	 */
 	void validate();
 
 	void use();
@@ -71,10 +90,10 @@ public:
 	
 	void setUniformColor(const std::string &uniform, const math::TColor<float> &color);
 
-private:
-	void _printProgramLog();
+	u32 getShaderProgram() {return _program;}
 
-	void _printShaderLog(u32 shader);
+private:
+	s32 _checkStatus(u32 shader, u32 name);
 
 private:
 	u32 _program;

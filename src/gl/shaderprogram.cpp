@@ -1,8 +1,29 @@
 #include "shaderprogram.h"
 #include "shadertypeutils.h"
+#include <string.h>
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
+
+PFNGLCREATEPROGRAMOBJECTARBPROC glCreateProgramObjectARB = (PFNGLCREATEPROGRAMOBJECTARBPROC) glXGetProcAddressARB((const GLubyte*) "glCreateProgramObjectARB");
+PFNGLCREATESHADEROBJECTARBPROC glCreateShaderObjectARB = (PFNGLCREATESHADEROBJECTARBPROC) glXGetProcAddressARB((const GLubyte*) "glCreateShaderObjectARB");
+PFNGLSHADERSOURCEARBPROC glShaderSourceARB = (PFNGLSHADERSOURCEARBPROC) glXGetProcAddressARB((const GLubyte*) "glShaderSourceARB");
+PFNGLCOMPILESHADERARBPROC glCompileShaderARB = (PFNGLCOMPILESHADERARBPROC) glXGetProcAddressARB((const GLubyte*) "glCompileShaderARB");
+PFNGLATTACHOBJECTARBPROC glAttachObjectARB = (PFNGLATTACHOBJECTARBPROC) glXGetProcAddressARB((const GLubyte*) "glAttachObjectARB");
+PFNGLLINKPROGRAMARBPROC glLinkProgramARB = (PFNGLLINKPROGRAMARBPROC) glXGetProcAddressARB((const GLubyte*) "glLinkProgramARB");
+PFNGLUSEPROGRAMOBJECTARBPROC glUseProgramObjectARB = (PFNGLUSEPROGRAMOBJECTARBPROC) glXGetProcAddressARB((const GLubyte*) "glUseProgramObjectARB");
+PFNGLGETUNIFORMLOCATIONARBPROC glGetUniformLocationARB = (PFNGLGETUNIFORMLOCATIONARBPROC) glXGetProcAddressARB((const GLubyte*) "glGetUniformLocationARB");
+PFNGLDELETEPROGRAMSARBPROC glDeleteProgramsARB = (PFNGLDELETEPROGRAMSARBPROC) glXGetProcAddressARB((const GLubyte*) "glDeleteProgramsARB");
+PFNGLDETACHOBJECTARBPROC glDetachObjectARB = (PFNGLDETACHOBJECTARBPROC) glXGetProcAddressARB((const GLubyte*) "glDetachObjectARB");
+PFNGLDELETEOBJECTARBPROC glDeleteObjectARB = (PFNGLDELETEOBJECTARBPROC) glXGetProcAddressARB((const GLubyte*) "glDeleteObjectARB");
+PFNGLVALIDATEPROGRAMARBPROC glValidateProgramARB = (PFNGLVALIDATEPROGRAMARBPROC) glXGetProcAddressARB((const GLubyte*) "glValidateProgramARB");
+PFNGLUNIFORM4FARBPROC glUniform4fARB = (PFNGLUNIFORM4FARBPROC) glXGetProcAddressARB((const GLubyte*) "glUniform4fARB");
+PFNGLGETPROGRAMIVARBPROC glGetProgramivARB = (PFNGLGETPROGRAMIVARBPROC) glXGetProcAddressARB((const GLubyte*) "glGetProgramivARB");
+PFNGLGETPROGRAMINFOLOGPROC glGetProgramInfoLog = (PFNGLGETPROGRAMINFOLOGPROC) glXGetProcAddressARB((const GLubyte*) "glGetProgramInfoLog");
+PFNGLGETSHADERIVPROC glGetShaderiv = (PFNGLGETSHADERIVPROC) glXGetProcAddressARB((const GLubyte*) "glGetShaderiv");
+PFNGLGETSHADERINFOLOGPROC glGetShaderInfoLog = (PFNGLGETSHADERINFOLOGPROC) glXGetProcAddressARB((const GLubyte*) "glGetShaderInfoLog");
+PFNGLGETOBJECTPARAMETERIVARBPROC glGetObjectParameterivARB = (PFNGLGETOBJECTPARAMETERIVARBPROC) glXGetProcAddressARB((const GLubyte*) "glGetObjectParameterivARB");
+PFNGLGETINFOLOGARBPROC glGetInfoLogARB = (PFNGLGETINFOLOGARBPROC) glXGetProcAddressARB((const GLubyte*) "glGetInfoLogARB");
 
 /*!
  * \brief
@@ -13,7 +34,7 @@ NAMESPACE_BEGIN(gl)
 ShaderProgram::ShaderProgram()
 	: _program(0), _vertexShader(0), _fragmentShader(0)
 {
-	// Empty
+	_program = glCreateProgramObjectARB();
 }
 
 /*!
@@ -24,14 +45,14 @@ ShaderProgram::ShaderProgram()
  */
 ShaderProgram::~ShaderProgram()
 {
-	// Empty
+	if (_program > 0)
+		glDeleteProgramsARB(1, &_program);
 }
 
 std::string ShaderProgram::readFile(lpcstr filename)
 {
 	std::ifstream fileStream(filename, std::ios::binary);
-	if (NOT fileStream.is_open())
-	{
+	if (NOT fileStream.is_open()) {
 		printf("File %s not found\n", filename);
 		return "";
 	}
@@ -44,37 +65,47 @@ std::string ShaderProgram::readFile(lpcstr filename)
 
 /*!
  * \brief
- *   Создает шейдерную программу.
+ *   Создает и выполняет компиляцию шейдерного объекта.
+ * 
+ * \param type
+ *   Тип создаваемого шейдера.
+ * 
+ * \param source
+ *   Исходный код шейдера.
  */
-void ShaderProgram::create()
-{
-	_program = glCreateProgramObjectARB();
-}
-
-void ShaderProgram::destroy()
-{	
-	if (_program > 0)
-		glDeleteProgramsARB(1, &_program);
-}
-
-u32 ShaderProgram::compile(ShaderTypes type, std::string shaderStr)
+u32 ShaderProgram::compile(ShaderTypes type, lpcstr source)
 {
 	u32 shader = glCreateShaderObjectARB(ShaderTypeUtils::toGL(type));
-	if (shader == 0)
-		std::cerr << "Error compiling shader type: " << ShaderTypeUtils::toStr(type) << std::endl;
-
-	glShaderSourceARB(shader, 1, (const GLcharARB**)shaderStr.c_str(), NULL);
+	glShaderSourceARB(shader, 1, &source, NULL);
 	glCompileShaderARB(shader);
+
+	if (_checkStatus(shader, GL_OBJECT_COMPILE_STATUS_ARB)) {
+		// Empty
+	}
 
 	return shader;
 }
 
+/*!
+ * \brief
+ *   Связывает шейдерные объекты с программным объектом.
+ * 
+ * \param shaders
+ *   Дескрипторы связываемых шейдерных объектов.
+ */
 void ShaderProgram::attach(std::vector<u32> shaders)
 {
 	for (auto shader : shaders)
 		glAttachObjectARB(_program, shader);
 }
 
+/*!
+ * \brief
+ *   Отсоединяет шейдерный объект от программного объекта.
+ * 
+ * \param shaders
+ *   Дескрипторы отвязываемых шейдерных объектов.
+ */
 void ShaderProgram::detach(std::vector<u32> shaders)
 {
 	for (auto shader : shaders)
@@ -83,20 +114,33 @@ void ShaderProgram::detach(std::vector<u32> shaders)
 	std::for_each(shaders.begin(), shaders.end(), glDeleteObjectARB);
 }
 
+/*!
+ * \brief
+ *   Компоновка шей­дерных объектов.
+ */
 void ShaderProgram::link()
 {
 	glLinkProgramARB(_program);
+	if (_checkStatus(_program, GL_OBJECT_LINK_STATUS_ARB)) {
+		// Empty
+	}
 }
 
+/*!
+ * \brief
+ *   Проверяет программный объект.
+ */
 void ShaderProgram::validate()
 {
 	glValidateProgramARB(_program);
+	if (_checkStatus(_program, GL_OBJECT_VALIDATE_STATUS_ARB)) {
+		// Empty
+	}
 }
 
 void ShaderProgram::use()
 {
-	if (_program > 0)
-	{
+	if (_program > 0) {
 		glUseProgramObjectARB(_program);
 
 		for (auto iter : _uniformVec4fSets)
@@ -120,34 +164,22 @@ void ShaderProgram::setUniformColor(const std::string &uniform, const math::TCol
 	_uniformVec4fSets[uniform] = color.toVec4();
 }
 
-void ShaderProgram::_printProgramLog()
+s32 ShaderProgram::_checkStatus(u32 shader, u32 name)
 {
-	int result = FAILURE_STATUS, logLength = 0;
+	int status = 0, length = 0;
 
-	glGetProgramiv(_program, GL_LINK_STATUS, &result);
-	glGetProgramiv(_program, GL_INFO_LOG_LENGTH, &logLength);
-
-	if (logLength > 0)
-	{
-		lpstr infoLog = new s8[logLength + 1];
-		glGetProgramInfoLog(_program, logLength, NULL, infoLog);
-		printf("program log: %s\n", infoLog);
+	glGetObjectParameterivARB(shader, name, &status);
+	if (status == FAILURE_STATUS) {
+		glGetObjectParameterivARB(shader, GL_OBJECT_INFO_LOG_LENGTH_ARB, &length);
+		if (length > 1) {
+			lpstr info = (lpstr)malloc(length);
+			glGetInfoLogARB(shader, length, NULL, info);
+			printf("Failed:\n%s", info);
+			free(info);
+		}
 	}
-}
 
-void ShaderProgram::_printShaderLog(u32 shader)
-{
-	int result = FAILURE_STATUS, logLength = 0;
-
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &result);
-	glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLength);
-
-	if (logLength > 0)
-	{
-		lpstr infoLog = new s8[logLength + 1];
-		glGetShaderInfoLog(shader, logLength, NULL, infoLog);
-		printf("shader log: %s\n", infoLog);
-	}
+	return status;
 }
 
 NAMESPACE_END(gl)
