@@ -6,6 +6,10 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(math)
 
+/*!
+ * \brief
+ *   Структура представления вершины.
+ */
 struct ColorVertex
 {
 	float x, y, z;

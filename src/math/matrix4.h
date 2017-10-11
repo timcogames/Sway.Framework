@@ -22,22 +22,55 @@ public:
 	 */
 	TMatrix4()
 	{
-		setRow(0, TVector4<type>(1, 0, 0, 0));
-		setRow(1, TVector4<type>(0, 1, 0, 0));
-		setRow(2, TVector4<type>(0, 0, 1, 0));
-		setRow(3, TVector4<type>(0, 0, 0, 1));
+		makeIdentity();
 	}
 
+	/*!
+	 * \brief 
+	 *   Устанавливает новое значение элемента матрицы.
+	 * 
+	 * \param[in] row
+	 *   Номер ряда.
+	 * 
+	 * \param[in] col
+	 *   Номер колонки.
+	 * 
+	 * \param[in] value
+	 *   Значения для установки.
+	 */
 	void set(u32 row, u32 col, type value)
 	{
-		_values[col + (row * 4)] = value;
+		_values[row * 4 + col] = value;
 	}
 
+	/*!
+	 * \brief 
+	 *   Получает значение элемента матрицы.
+	 * 
+	 * \param[in] row
+	 *   Номер ряда.
+	 * 
+	 * \param[in] col
+	 *   Номер колонки.
+	 * 
+	 * \return
+	 *   Значения элемента.
+	 */
 	type get(u32 row, u32 col) const
 	{
-		return _values[col + (row * 4)];
+		return _values[row * 4 + col];
 	}
 
+	/*!
+	 * \brief 
+	 *   Устанавливает новые значения элементов матрицы в указанном ряду.
+	 * 
+	 * \param[in] i
+	 *   Номер ряда.
+	 * 
+	 * \param[in] value
+	 *   Значения для установки.
+	 */
 	void setRow(u32 i, const TVector4<type> &value)
 	{
 		set(i, 0, value.getX());
@@ -46,11 +79,31 @@ public:
 		set(i, 3, value.getW());
 	}
 
+	/*!
+	 * \brief 
+	 *   Получает значения элементов матрицы в указанном ряду.
+	 * 
+	 * \param[in] i
+	 *   Номер ряда.
+	 * 
+	 * \return
+	 *   Значения элементов.
+	 */
 	TVector4<type> getRow(u32 i) const
 	{
 		return TVector4<type>(get(i, 0), get(i, 1), get(i, 2), get(i, 3));
 	}
 
+	/*!
+	 * \brief 
+	 *   Устанавливает новые значения элементов матрицы в указанной колонке.
+	 * 
+	 * \param[in] i
+	 *   Номер колонки.
+	 * 
+	 * \param[in] value
+	 *   Значения для установки.
+	 */
 	void setCol(u32 i, const TVector4<type> &value)
 	{
 		set(0, i, value.getX());
@@ -59,13 +112,49 @@ public:
 		set(3, i, value.getW());
 	}
 
+	/*!
+	 * \brief 
+	 *   Получает значения элементов матрицы в указанной колонке.
+	 * 
+	 * \param[in] i
+	 *   Номер колонки.
+	 * 
+	 * \return
+	 *   Значения элементов.
+	 */
 	TVector4<type> getCol(u32 i) const
 	{
 		return TVector4<type>(get(0, i), get(1, i), get(2, i), get(3, i));
 	}
 
+	/*!
+	 * \brief 
+	 *   Обнуляет все элементы матрицы.
+	 */
+	TMatrix4<type> &makeZero()
+	{
+		memset(_values, 0, sizeof(type) * 16);
+		
+		return *this;
+	}
+	
+	/*!
+	 * \brief 
+	 *   Приводит к единичной матрице.
+	 */
+	TMatrix4<type> &makeIdentity()
+	{
+		makeZero();
+		set(0, 0, (type)1);
+		set(1, 1, (type)1);
+		set(2, 2, (type)1);
+		set(3, 3, (type)1);
+
+		return *this;
+	}
+
 private:
-	type _values[16];
+	type _values[16]; /*!< Элементы матрицы. */
 };
 
 NAMESPACE_END(math)
