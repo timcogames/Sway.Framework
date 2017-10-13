@@ -31,16 +31,16 @@ public:
 	 *
 	 *   Выполняет инициализацию нового экземпляра класса.
 	 *
-	 * \param x
+	 * \param[in] x
 	 *   Компонент X вектора.
 	 * 
-	 * \param y
+	 * \param[in] y
 	 *   Компонент Y вектора.
 	 * 
-	 * \param z
+	 * \param[in] z
 	 *   Компонент Z вектора.
 	 * 
-	 * \param w
+	 * \param[in] w
 	 *   Компонент W вектора.
 	 */
 	explicit TVector4(type x, type y, type z, type w)
@@ -52,16 +52,16 @@ public:
 	 * \brief 
 	 *   Устанавливает новые значения.
 	 *
-	 * \param x
+	 * \param[in] x
 	 *   Значение X компонента.
 	 * 
-	 * \param y
+	 * \param[in] y
 	 *   Значение Y компонента.
 	 * 
-	 * \param z
+	 * \param[in] z
 	 *   Значение Z компонента.
 	 * 
-	 * \param w
+	 * \param[in] w
 	 *   Значение W компонента.
 	 */
 	void set(type x, type y, type z, type w)

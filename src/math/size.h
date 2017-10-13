@@ -31,10 +31,10 @@ public:
 	 *
 	 *   Выполняет инициализацию нового экземпляра класса.
 	 *
-	 * \param w
+	 * \param[in] w
 	 *   Значение ширины.
 	 * 
-	 * \param h
+	 * \param[in] h
 	 *   Значение высоты.
 	 */
 	explicit TSize(type w, type h)
@@ -61,10 +61,10 @@ public:
 	 * \brief
 	 *   Устанавливает новые значения.
 	 *
-	 * \param w
+	 * \param[in] w
 	 *   Значение ширины.
 	 * 
-	 * \param h
+	 * \param[in] h
 	 *   Значение высоты.
 	 */
 	void set(type w, type h)
@@ -77,7 +77,7 @@ public:
 	 * \brief
 	 *   Устанавливает значение ширины.
 	 * 
-	 * \param w
+	 * \param[in] w
 	 *   Новое значение ширины.
 	 *
 	 * \sa
@@ -101,7 +101,7 @@ public:
 	 * \brief
 	 *   Устанавливает значение высоты.
 	 * 
-	 * \param h
+	 * \param[in] h
 	 *   Новое значение высоты.
 	 *
 	 * \sa

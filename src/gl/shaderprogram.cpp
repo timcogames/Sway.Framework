@@ -67,10 +67,10 @@ std::string ShaderProgram::readFile(lpcstr filename)
  * \brief
  *   Создает и выполняет компиляцию шейдерного объекта.
  * 
- * \param type
+ * \param[in] type
  *   Тип создаваемого шейдера.
  * 
- * \param source
+ * \param[in] source
  *   Исходный код шейдера.
  */
 u32 ShaderProgram::compile(ShaderTypes type, lpcstr source)
@@ -90,7 +90,7 @@ u32 ShaderProgram::compile(ShaderTypes type, lpcstr source)
  * \brief
  *   Связывает шейдерные объекты с программным объектом.
  * 
- * \param shaders
+ * \param[in] shaders
  *   Дескрипторы связываемых шейдерных объектов.
  */
 void ShaderProgram::attach(std::vector<u32> shaders)
@@ -103,7 +103,7 @@ void ShaderProgram::attach(std::vector<u32> shaders)
  * \brief
  *   Отсоединяет шейдерный объект от программного объекта.
  * 
- * \param shaders
+ * \param[in] shaders
  *   Дескрипторы отвязываемых шейдерных объектов.
  */
 void ShaderProgram::detach(std::vector<u32> shaders)

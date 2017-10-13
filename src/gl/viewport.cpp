@@ -37,16 +37,16 @@ void Viewport::reset()
  * \brief
  *   Устанавливает новые значения прямоугольной области.
  *
- * \param x
+ * \param[in] x
  *   Значение координаты по оси X.
  * 
- * \param y
+ * \param[in] y
  *   Значение координаты по оси Y.
  * 
- * \param w
+ * \param[in] w
  *   Значение ширины.
  * 
- * \param h
+ * \param[in] h
  *   Значение высоты.
  */
 void Viewport::set(s32 x, s32 y, s32 w, s32 h)
@@ -63,10 +63,10 @@ void Viewport::set(s32 x, s32 y, s32 w, s32 h)
  * \brief
  *   Устанавливает размер прямоугольной области.
  *
- * \param w
+ * \param[in] w
  *   Значение ширины.
  * 
- * \param h
+ * \param[in] h
  *   Значение высоты.
  */
 void Viewport::set(s32 w, s32 h)
@@ -74,6 +74,10 @@ void Viewport::set(s32 w, s32 h)
 	set(0, 0, w, h);
 }
 
+/*!
+ * \brief
+ *   Получает размер прямоугольной области.
+ */
 math::TRect<s32> Viewport::get() const
 {
 	return _rect;

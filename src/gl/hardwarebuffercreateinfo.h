@@ -12,8 +12,8 @@ struct HardwareBufferCreateInfo
 {
 	HardwareBufferUsages usage;
 	s32 byteStride;
-	s32 capacity;
-	const void* data;
+	s32 capacity;               /*!< Количество элементов в массиве. */
+	const void *data;
 };
 
 NAMESPACE_END(gl)

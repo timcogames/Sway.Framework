@@ -153,6 +153,16 @@ public:
 		return *this;
 	}
 
+	type *get()
+	{
+		return _values;
+	}
+	
+	const type *get() const
+	{
+		return _values;
+	}
+
 private:
 	type _values[16]; /*!< Элементы матрицы. */
 };

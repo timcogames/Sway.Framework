@@ -31,13 +31,13 @@ public:
 	 *
 	 *   Выполняет инициализацию нового экземпляра класса.
 	 *
-	 * \param x
+	 * \param[in] x
 	 *   Компонент X вектора.
 	 * 
-	 * \param y
+	 * \param[in] y
 	 *   Компонент Y вектора.
 	 * 
-	 * \param z
+	 * \param[in] z
 	 *   Компонент Z вектора.
 	 */
 	explicit TVector3(type x, type y, type z)
@@ -49,13 +49,13 @@ public:
 	 * \brief 
 	 *   Устанавливает новые значения.
 	 *
-	 * \param x
+	 * \param[in] x
 	 *   Значение X компонента.
 	 * 
-	 * \param y
+	 * \param[in] y
 	 *   Значение Y компонента.
 	 * 
-	 * \param z
+	 * \param[in] z
 	 *   Значение Z компонента.
 	 */
 	void set(type x, type y, type z)

@@ -44,7 +44,7 @@ Canvas::~Canvas()
  * \brief
  *   Создает окно.
  *
- * \param params
+ * \param[in] params
  *   Параметры окна.
  */
 void Canvas::create(const WindowInitialParams &params)
@@ -192,7 +192,7 @@ bool Canvas::eventLoop(ois::InputManager *inputManager, bool keepgoing)
  * \brief
  *   Устанавливает заголовок окна.
  *
- * \param title
+ * \param[in] title
  *   Заголовок окна.
  */
 void Canvas::setTitle(lpcstr title)
@@ -205,10 +205,10 @@ void Canvas::setTitle(lpcstr title)
  * \brief
  *   Устанавливает позицию окна.
  *
- * \param x
+ * \param[in] x
  *   Координата позиции окна по оси X.
  * 
- * \param y
+ * \param[in] y
  *   Координата позиции окна по оси Y.
  *
  * \sa
@@ -238,10 +238,10 @@ void Canvas::setPosition(s32 x, s32 y)
  * \brief
  *   Получает позицию окна.
  *
- * \param x
+ * \param[out] x
  *   Возвращаемое значение координаты позиции окна по оси X.
  * 
- * \param y
+ * \param[out] y
  *   Возвращаемое значение координаты позиции окна по оси Y.
  *
  * \sa
@@ -283,10 +283,10 @@ math::TPoint<s32> Canvas::getPosition() const
  * \brief
  *   Устанавливает размер окна.
  *
- * \param w
+ * \param[in] w
  *   Ширина окна.
  * 
- * \param h
+ * \param[in] h
  *   Высота окна.
  *
  * \sa
@@ -303,10 +303,10 @@ void Canvas::setSize(u32 w, u32 h)
  * \brief
  *   Получает размер окна.
  *
- * \param w
+ * \param[out] w
  *   Возвращаемое значение ширины окна.
  * 
- * \param h
+ * \param[out] h
  *   Возвращаемое значение высоты окна.
  *
  * \sa
@@ -378,10 +378,10 @@ void Canvas::_maxSize(XSizeHints *hints, const math::TSize<s32> *sizes, bool res
  * \brief
  *   Устанавливает поведение при смене размера.
  *
- * \param sizes
+ * \param[in] sizes
  *   Оригинальный/минимальный/максимальный размер окна.
  * 
- * \param resizable
+ * \param[in] resizable
  *   Возможность изменения размера.
  */
 void Canvas::setSizeHints(const math::TSize<s32> *sizes, bool resizable) {
@@ -446,7 +446,7 @@ bool Canvas::visible() const
  * \brief
  *   Переключает в полноэкранный/оконный режим.
  *
- * \param fullscreen
+ * \param[in] fullscreen
  *   Включить полноэкранный режим?
  */
 void Canvas::setFullscreen(bool fullscreen)

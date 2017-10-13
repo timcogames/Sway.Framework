@@ -21,6 +21,9 @@ public:
 	 *   Конструктор класса.
 	 *
 	 *   Выполняет инициализацию нового экземпляра класса.
+	 * 
+	 * \param[in] target
+	 *   Тип данных.
 	 */
 	HardwareBuffer(HardwareBufferTargets target);
 
@@ -36,13 +39,7 @@ public:
 	 * \brief
 	 *   Создает аппаратный буфер.
 	 * 
-	 * \list
-	 *   \i Генерируем буфер.
-	 *   \i Делаем буфер текущим.
-	 *   \i Передать данные в аппаратный буфер.
-	 * \endlist
-	 * 
-	 * \param createInfo[in]
+	 * \param[in] createInfo
 	 *   Начальная информация.
 	 */
 	void create(const HardwareBufferCreateInfo &createInfo);
@@ -52,7 +49,20 @@ public:
 	 *   Удаляет аппаратный буфер.
 	 */
 	void destroy();
-	
+
+	/*!
+	 * \brief
+	 *   Изменяет данные в уже существующем буфере.
+	 * 
+	 * \param[in] offset
+	 *   Начало изменяемого блока данных.
+	 * 
+	 * \param[in] size
+	 *   Размер изменяемого блока данных.
+	 * 
+	 * \param[in] source
+	 *   Область памяти, содержащая новые значения.
+	 */
 	void updateSubData(u32 offset, u32 size, const void *source);
 
 	void updateSubData(const void *source);
@@ -75,7 +85,19 @@ public:
 
 	u32 getObjectHandle() const;
 
+	/*!
+	 * \brief
+	 *   Устанавливает количество элементов в массиве.
+	 * 
+	 * \param[in] capacity
+	 *   Количество элементов в массиве.
+	 */
 	void setCapacity(s32 capacity);
+
+	/*!
+	 * \brief
+	 *   Получает количество элементов в массиве.
+	 */
 	s32 getCapacity() const;
 
 	void setByteStride(s32 byteStride);

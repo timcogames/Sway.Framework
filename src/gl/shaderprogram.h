@@ -44,10 +44,10 @@ public:
 	 * \brief
 	 *   Создает и выполняет компиляцию шейдерного объекта.
 	 * 
-	 * \param type
+	 * \param[in] type
 	 *   Тип создаваемого шейдера.
 	 * 
-	 * \param source
+	 * \param[in] source
 	 *   Исходный код шейдера.
 	 */
 	u32 compile(ShaderTypes type, lpcstr source);
@@ -56,7 +56,7 @@ public:
 	 * \brief
 	 *   Связывает шейдерные объекты с программным объектом.
 	 * 
-	 * \param shaders
+	 * \param[in] shaders
 	 *   Дескрипторы связываемых шейдерных объектов.
 	 */
 	void attach(std::vector<u32> shaders);
@@ -65,7 +65,7 @@ public:
 	 * \brief
 	 *   Отсоединяет шейдерный объект от программного объекта.
 	 * 
-	 * \param shaders
+	 * \param[in] shaders
 	 *   Дескрипторы отвязываемых шейдерных объектов.
 	 */
 	void detach(std::vector<u32> shaders);

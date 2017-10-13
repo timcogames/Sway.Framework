@@ -36,16 +36,16 @@ public:
 	 * \brief
 	 *   Устанавливает новые значения прямоугольной области.
 	 *
-	 * \param x
+	 * \param[in] x
 	 *   Значение координаты по оси X.
 	 * 
-	 * \param y
+	 * \param[in] y
 	 *   Значение координаты по оси Y.
 	 * 
-	 * \param w
+	 * \param[in] w
 	 *   Значение ширины.
 	 * 
-	 * \param h
+	 * \param[in] h
 	 *   Значение высоты.
 	 */
 	virtual void set(s32 x, s32 y, s32 w, s32 h);
@@ -54,18 +54,22 @@ public:
 	 * \brief
 	 *   Устанавливает размер прямоугольной области.
 	 *
-	 * \param w
+	 * \param[in] w
 	 *   Значение ширины.
 	 * 
-	 * \param h
+	 * \param[in] h
 	 *   Значение высоты.
 	 */
 	virtual void set(s32 w, s32 h);
 
+	/*!
+	 * \brief
+	 *   Получает размер прямоугольной области.
+	 */
 	virtual math::TRect<s32> get() const;
 
 private:
-	math::TRect<s32> _rect;
+	math::TRect<s32> _rect; /*!< Размер прямоугольной области. */
 };
 
 NAMESPACE_END(gl)

@@ -1,0 +1,26 @@
+#ifndef SWAY_GL_EXTENSIONS_H
+#define SWAY_GL_EXTENSIONS_H
+
+#include "glprereqs.h"
+
+NAMESPACE_BEGIN(sway)
+NAMESPACE_BEGIN(gl)
+
+class Extensions
+{
+public:
+	static PFNGLGENBUFFERSARBPROC glGenBuffersARB;
+	static PFNGLBINDBUFFERARBPROC glBindBufferARB;
+	static PFNGLBUFFERDATAARBPROC glBufferDataARB;
+	static PFNGLGETBUFFERPARAMETERIVARBPROC glGetBufferParameterivARB;
+	static PFNGLDELETEBUFFERSARBPROC glDeleteBuffersARB;
+	static PFNGLISBUFFERARBPROC glIsBufferARB;
+	static PFNGLBUFFERSUBDATAARBPROC glBufferSubDataARB;
+
+	static void define();
+};
+
+NAMESPACE_END(gl)
+NAMESPACE_END(sway)
+
+#endif // SWAY_GL_EXTENSIONS_H

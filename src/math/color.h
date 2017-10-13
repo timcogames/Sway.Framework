@@ -32,16 +32,16 @@ public:
 	 *
 	 *   Выполняет инициализацию нового экземпляра класса.
 	 *
-	 * \param r
+	 * \param[in] r
 	 *   Значение канала красного цвета.
 	 * 
-	 * \param g
+	 * \param[in] g
 	 *   Значение канала зеленого цвета.
 	 * 
-	 * \param b
+	 * \param[in] b
 	 *   Значение канала синего цвета.
 	 * 
-	 * \param a
+	 * \param[in] a
 	 *   Значение альфа-канала.
 	 */
 	explicit TColor(type r, type g, type b, type a = (type)1)
@@ -53,16 +53,16 @@ public:
 	 * \brief 
 	 *   Устанавливает новые значения.
 	 *
-	 * \param r
+	 * \param[in] r
 	 *   Значение канала красного цвета.
 	 * 
-	 * \param g
+	 * \param[in] g
 	 *   Значение канала зеленого цвета.
 	 * 
-	 * \param b
+	 * \param[in] b
 	 *   Значение канала синего цвета.
 	 * 
-	 * \param a
+	 * \param[in] a
 	 *   Значение альфа-канала.
 	 */
 	void set(type r, type g, type b, type a = (type)1)
