@@ -10,7 +10,7 @@ NAMESPACE_BEGIN(gl)
  *
  *   Выполняет инициализацию нового экземпляра класса.
  */
-VertexDeclaration::VertexDeclaration(VertexElementContainer elements)
+VertexDeclaration::VertexDeclaration(VertexElementContainer_t elements)
 	: _elements(elements)
 	, _totalSize(0)
 {
@@ -29,7 +29,7 @@ VertexDeclaration::~VertexDeclaration()
 	_elements.clear();
 }
 
-VertexElementContainer VertexDeclaration::getVertexElements() const
+VertexElementContainer_t VertexDeclaration::getVertexElements() const
 {
 	return _elements;
 }

@@ -37,7 +37,7 @@ class Context
 	 * \brief
 	 *   Регистрирует объект в контейнере текущего контекста.
 	 *
-	 * \param object
+	 * \param[in] object
 	 *   Указатель на объект, который следует добавить в контейнер.
 	 * 
 	 * \sa
@@ -49,7 +49,7 @@ class Context
 	 * \brief
 	 *   Разрегистрирует объект из контейнера текущего контекста.
 	 *
-	 * \param objectType
+	 * \param[in] objectType
 	 *   Тип объекта.
 	 * 
 	 * \sa
@@ -61,7 +61,7 @@ class Context
 	 * \brief
 	 *   Получает объект из контейнера текущего контекста.
 	 *
-	 * \param objectType
+	 * \param[in] objectType
 	 *   Тип объекта.
 	 */
 	virtual Object *getObject(const std::string &objectType) const;

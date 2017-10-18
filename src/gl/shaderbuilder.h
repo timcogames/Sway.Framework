@@ -1,25 +1,16 @@
-#ifndef SWAY_GL_SHADERPROGRAM_H
-#define SWAY_GL_SHADERPROGRAM_H
+#ifndef SWAY_GL_SHADERBUILDER_H
+#define SWAY_GL_SHADERBUILDER_H
 
 #include "../math/math.h"
 #include "shadertypes.h"
-#include "glprereqs.h"
 
-#include <vector> // std::vector
-#include <string> // std::string
-#include <fstream> // std::ifstream
-#include <iostream> // std::cout, std::ios
-#include <algorithm> // std::for_each
-#include <map> // std::map
-#include <unordered_map> // std::unordered_map
+#include "shader.h"
+#include "glprereqs.h"
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
-template <typename type>
-using UniformContainer = std::unordered_map<std::string, type>;
-
-class ShaderProgram
+class ShaderBuilder : public IShader
 {
 public:
 	/*!
@@ -28,7 +19,7 @@ public:
 	 *
 	 *   Выполняет инициализацию нового экземпляра класса.
 	 */
-	ShaderProgram();
+	ShaderBuilder();
 
 	/*!
 	 * \brief
@@ -36,9 +27,16 @@ public:
 	 *
 	 *   Освобождает захваченные ресурсы.
 	 */
-	~ShaderProgram();
+	virtual ~ShaderBuilder();
 
-	std::string readFile(lpcstr filename);
+	/*!
+	 * \brief
+	 *   Читает файл с исходным кодом шейдера.
+	 * 
+	 * \param[in] filename
+	 *   Имя файла.
+	 */
+	virtual std::string readFile(lpcstr filename);
 
 	/*!
 	 * \brief
@@ -50,7 +48,7 @@ public:
 	 * \param[in] source
 	 *   Исходный код шейдера.
 	 */
-	u32 compile(ShaderTypes type, lpcstr source);
+	virtual ShaderHandle_t compile(ShaderTypes type, lpcstr source);
 
 	/*!
 	 * \brief
@@ -59,7 +57,7 @@ public:
 	 * \param[in] shaders
 	 *   Дескрипторы связываемых шейдерных объектов.
 	 */
-	void attach(std::vector<u32> shaders);
+	virtual void attach(std::vector<ShaderHandle_t> shaders);
 
 	/*!
 	 * \brief
@@ -68,42 +66,44 @@ public:
 	 * \param[in] shaders
 	 *   Дескрипторы отвязываемых шейдерных объектов.
 	 */
-	void detach(std::vector<u32> shaders);
+	virtual void detach(std::vector<ShaderHandle_t> shaders);
 	
 	/*!
 	 * \brief
 	 *   Компоновка шей­дерных объектов.
 	 */
-	void link();
+	virtual void link();
 	
 	/*!
 	 * \brief
 	 *   Проверяет программный объект.
 	 */
-	void validate();
+	virtual void validate();
 
-	void use();
+	virtual void use();
 
-	void unuse();
+	virtual void unuse();
 
-	void setUniformVector4(const std::string &uniform, const math::TVector4<float> &vector4);
+	virtual b32 isUsed() const;
+
+	virtual void setUniformVector4(const std::string &uniform, const math::TVector4<f32> &vector4);
 	
-	void setUniformColor(const std::string &uniform, const math::TColor<float> &color);
+	virtual void setUniformColor(const std::string &uniform, const math::TColor<f32> &color);
 
-	u32 getShaderProgram() {return _program;}
-
-private:
-	s32 _checkStatus(u32 shader, u32 name);
+	virtual ShaderProgramHandle_t getShaderProgram() const;
 
 private:
-	u32 _program;
-	u32 _vertexShader;
-	u32 _fragmentShader;
+	s32 _checkStatus(ShaderHandle_t shader, u32 name);
 
-	UniformContainer<math::TVector4<float>> _uniformVec4fSets;
+private:
+	ShaderProgramHandle_t _program;
+	ShaderHandle_t _vertexShader;
+	ShaderHandle_t _fragmentShader;
+
+	std::unordered_map<std::string, math::TVector4<f32>> _uniformVec4fSets;
 };
 
 NAMESPACE_END(gl)
 NAMESPACE_END(sway)
 
-#endif // SWAY_GL_SHADERPROGRAM_H
+#endif // SWAY_GL_SHADERBUILDER_H

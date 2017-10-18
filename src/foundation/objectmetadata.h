@@ -17,10 +17,10 @@ class ObjectMetadata
 	 *
 	 *   Выполняет инициализацию нового экземпляра класса.
 	 *
-	 * \param className
+	 * \param[in] className
 	 *   Имя класса.
 	 * 
-	 * \param superclass
+	 * \param[in] superclass
 	 *   Указатель на объект метаданных базового класса.
 	 */
 	ObjectMetadata(lpcstr className, const ObjectMetadata *superclass)

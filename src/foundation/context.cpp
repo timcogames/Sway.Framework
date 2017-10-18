@@ -29,7 +29,7 @@ Context::~Context()
  * \brief
  *   Регистрирует объект в контейнере текущего контекста.
  *
- * \param object
+ * \param[in] object
  *   Указатель на объект, который следует добавить в контейнер.
  * 
  * \sa
@@ -47,7 +47,7 @@ void Context::registerObject(Object *object)
  * \brief
  *   Разрегистрирует объект из контейнера текущего контекста.
  *
- * \param objectType
+ * \param[in] objectType
  *   Тип объекта.
  * 
  * \sa
@@ -64,7 +64,7 @@ void Context::unregisterObject(const std::string &objectType)
  * \brief
  *   Получает объект из контейнера текущего контекста.
  *
- * \param objectType
+ * \param[in] objectType
  *   Тип объекта.
  */
 Object *Context::getObject(const std::string &objectType) const

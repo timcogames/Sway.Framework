@@ -23,7 +23,7 @@ class Object
 	 *
 	 *   Выполняет инициализацию нового экземпляра класса.
 	 *
-	 * \param context
+	 * \param[in] context
 	 *   Контекст.
 	 */
 	Object(Context *context)

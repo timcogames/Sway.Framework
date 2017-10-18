@@ -1,12 +1,8 @@
 #ifndef SWAY_GL_VIEWPORT_H
 #define SWAY_GL_VIEWPORT_H
 
-#include "../math/rect.h"
-
-#include "../defines.h"
-#include "../types.h"
-
-#include <GL/gl.h>
+#include "../math/math.h"
+#include "glprereqs.h"
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
@@ -28,9 +24,7 @@ public:
 	 *
 	 *   Освобождает захваченные ресурсы.
 	 */
-	virtual ~Viewport();
-
-	virtual void reset();
+	~Viewport();
 
 	/*!
 	 * \brief
@@ -48,7 +42,7 @@ public:
 	 * \param[in] h
 	 *   Значение высоты.
 	 */
-	virtual void set(s32 x, s32 y, s32 w, s32 h);
+	void set(s32 x, s32 y, s32 w, s32 h);
 
 	/*!
 	 * \brief
@@ -60,16 +54,19 @@ public:
 	 * \param[in] h
 	 *   Значение высоты.
 	 */
-	virtual void set(s32 w, s32 h);
+	void set(s32 w, s32 h);
 
 	/*!
 	 * \brief
 	 *   Получает размер прямоугольной области.
 	 */
-	virtual math::TRect<s32> get() const;
+	math::TRect<s32> get() const;
 
-private:
-	math::TRect<s32> _rect; /*!< Размер прямоугольной области. */
+	/*!
+	 * \brief
+	 *   Получает соотношение сторон.
+	 */
+	float aspect() const;
 };
 
 NAMESPACE_END(gl)

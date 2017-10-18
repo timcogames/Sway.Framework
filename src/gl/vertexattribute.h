@@ -2,11 +2,7 @@
 #define SWAY_GL_VERTEXATTRIBUTE_H
 
 #include "datatypeinfo.h"
-#include "../defines.h"
-#include "../types.h"
-
-#include <unordered_map>
-#include <string>
+#include "glprereqs.h"
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
@@ -21,8 +17,6 @@ struct VertexAttribute
 	bool isEnabled;
 	bool isCustomAttribute;
 };
-
-typedef std::unordered_map<std::string, VertexAttribute> VertexAttributeContainer;
 
 NAMESPACE_END(gl)
 NAMESPACE_END(sway)

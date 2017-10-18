@@ -18,11 +18,11 @@ NAMESPACE_BEGIN(gl)
  */
 HardwareBuffer::HardwareBuffer(HardwareBufferTargets target)
 	: _target(HardwareBufferTargetUtils::toGL(target))
-	, _bufferId(0)
+	, _bufferHandle(0)
 	, _capacity(0)
 	, _byteStride(0)
 {
-	Extensions::define();
+	// Empty
 }
 
 /*!
@@ -50,15 +50,15 @@ void HardwareBuffer::create(const HardwareBufferCreateInfo &createInfo)
 
 	s32 dataSize = _capacity * _byteStride;
 
-	Extensions::glGenBuffersARB(1, &_bufferId);
-	Extensions::glBindBufferARB(_target, _bufferId);
+	Extensions::glGenBuffersARB(1, &_bufferHandle);
+	Extensions::glBindBufferARB(_target, _bufferHandle);
 	Extensions::glBufferDataARB(_target, dataSize, createInfo.data, HardwareBufferUsageUtils::toGL(createInfo.usage));
 
 	int bufferSize = 0;
 	Extensions::glGetBufferParameterivARB(_target, GL_BUFFER_SIZE_ARB, &bufferSize);
 	if (dataSize != bufferSize) {
-		Extensions::glDeleteBuffersARB(1, &_bufferId);
-		_bufferId = 0;
+		Extensions::glDeleteBuffersARB(1, &_bufferHandle);
+		_bufferHandle = 0;
 	}
 }
 
@@ -68,8 +68,8 @@ void HardwareBuffer::create(const HardwareBufferCreateInfo &createInfo)
  */
 void HardwareBuffer::destroy()
 {
-	if (Extensions::glIsBufferARB(_bufferId))
-		Extensions::glDeleteBuffersARB(1, &_bufferId);
+	if (Extensions::glIsBufferARB(_bufferHandle))
+		Extensions::glDeleteBuffersARB(1, &_bufferHandle);
 }
 
 /*!
@@ -85,18 +85,18 @@ void HardwareBuffer::destroy()
  * \param[in] source
  *   Область памяти, содержащая новые значения.
  */
-void HardwareBuffer::updateSubData(u32 offset, u32 size, const void *source)
+void HardwareBuffer::updateSubdata(u32 offset, u32 size, const void *source)
 {
-	if (Extensions::glIsBufferARB(_bufferId)) {
-		Extensions::glBindBufferARB(_target, _bufferId);
+	if (Extensions::glIsBufferARB(_bufferHandle)) {
+		Extensions::glBindBufferARB(_target, _bufferHandle);
 		Extensions::glBufferSubDataARB(_target, offset, size, source);
 		Extensions::glBindBufferARB(_target, 0);
 	}
 }
 
-void HardwareBuffer::updateSubData(const void *source)
+void HardwareBuffer::updateSubdata(const void *source)
 {
-	updateSubData(0, _capacity * _byteStride, source);
+	updateSubdata(0, _capacity * _byteStride, source);
 }
 
 /*!
@@ -105,7 +105,7 @@ void HardwareBuffer::updateSubData(const void *source)
  */
 void HardwareBuffer::bind()
 {
-
+	Extensions::glBindBufferARB(_target, _bufferHandle);
 }
 
 /*!
@@ -114,12 +114,12 @@ void HardwareBuffer::bind()
  */
 void HardwareBuffer::unbind()
 {
-
+	Extensions::glBindBufferARB(_target, 0);
 }
 
 void HardwareBuffer::drawPrimitives(PrimitiveTopologies topology, u32 first, u32 count)
 {
-
+	glDrawArrays(PrimitiveTopologyUtils::toGL(topology), first, count);
 }
 
 void HardwareBuffer::drawIndexedPrimitives(PrimitiveTopologies topology, HardwareBuffer *ibo, DataTypeInfo::Types dataType)
@@ -131,9 +131,9 @@ void HardwareBuffer::drawIndexedPrimitives(PrimitiveTopologies topology, Hardwar
 	Extensions::glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
 }
 
-u32 HardwareBuffer::getObjectHandle() const
+HardwareBufferHandle_t HardwareBuffer::getObjectHandle() const
 {
-	return _bufferId;
+	return _bufferHandle;
 }
 
 /*!

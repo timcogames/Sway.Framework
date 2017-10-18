@@ -25,14 +25,6 @@ Viewport::~Viewport()
 	// Empty
 }
 
-void Viewport::reset()
-{
-	s32 viewport[4];
-	glGetIntegerv(GL_VIEWPORT, viewport);
-
-	_rect.set(viewport[0], viewport[1], viewport[2], viewport[3]);
-}
-
 /*!
  * \brief
  *   Устанавливает новые значения прямоугольной области.
@@ -51,12 +43,7 @@ void Viewport::reset()
  */
 void Viewport::set(s32 x, s32 y, s32 w, s32 h)
 {
-	if (_rect.getL() != x OR _rect.getT() != y OR _rect.getW() != w OR _rect.getH() != h)
-	{
-		glViewport(x, y, w, h);
-
-		_rect.set(x, y, w, h);
-	}
+	glViewport(x, y, w, h);
 }
 
 /*!
@@ -80,7 +67,20 @@ void Viewport::set(s32 w, s32 h)
  */
 math::TRect<s32> Viewport::get() const
 {
-	return _rect;
+	s32 viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
+	math::TRect<s32> nativeRectArea(viewport[0], viewport[1], viewport[2], viewport[3]);
+	return nativeRectArea;
+}
+
+/*!
+ * \brief
+ *   Получает соотношение сторон.
+ */
+float Viewport::aspect() const
+{
+	math::TRect<s32> nativeRectArea = get();
+	return (float) nativeRectArea.getW() / (float) nativeRectArea.getH();
 }
 
 NAMESPACE_END(gl)

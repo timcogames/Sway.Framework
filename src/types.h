@@ -5,7 +5,10 @@
 typedef char s8;
 typedef short s16;
 typedef int s32;
+typedef int b32;
+typedef float f32;
 typedef long s64;
+typedef double f64;
 
 // unsigned
 typedef unsigned char u8;

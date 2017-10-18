@@ -11,8 +11,6 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
-#define BUFFER_OFFSET(x)((char*)NULL + (x))
-
 class HardwareBuffer
 {
 public:
@@ -63,9 +61,9 @@ public:
 	 * \param[in] source
 	 *   Область памяти, содержащая новые значения.
 	 */
-	void updateSubData(u32 offset, u32 size, const void *source);
+	void updateSubdata(u32 offset, u32 size, const void *source);
 
-	void updateSubData(const void *source);
+	void updateSubdata(const void *source);
 
 	/*!
 	 * \brief
@@ -83,7 +81,7 @@ public:
 
 	void drawIndexedPrimitives(PrimitiveTopologies topology, HardwareBuffer *ibo, DataTypeInfo::Types dataType);
 
-	u32 getObjectHandle() const;
+	HardwareBufferHandle_t getObjectHandle() const;
 
 	/*!
 	 * \brief
@@ -101,11 +99,12 @@ public:
 	s32 getCapacity() const;
 
 	void setByteStride(s32 byteStride);
+	
 	s32 getByteStride() const;
 
 private:
 	u32 _target;
-	u32 _bufferId; /*!< Идентификатор буфера. */
+	HardwareBufferHandle_t _bufferHandle; /*!< Идентификатор буфера. */
 
 	s32 _capacity;
 	s32 _byteStride;
