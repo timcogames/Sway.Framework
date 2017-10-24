@@ -10,6 +10,8 @@ PFNGLGETBUFFERPARAMETERIVARBPROC Extensions::glGetBufferParameterivARB = NULL;
 PFNGLDELETEBUFFERSARBPROC Extensions::glDeleteBuffersARB = NULL;
 PFNGLISBUFFERARBPROC Extensions::glIsBufferARB = NULL;
 PFNGLBUFFERSUBDATAARBPROC Extensions::glBufferSubDataARB = NULL;
+PFNGLMAPBUFFERARBPROC Extensions::glMapBufferARB = NULL;
+PFNGLUNMAPBUFFERARBPROC Extensions::glUnmapBufferARB = NULL;
 
 PFNGLCREATEPROGRAMOBJECTARBPROC Extensions::glCreateProgramObjectARB = NULL;
 PFNGLCREATESHADEROBJECTARBPROC Extensions::glCreateShaderObjectARB = NULL;
@@ -36,8 +38,7 @@ PFNGLGETATTRIBLOCATIONARBPROC Extensions::glGetAttribLocationARB = NULL;
 PFNGLVERTEXATTRIBPOINTERARBPROC Extensions::glVertexAttribPointerARB = NULL;
 PFNGLENABLEVERTEXATTRIBARRAYARBPROC Extensions::glEnableVertexAttribArrayARB = NULL;	
 
-void Extensions::define()
-{
+void Extensions::define() {
 	glGenBuffersARB = (PFNGLGENBUFFERSARBPROC) glXGetProcAddressARB((const GLubyte*) "glGenBuffersARB");
 	glBindBufferARB = (PFNGLBINDBUFFERARBPROC) glXGetProcAddressARB((const GLubyte*) "glBindBufferARB");
 	glBufferDataARB = (PFNGLBUFFERDATAARBPROC) glXGetProcAddressARB((const GLubyte*) "glBufferDataARB");
@@ -45,6 +46,8 @@ void Extensions::define()
 	glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC) glXGetProcAddressARB((const GLubyte*) "glDeleteBuffersARB");
 	glIsBufferARB = (PFNGLISBUFFERARBPROC) glXGetProcAddressARB((const GLubyte*) "glIsBufferARB");
 	glBufferSubDataARB = (PFNGLBUFFERSUBDATAARBPROC) glXGetProcAddressARB((const GLubyte*) "glBufferSubDataARB");
+	glMapBufferARB = (PFNGLMAPBUFFERARBPROC) glXGetProcAddressARB((const GLubyte*) "glMapBufferARB");
+	glUnmapBufferARB = (PFNGLUNMAPBUFFERARBPROC) glXGetProcAddressARB((const GLubyte*) "glUnmapBufferARB");
 
 	glCreateProgramObjectARB = (PFNGLCREATEPROGRAMOBJECTARBPROC) glXGetProcAddressARB((const GLubyte*) "glCreateProgramObjectARB");
 	glCreateShaderObjectARB = (PFNGLCREATESHADEROBJECTARBPROC) glXGetProcAddressARB((const GLubyte*) "glCreateShaderObjectARB");

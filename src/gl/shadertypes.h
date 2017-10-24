@@ -6,9 +6,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
-enum ShaderTypes
-{
-	kShaderType_Invalid = 0,
+enum ShaderTypes {
 	kShaderType_Vertex = 0x8B31,  /*!< Вершинный шейдер. */
 	kShaderType_Fragment = 0x8B30 /*!< Фрагментный шейдер. */
 };

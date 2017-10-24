@@ -6,8 +6,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
-enum VertexElementSemantics
-{
+enum VertexElementSemantics {
 	kVertexElementSemantic_Position = 0x0605,
 	kVertexElementSemantic_Color    = 0x3407,
 	kVertexElementSemantic_TexCoord = 0x309F,

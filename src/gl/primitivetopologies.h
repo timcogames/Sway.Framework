@@ -7,9 +7,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
-enum PrimitiveTopologies
-{
-	kPrimitiveTopology_Invalid       = 0,
+enum PrimitiveTopologies {
 	kPrimitiveTopology_PointList     = 0xFE12,
 	kPrimitiveTopology_LineList      = 0xFDBE,
 	kPrimitiveTopology_LineStrip     = 0x6B83,

@@ -42,6 +42,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
+struct HardwareBufferDescription;
 struct HardwareBufferCreateInfo;
 struct VertexAttribute;
 struct VertexElement;

@@ -7,8 +7,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
-class Viewport
-{
+class Viewport {
 public:
 	/*!
 	 * \brief

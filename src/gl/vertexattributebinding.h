@@ -7,11 +7,13 @@
 #include "datatypeinfo.h"
 #include "glprereqs.h"
 
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
+
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
-class VertexAttributeBinding
-{
+class VertexAttributeBinding {
 public:
 	/*!
 	 * \brief
@@ -37,23 +39,19 @@ public:
 
 	void setVertexInputAttributeDescription(const std::string &attributeName, int size, DataTypeInfo::Types dataType, bool isNormalized);
 
-	void bind();
+	void enable(u32 byteStride);
 
-	void unbind();
+	void disable();
 
 	u32 getVertexLayoutOffset() const;
 
-	void setShaderPointer(IShader *shader);
+	void setShader(IShader *shader);
 	
-	IShader *getShaderPointer();
+	IShader *getShader();
 
-	void setVertexDeclarationPointer(VertexDeclaration *vertexDeclaration);
+	void setVertexDeclaration(boost::shared_ptr<VertexDeclaration> vertexDeclaration);
 
-	VertexDeclaration *getVertexDeclarationPointer();
-
-	void setVertexBufferPointer(HardwareBuffer *vertexBuffer);
-
-	HardwareBuffer *getVertexBufferPointer();
+	boost::shared_ptr<VertexDeclaration> getVertexDeclaration();
 
 	void setAttributes(VertexAttributeContainer_t attributes);
 
@@ -68,8 +66,7 @@ protected:
 
 private:
 	IShader *_shader;
-	VertexDeclaration *_vertexDeclaration;
-	HardwareBuffer *_vertexBuffer;
+	boost::shared_ptr<VertexDeclaration> _vertexDeclaration;
 	VertexAttributeContainer_t _attributes;
 	int _maxVertexAttributes;
 

@@ -6,13 +6,11 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
-IShader *allocateShader()
-{
+IShader *allocateShader() {
 	return new ShaderBuilder();
 }
 
-void freeShader(IShader *object)
-{
+void freeShader(IShader *object) {
 	delete object;
 }
 
@@ -23,8 +21,10 @@ void freeShader(IShader *object)
  *   Выполняет инициализацию нового экземпляра класса.
  */
 ShaderBuilder::ShaderBuilder()
-	: _program(0), _vertexShader(0), _fragmentShader(0)
-{
+	: _program(0)
+	, _vertexShader(0)
+	, _fragmentShader(0) {
+
 	Extensions::define();
 
 	_program = Extensions::glCreateProgramObjectARB();
@@ -36,8 +36,7 @@ ShaderBuilder::ShaderBuilder()
  *
  *   Освобождает захваченные ресурсы.
  */
-ShaderBuilder::~ShaderBuilder()
-{
+ShaderBuilder::~ShaderBuilder() {
 	if (_program > 0)
 		Extensions::glDeleteProgramsARB(1, &_program);
 }
@@ -49,8 +48,7 @@ ShaderBuilder::~ShaderBuilder()
  * \param[in] filename
  *   Имя файла.
  */
-std::string ShaderBuilder::readFile(lpcstr filename)
-{
+std::string ShaderBuilder::readFile(lpcstr filename){
 	std::ifstream fileStream(filename, std::ios::binary);
 	if (NOT fileStream.is_open()) {
 		printf("File %s not found\n", filename);
@@ -73,8 +71,7 @@ std::string ShaderBuilder::readFile(lpcstr filename)
  * \param[in] source
  *   Исходный код шейдера.
  */
-ShaderHandle_t ShaderBuilder::compile(ShaderTypes type, lpcstr source)
-{
+ShaderHandle_t ShaderBuilder::compile(ShaderTypes type, lpcstr source) {
 	auto shader = Extensions::glCreateShaderObjectARB(ShaderTypeUtils::toGL(type));
 	Extensions::glShaderSourceARB(shader, 1, &source, NULL);
 	Extensions::glCompileShaderARB(shader);
@@ -93,8 +90,7 @@ ShaderHandle_t ShaderBuilder::compile(ShaderTypes type, lpcstr source)
  * \param[in] shaders
  *   Дескрипторы связываемых шейдерных объектов.
  */
-void ShaderBuilder::attach(std::vector<ShaderHandle_t> shaders)
-{
+void ShaderBuilder::attach(std::vector<ShaderHandle_t> shaders) {
 	for (auto shader : shaders)
 		Extensions::glAttachObjectARB(_program, shader);
 }
@@ -106,8 +102,7 @@ void ShaderBuilder::attach(std::vector<ShaderHandle_t> shaders)
  * \param[in] shaders
  *   Дескрипторы отвязываемых шейдерных объектов.
  */
-void ShaderBuilder::detach(std::vector<ShaderHandle_t> shaders)
-{
+void ShaderBuilder::detach(std::vector<ShaderHandle_t> shaders) {
 	for (auto shader : shaders)
 		Extensions::glDetachObjectARB(_program, shader);
 
@@ -118,8 +113,7 @@ void ShaderBuilder::detach(std::vector<ShaderHandle_t> shaders)
  * \brief
  *   Компоновка шей­дерных объектов.
  */
-void ShaderBuilder::link()
-{
+void ShaderBuilder::link() {
 	Extensions::glLinkProgramARB(_program);
 	if (_checkStatus(_program, GL_OBJECT_LINK_STATUS_ARB)) {
 		// Empty
@@ -130,16 +124,14 @@ void ShaderBuilder::link()
  * \brief
  *   Проверяет программный объект.
  */
-void ShaderBuilder::validate()
-{
+void ShaderBuilder::validate() {
 	Extensions::glValidateProgramARB(_program);
 	if (_checkStatus(_program, GL_OBJECT_VALIDATE_STATUS_ARB)) {
 		// Empty
 	}
 }
 
-void ShaderBuilder::use()
-{
+void ShaderBuilder::use() {
 	if (_program > 0 AND NOT isUsed()) {
 		Extensions::glUseProgramObjectARB(_program);
 
@@ -148,27 +140,23 @@ void ShaderBuilder::use()
 	}
 }
 
-void ShaderBuilder::unuse()
-{
+void ShaderBuilder::unuse() {
 	if (_program > 0 AND isUsed())
 		Extensions::glUseProgramObjectARB(0);
 }
 
-b32 ShaderBuilder::isUsed() const
-{
+b32 ShaderBuilder::isUsed() const {
 	s32 current = 0;
 	glGetIntegerv(GL_CURRENT_PROGRAM, &current);
 
 	return (current == (s32)_program);
 }
 
-void ShaderBuilder::setUniformVector4(const std::string &uniform, const math::TVector4<f32> &vector4)
-{
+void ShaderBuilder::setUniformVector4(const std::string &uniform, const math::TVector4<f32> &vector4) {
 	_uniformVec4fSets[uniform] = vector4;
 }
 
-void ShaderBuilder::setUniformColor(const std::string &uniform, const math::TColor<f32> &color)
-{
+void ShaderBuilder::setUniformColor(const std::string &uniform, const math::TColor<f32> &color) {
 	_uniformVec4fSets[uniform] = color.toVec4();
 }
 
@@ -176,8 +164,7 @@ ShaderProgramHandle_t ShaderBuilder::getShaderProgram() const {
 	return _program;
 }
 
-s32 ShaderBuilder::_checkStatus(ShaderHandle_t shader, u32 name)
-{
+s32 ShaderBuilder::_checkStatus(ShaderHandle_t shader, u32 name) {
 	int status = 0, length = 0;
 
 	Extensions::glGetObjectParameterivARB(shader, name, &status);

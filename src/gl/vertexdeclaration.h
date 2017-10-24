@@ -10,8 +10,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
-class VertexDeclaration
-{
+class VertexDeclaration {
 public:
 	/*!
 	 * \brief

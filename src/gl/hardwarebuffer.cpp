@@ -1,28 +1,55 @@
 #include "hardwarebuffer.h"
-#include "hardwarebufferusageutils.h"
-#include "hardwarebuffertargetutils.h"
-#include "primitivetopologyutils.h"
 #include "extensions.h"
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
+
+GLenum HardwareBuffer::getGLTarget(u32 target) {
+	switch (target) {
+	case kHardwareBufferTarget_Array: return GL_ARRAY_BUFFER_ARB;
+	case kHardwareBufferTarget_ElementArray: return GL_ELEMENT_ARRAY_BUFFER_ARB;
+	default: return GL_ARRAY_BUFFER_ARB;
+	}
+}
+
+GLenum HardwareBuffer::getGLUsage(u32 usage) {
+	switch (usage) {
+	case kHardwareBufferUsage_Static: return GL_STATIC_DRAW_ARB;
+	case kHardwareBufferUsage_Dynamic: return GL_DYNAMIC_DRAW_ARB;
+	case kHardwareBufferUsage_Stream: return GL_STREAM_DRAW_ARB;
+	default: return GL_DYNAMIC_DRAW_ARB;
+	}
+}
+
+/*!
+ * \brief
+ *   Создает аппаратный буфер.
+ */
+HardwareBuffer *HardwareBuffer::create(const HardwareBufferCreateInfo &info) {
+	HardwareBuffer *instance = new HardwareBuffer(info.description);
+	if (instance->allocate(info.data) == SUCCESS_STATUS) return instance;
+    SAFE_DELETE(instance);
+    return 0;
+}
 
 /*!
  * \brief
  *   Конструктор класса.
  *
  *   Выполняет инициализацию нового экземпляра класса.
- * 
- * \param[in] target
- *   Тип данных.
  */
-HardwareBuffer::HardwareBuffer(HardwareBufferTargets target)
-	: _target(HardwareBufferTargetUtils::toGL(target))
-	, _bufferHandle(0)
-	, _capacity(0)
-	, _byteStride(0)
-{
-	// Empty
+HardwareBuffer::HardwareBuffer(const HardwareBufferDescription &desc)
+	: _bufferHandle(0)
+	, _allocedSize(0) {
+
+	setTarget(desc.target);
+	setUsage(desc.usage);
+	setByteStride(desc.byteStride);
+	setCapacity(desc.capacity);
+	setDataType(desc.datatype);
+
+	/* Создает аппаратный буфер. */
+	Extensions::glGenBuffersARB(1, &_bufferHandle);
 }
 
 /*!
@@ -31,45 +58,29 @@ HardwareBuffer::HardwareBuffer(HardwareBufferTargets target)
  *
  *   Освобождает захваченные ресурсы.
  */
-HardwareBuffer::~HardwareBuffer()
-{
-	// Empty
+HardwareBuffer::~HardwareBuffer() {
+	/* Удаляет аппаратный буфер. */
+	Extensions::glDeleteBuffersARB(1, &_bufferHandle);
 }
 
 /*!
  * \brief
- *   Создает аппаратный буфер.
+ *   Устанавливает данные в аппаратный буфер.
  * 
- * \param[in] createInfo
- *   Начальная информация.
+ * \param[in] data
+ *   Первоначальный данные.
  */
-void HardwareBuffer::create(const HardwareBufferCreateInfo &createInfo)
-{
-	setByteStride(createInfo.byteStride);
-	setCapacity(createInfo.capacity);
-
+b32 HardwareBuffer::allocate(const void *data) {
 	s32 dataSize = _capacity * _byteStride;
 
-	Extensions::glGenBuffersARB(1, &_bufferHandle);
 	Extensions::glBindBufferARB(_target, _bufferHandle);
-	Extensions::glBufferDataARB(_target, dataSize, createInfo.data, HardwareBufferUsageUtils::toGL(createInfo.usage));
+	Extensions::glBufferDataARB(_target, dataSize, data, _usage);
 
-	int bufferSize = 0;
-	Extensions::glGetBufferParameterivARB(_target, GL_BUFFER_SIZE_ARB, &bufferSize);
-	if (dataSize != bufferSize) {
-		Extensions::glDeleteBuffersARB(1, &_bufferHandle);
-		_bufferHandle = 0;
-	}
-}
+	Extensions::glGetBufferParameterivARB(_target, GL_BUFFER_SIZE_ARB, &_allocedSize);
+	if (_allocedSize != dataSize)
+		return FAILURE_STATUS;
 
-/*!
- * \brief
- *   Удаляет аппаратный буфер.
- */
-void HardwareBuffer::destroy()
-{
-	if (Extensions::glIsBufferARB(_bufferHandle))
-		Extensions::glDeleteBuffersARB(1, &_bufferHandle);
+	return SUCCESS_STATUS;
 }
 
 /*!
@@ -85,8 +96,7 @@ void HardwareBuffer::destroy()
  * \param[in] source
  *   Область памяти, содержащая новые значения.
  */
-void HardwareBuffer::updateSubdata(u32 offset, u32 size, const void *source)
-{
+void HardwareBuffer::updateSubdata(u32 offset, u32 size, const void *source) {
 	if (Extensions::glIsBufferARB(_bufferHandle)) {
 		Extensions::glBindBufferARB(_target, _bufferHandle);
 		Extensions::glBufferSubDataARB(_target, offset, size, source);
@@ -94,17 +104,39 @@ void HardwareBuffer::updateSubdata(u32 offset, u32 size, const void *source)
 	}
 }
 
-void HardwareBuffer::updateSubdata(const void *source)
-{
+/*!
+ * \brief
+ *   Изменяет данные в уже существующем буфере.х.
+ * 
+ * \param[in] source
+ *   Область памяти, содержащая новые значения.
+ */
+void HardwareBuffer::updateSubdata(const void *source) {
 	updateSubdata(0, _capacity * _byteStride, source);
+}
+
+
+void *HardwareBuffer::map() {
+	Extensions::glBindBufferARB(_target, _bufferHandle);
+	GLvoid *mapped = Extensions::glMapBufferARB(_target, GL_WRITE_ONLY_ARB);
+	if (NOT mapped)
+		return NULL;
+	Extensions::glBindBufferARB(_target, 0);
+
+	return mapped;
+}
+
+void HardwareBuffer::unmap() {
+	Extensions::glBindBufferARB(_target, _bufferHandle);
+	Extensions::glUnmapBufferARB(_target);
+	Extensions::glBindBufferARB(_target, 0);
 }
 
 /*!
  * \brief
  *   Делает буфер текущим.
  */
-void HardwareBuffer::bind()
-{
+void HardwareBuffer::bind() {
 	Extensions::glBindBufferARB(_target, _bufferHandle);
 }
 
@@ -112,28 +144,71 @@ void HardwareBuffer::bind()
  * \brief
  *   Делает текущим пустой буфер.
  */
-void HardwareBuffer::unbind()
-{
+void HardwareBuffer::unbind() {
 	Extensions::glBindBufferARB(_target, 0);
 }
 
-void HardwareBuffer::drawPrimitives(PrimitiveTopologies topology, u32 first, u32 count)
-{
-	glDrawArrays(PrimitiveTopologyUtils::toGL(topology), first, count);
-}
-
-void HardwareBuffer::drawIndexedPrimitives(PrimitiveTopologies topology, HardwareBuffer *ibo, DataTypeInfo::Types dataType)
-{	
-	Extensions::glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, ibo->getObjectHandle());
-
-	glDrawElements(PrimitiveTopologyUtils::toGL(topology), ibo->getCapacity(), DataTypeInfo::toGL(dataType), NULL);
-
-	Extensions::glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
-}
-
-HardwareBufferHandle_t HardwareBuffer::getObjectHandle() const
-{
+/*!
+ * \brief
+ *   Получает дескриптор буфера.
+ */
+HardwareBufferHandle_t HardwareBuffer::getBufferHandle() const {
 	return _bufferHandle;
+}
+
+/*!
+ * \brief
+ *   Получает выделенный размер данных.
+ */
+u32 HardwareBuffer::getAllocedSize() const {
+	return _allocedSize;
+}
+
+/*!
+ * \brief
+ *   Устанавливает целевой тип буфера.
+ * 
+ * \param[in] target
+ *   Целевой тип буфера.
+ */
+void HardwareBuffer::setTarget(u32 target) {
+	_target = getGLTarget(target);
+}
+
+/*!
+ * \brief
+ *   Получает целевой тип буфера.
+ */
+u32 HardwareBuffer::getTarget() const {
+	switch (_target) {
+	case GL_ARRAY_BUFFER_ARB: return kHardwareBufferTarget_Array;
+	case GL_ELEMENT_ARRAY_BUFFER_ARB: return kHardwareBufferTarget_ElementArray;
+	default: return INVALID_TYPE;
+	}
+}
+
+/*!
+ * \brief
+ *   Устанавливает режим работы с данными.
+ * 
+ * \param[in] usage
+ *   Режим работы.
+ */
+void HardwareBuffer::setUsage(u32 usage) {
+	_usage = getGLUsage(usage);
+}
+
+/*!
+ * \brief
+*   Получает режим работы с данными.
+ */
+u32 HardwareBuffer::getUsage() const {
+	switch (_usage) {
+	case GL_STATIC_DRAW_ARB: return kHardwareBufferUsage_Static;
+	case GL_DYNAMIC_DRAW_ARB: return kHardwareBufferUsage_Dynamic;
+	case GL_STREAM_DRAW_ARB: return kHardwareBufferUsage_Stream;
+	default: return INVALID_TYPE;
+	}
 }
 
 /*!
@@ -143,8 +218,7 @@ HardwareBufferHandle_t HardwareBuffer::getObjectHandle() const
  * \param[in] capacity
  *   Количество элементов в массиве.
  */
-void HardwareBuffer::setCapacity(s32 capacity)
-{
+void HardwareBuffer::setCapacity(s32 capacity) {
 	_capacity = capacity;
 }
 
@@ -152,19 +226,46 @@ void HardwareBuffer::setCapacity(s32 capacity)
  * \brief
  *   Получает количество элементов в массиве.
  */
-s32 HardwareBuffer::getCapacity() const
-{
+s32 HardwareBuffer::getCapacity() const {
 	return _capacity;
 }
 
-void HardwareBuffer::setByteStride(s32 byteStride)
-{
+/*!
+ * \brief
+ *   Устанавливает размер структуры данных.
+ * 
+ * \param[in] byteStride
+ *   Размер структуры.
+ */
+void HardwareBuffer::setByteStride(s32 byteStride) {
 	_byteStride = byteStride;
 }
 
-s32 HardwareBuffer::getByteStride() const
-{
+/*!
+ * \brief
+ *   Получает размер структуры данных.
+ */
+s32 HardwareBuffer::getByteStride() const {
 	return _byteStride;
+}
+
+/*!
+ * \brief
+ *   Устанавливает тип данных.
+ * 
+ * \param[in] type
+ *   Тип данных.
+ */
+void HardwareBuffer::setDataType(u32 type) {
+	_datatype = type;
+}
+
+/*!
+ * \brief
+ *   Получает тип данных.
+ */
+u32 HardwareBuffer::getDataType() const {
+	return _datatype;
 }
 
 NAMESPACE_END(gl)

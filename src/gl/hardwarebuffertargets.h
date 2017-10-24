@@ -7,8 +7,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
-enum HardwareBufferTargets
-{
+enum HardwareBufferTargets {
 	kHardwareBufferTarget_Array        = 0x2CA1,
 	kHardwareBufferTarget_ElementArray = 0xE70D,
 	kHardwareBufferTarget_Uniform      = 0x6986,

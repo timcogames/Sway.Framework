@@ -9,8 +9,7 @@ NAMESPACE_BEGIN(gl)
  *
  *   Выполняет инициализацию нового экземпляра класса.
  */
-Viewport::Viewport()
-{
+Viewport::Viewport() {
 	// Empty
 }
 
@@ -20,8 +19,7 @@ Viewport::Viewport()
  *
  *   Освобождает захваченные ресурсы.
  */
-Viewport::~Viewport()
-{
+Viewport::~Viewport() {
 	// Empty
 }
 
@@ -41,8 +39,7 @@ Viewport::~Viewport()
  * \param[in] h
  *   Значение высоты.
  */
-void Viewport::set(s32 x, s32 y, s32 w, s32 h)
-{
+void Viewport::set(s32 x, s32 y, s32 w, s32 h) {
 	glViewport(x, y, w, h);
 }
 
@@ -56,8 +53,7 @@ void Viewport::set(s32 x, s32 y, s32 w, s32 h)
  * \param[in] h
  *   Значение высоты.
  */
-void Viewport::set(s32 w, s32 h)
-{
+void Viewport::set(s32 w, s32 h) {
 	set(0, 0, w, h);
 }
 
@@ -65,8 +61,7 @@ void Viewport::set(s32 w, s32 h)
  * \brief
  *   Получает размер прямоугольной области.
  */
-math::TRect<s32> Viewport::get() const
-{
+math::TRect<s32> Viewport::get() const {
 	s32 viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
 	math::TRect<s32> nativeRectArea(viewport[0], viewport[1], viewport[2], viewport[3]);
@@ -77,8 +72,7 @@ math::TRect<s32> Viewport::get() const
  * \brief
  *   Получает соотношение сторон.
  */
-float Viewport::aspect() const
-{
+float Viewport::aspect() const {
 	math::TRect<s32> nativeRectArea = get();
 	return (float) nativeRectArea.getW() / (float) nativeRectArea.getH();
 }

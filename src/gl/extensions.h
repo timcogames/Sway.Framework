@@ -6,8 +6,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
-class Extensions
-{
+class Extensions {
 public:
 	static PFNGLGENBUFFERSARBPROC glGenBuffersARB;
 	static PFNGLBINDBUFFERARBPROC glBindBufferARB;
@@ -16,6 +15,8 @@ public:
 	static PFNGLDELETEBUFFERSARBPROC glDeleteBuffersARB;
 	static PFNGLISBUFFERARBPROC glIsBufferARB;
 	static PFNGLBUFFERSUBDATAARBPROC glBufferSubDataARB;
+	static PFNGLMAPBUFFERARBPROC glMapBufferARB;
+	static PFNGLUNMAPBUFFERARBPROC glUnmapBufferARB;
 
 	static PFNGLCREATEPROGRAMOBJECTARBPROC glCreateProgramObjectARB;
 	static PFNGLCREATESHADEROBJECTARBPROC glCreateShaderObjectARB;

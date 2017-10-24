@@ -7,8 +7,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
-struct VertexAttribute
-{
+struct VertexAttribute {
 	s32 location;
 	DataTypeInfo::Types dataType; /*!< Тип данных. */
 	int componentCount;

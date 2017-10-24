@@ -7,8 +7,29 @@
 
 #define DONT_CARE -1
 
-#define SUCCESS_STATUS 1
-#define FAILURE_STATUS 0
+/*!
+ * \brief
+ *   Статус успеха.
+ * 
+ * \sa
+ *   FAILURE_STATUS
+ */
+#define SUCCESS_STATUS 0
+
+/*!
+ * \brief
+ *   Статус отказа.
+ * 
+ * \sa
+ *   SUCCESS_STATUS
+ */
+#define FAILURE_STATUS 1
+
+/*!
+ * \brief
+ *   Недействительный тип.
+ */
+#define INVALID_TYPE 0
 
 /*!
  * \brief

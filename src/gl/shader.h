@@ -9,8 +9,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
-class IShader
-{
+class IShader {
 public:
 	/*!
 	 * \brief
