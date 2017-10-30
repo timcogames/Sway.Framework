@@ -10,9 +10,8 @@ NAMESPACE_BEGIN(math)
  * \brief
  *   Шаблонный класс представления прямоугольной области.
  */
-template<typename type>
-class TRect final
-{
+template<typename type_t>
+class TRect final {
 public:
 	/*!
 	 * \brief
@@ -20,9 +19,8 @@ public:
 	 *
 	 *   Выполняет инициализацию нового экземпляра класса.
 	 */
-	TRect()
-	{
-		_l = _t = _r = _b = (type)0;
+	TRect() {
+		_l = _t = _r = _b = (type_t)0;
 	}
 
 	/*!
@@ -43,8 +41,7 @@ public:
 	 * \param[in] h
 	 *   Значение высоты.
 	 */
-	explicit TRect(type x, type y, type w, type h)
-	{
+	explicit TRect(type_t x, type_t y, type_t w, type_t h) {
 		set(x, y, w, h);
 	}
 
@@ -64,8 +61,7 @@ public:
 	 * \param[in] h
 	 *   Значение высоты.
 	 */
-	void set(type x, type y, type w, type h)
-	{
+	void set(type_t x, type_t y, type_t w, type_t h) {
 		_l = x;
 		_t = y;
 		_r = x + w;
@@ -82,8 +78,7 @@ public:
 	 * \param[in] y
 	 *   Значение координаты по оси Y.
 	 */
-	void offset(type x, type y)
-	{
+	void offset(type_t x, type_t y) {
 		_l += x;
 		_t += y;
 		_r += x;
@@ -104,13 +99,11 @@ public:
 	 *   TRect::setW() const
 	 *   TRect::setH() const
 	 */
-	void setL(type x)
-	{
+	void setL(type_t x) {
 		_l = x;
 	}
 
-	type getL() const
-	{
+	type_t getL() const {
 		return _l;
 	}
 
@@ -128,33 +121,27 @@ public:
 	 *   TRect::setW() const
 	 *   TRect::setH() const
 	 */
-	void setT(type y)
-	{
+	void setT(type_t y) {
 		_t = y;
 	}
 
-	type getT() const
-	{
+	type_t getT() const {
 		return _t;
 	}
 
-	void setR(type w)
-	{
+	void setR(type_t w) {
 		_r = w;
 	}
 
-	type getR() const
-	{
+	type_t getR() const {
 		return _r;
 	}
 
-	void setB(type h)
-	{
+	void setB(type_t h) {
 		_b = h;
 	}
 
-	type getB() const
-	{
+	type_t getB() const {
 		return _b;
 	}
 
@@ -169,8 +156,7 @@ public:
 	 *   TRect::getB() const
 	 *   TRect::getH() const
 	 */
-	type getW() const
-	{
+	type_t getW() const {
 		return _r - _l;
 	}
 
@@ -185,32 +171,28 @@ public:
 	 *   TRect::getB() const
 	 *   TRect::getW() const
 	 */
-	type getH() const
-	{
+	type_t getH() const {
 		return _b - _t;
 	}
 
 	/*!
 	 * \brief
-	 *   Преобразовывает в TSize<type> класс.
+	 *   Преобразовывает в TSize<type_t> класс.
 	 */
-	TSize<type> toSize() const
-	{
-		return TSize<type>(getW(), getH());
+	TSize<type_t> toSize() const {
+		return TSize<type_t>(getW(), getH());
 	}
 
-	bool isEmpty() const
-	{
-		return ((getW() <= (type)0) OR (getH() <= (type)0));
+	bool isEmpty() const {
+		return ((getW() <= (type_t)0) OR (getH() <= (type_t)0));
 	}
 
-	bool isValid() const
-	{
+	bool isValid() const {
 		return ((_t > _b) OR (_l > _r)) ? false : false;
 	}
 
 private:
-	type _l, _t, _r, _b;
+	type_t _l, _t, _r, _b;
 };
 
 NAMESPACE_END(math)

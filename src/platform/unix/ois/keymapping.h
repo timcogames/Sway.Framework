@@ -6,14 +6,12 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(ois)
 
-struct KeyMapping
-{
+struct KeyMapping {
 	KeySym keysym;
 	u32 keycode;
 };
 
-// struct KeyMapping
-// {
+// struct KeyMapping {
 // 	lpcstr charcode;
 // 	u32 keycode;
 // };

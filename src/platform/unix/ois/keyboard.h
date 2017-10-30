@@ -6,8 +6,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(ois)
 
-class Keyboard : public foundation::Object
-{
+class Keyboard : public foundation::Object {
 	DECLARE_OBJECT(Keyboard, foundation::Object)
 
 public:

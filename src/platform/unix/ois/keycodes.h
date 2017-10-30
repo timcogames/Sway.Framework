@@ -6,8 +6,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(ois)
 
-enum KeyCodes
-{
+enum KeyCodes {
 	kKeyCode_Unknown = 0,
 
 	kKeyCode_0 = 48,

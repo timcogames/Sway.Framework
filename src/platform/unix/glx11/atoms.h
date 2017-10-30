@@ -6,8 +6,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
 
-enum Atoms
-{
+enum Atoms {
 	kAtom_NET_WM_STATE,
 	kAtom_NET_WM_STATE_MAXIMIZED_VERT,
 	kAtom_NET_WM_STATE_MAXIMIZED_HORZ,

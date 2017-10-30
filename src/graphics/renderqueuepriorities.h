@@ -9,8 +9,7 @@ NAMESPACE_BEGIN(graphics)
 /*!
  * Типы приоритетов.
  */
-enum RenderQueuePriorities
-{
+enum RenderQueuePriorities {
 	kRenderQueuePriority_VeryLow = 0, /*!< Очень низкий приоритет. */
 	kRenderQueuePriority_Low = 1,	  /*!< Низкий приоритет. */
 	kRenderQueuePriority_Normal = 2,  /*!< Средний приоритет. */

@@ -6,58 +6,65 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(graphics)
 
-class RenderQueue
-{
-  public:
+class RenderQueue {
+public:
 	/*!
-	 * \brief Конструктор класса.
+	 * \brief
+	 *   Конструктор класса.
 	 *
-	 * Выполняет инициализацию нового экземпляра класса.
+	 *   Выполняет инициализацию нового экземпляра класса.
 	 */
 	RenderQueue();
 
 	/*!
-	 * \brief Деструктор класса.
+	 * \brief
+	 *   Деструктор класса.
 	 *
-	 * Освобождает захваченные ресурсы.
+	 *   Освобождает захваченные ресурсы.
 	 */
 	virtual ~RenderQueue();
 
 	/*!
-	 * \brief Добавляет подочередь \ref RenderSubqueue в группу.
+	 * \brief
+	 *   Добавляет подочередь \ref RenderSubqueue в группу.
 	 *
-	 * \param subqueue Указатель на обьект класса подочереди, которой следует добавить в контейнер.
+	 * \param[in] subqueue
+	 *   Указатель на обьект класса подочереди, которой следует добавить в контейнер.
 	 */
 	virtual void addSubqueue(const RenderSubqueuePtr &subqueue);
 
 	/*!
-	 * \brief Удаляет подочередь \ref RenderSubqueue из группы.
+	 * \brief
+	 *   Удаляет подочередь \ref RenderSubqueue из группы.
 	 *
-	 * \param subqueue Указатель на обьект класса подочереди, которой следует удалить из контейнера.
+	 * \param[in] subqueue
+	 *   Указатель на обьект класса подочереди, которой следует удалить из контейнера.
 	 */
 	virtual void removeSubqueue(const RenderSubqueuePtr &subqueue);
 
 	/*!
-	 * \brief Получает группу подочередей по индексу.
+	 * \brief
+	 *   Получает группу подочередей по индексу.
 	 *
-	 * \param groupIdx Индекс группы.
+	 * \param[in] groupIdx
+	 *   Индекс группы.
 	 */
 	virtual RenderSubqueueVec &getSubqueueGroupByIdx(u32 groupIdx);
 
 	/*!
-	 * \brief Устанавливает значение приоритета.
+	 * \brief
+	 *   Устанавливает значение приоритета.
 	 */
-	virtual void setPriority(u32 priority) { _priority = priority; }
+	virtual void setPriority(u32 priority);
 
 	/*!
-	 * \brief Получает значение приоритета.
+	 * \brief
+	 *   Получает значение приоритета.
 	 */
-	virtual u32 getPriority() const { return _priority; }
+	virtual u32 getPriority() const;
 
-	struct PriorityInDescendingOrder
-	{
-		bool operator()(const RenderQueuePtr &lhs, const RenderQueuePtr &rhs) const
-		{
+	struct PriorityInDescendingOrder {
+		bool operator()(const RenderQueuePtr &lhs, const RenderQueuePtr &rhs) const {
 			return lhs->getPriority() > rhs->getPriority();
 		}
 	};

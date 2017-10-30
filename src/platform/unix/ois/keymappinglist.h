@@ -8,8 +8,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(ois)
 
-static const KeyMapping XtoKeycode[] =
-{
+static const KeyMapping XtoKeycode[] = {
 	{ XK_a, kKeyCode_A },
 	{ XK_b, kKeyCode_B },
 	{ XK_c, kKeyCode_C },
@@ -38,8 +37,7 @@ static const KeyMapping XtoKeycode[] =
 	{ XK_z, kKeyCode_Z }
 };
 
-// static const KeyMapping LPCSTRtoKeycode[] =
-// {
+// static const KeyMapping LPCSTRtoKeycode[] = {
 // 	{ "a", kKeyCode_A },
 // 	{ "b", kKeyCode_B },
 // 	{ "c", kKeyCode_C },

@@ -9,15 +9,13 @@
 
 USING_NAMESPACE(sway)
 
-class ThingyContext : public foundation::Context
-{
+class ThingyContext : public foundation::Context {
  public:
 	ThingyContext() {}
 	virtual ~ThingyContext() {}
 };
 
-class ThingyObject : public foundation::Object
-{
+class ThingyObject : public foundation::Object {
 	DECLARE_OBJECT(ThingyObject, foundation::Object)
 
  public:
@@ -26,8 +24,7 @@ class ThingyObject : public foundation::Object
 };
 
 BOOST_AUTO_TEST_SUITE(test_suite)
-BOOST_AUTO_TEST_CASE(test_case)
-{
+BOOST_AUTO_TEST_CASE(test_case) {
 	ThingyContext *context = new ThingyContext();
 	context->registerObject(new ThingyObject(context));
 

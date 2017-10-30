@@ -14,9 +14,8 @@ NAMESPACE_BEGIN(foundation)
 typedef std::map<std::string, Object *> ObjectMap;
 typedef std::map<std::string, Object *>::const_iterator ObjectMapConstIter;
 
-class Context
-{
-  public:
+class Context {
+public:
 	/*!
 	 * \brief
 	 *   Конструктор класса.

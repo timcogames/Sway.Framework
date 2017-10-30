@@ -43,6 +43,7 @@ public:
 	static PFNGLVERTEXATTRIBPOINTERARBPROC glVertexAttribPointerARB;
 	static PFNGLENABLEVERTEXATTRIBARRAYARBPROC glEnableVertexAttribArrayARB;	
 
+	static b32 checkSupport(lpcstr extensions, lpcstr name);
 	static void define();
 };
 

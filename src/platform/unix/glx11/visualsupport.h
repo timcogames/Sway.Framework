@@ -8,8 +8,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
 
-class VisualSupport : private boost::noncopyable
-{
+class VisualSupport : private boost::noncopyable {
 public:
 	/*!
 	 * \brief

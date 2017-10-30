@@ -6,24 +6,20 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
 
-struct WindowEventGeneric
-{
+struct WindowEventGeneric {
 	// Empty
 };
 
-struct WindowEventCreate
-{
+struct WindowEventCreate {
 	math::TPoint<s32> position;
 	math::TSize<s32> size;
 };
 
-struct WindowEventResize
-{
+struct WindowEventResize {
 	math::TSize<s32> size;
 };
 
-struct WindowEventRedraw
-{
+struct WindowEventRedraw {
 	math::TPoint<s32> position;
 	math::TSize<s32> size;
 };

@@ -9,8 +9,7 @@ BOOST_AUTO_TEST_SUITE(TRectTestSuite)
 /*!
  * Убеждаемся, что конструктор по умолчанию приводит все компоненты к нулю.
  */
-BOOST_AUTO_TEST_CASE(TRectTestCase_DefaultConstructor)
-{
+BOOST_AUTO_TEST_CASE(TRectTestCase_DefaultConstructor) {
 	math::TRect<s32> rect;
 
 	BOOST_CHECK_EQUAL(rect.getL(), 0);
@@ -23,8 +22,7 @@ BOOST_AUTO_TEST_CASE(TRectTestCase_DefaultConstructor)
  * Убеждаемся, что конструктор устанавливает все значения компонентов в те, 
  * которые были заданы.
  */
-BOOST_AUTO_TEST_CASE(TRectTestCase_ComponentConstructor)
-{
+BOOST_AUTO_TEST_CASE(TRectTestCase_ComponentConstructor) {
 	const s32 x = 8, y = 16, w = 32, h = 64;
 	
 	math::TRect<s32> rect = math::TRect<s32>(x, y, w, h);
@@ -37,8 +35,7 @@ BOOST_AUTO_TEST_CASE(TRectTestCase_ComponentConstructor)
 	BOOST_CHECK_EQUAL(rect.getH(), h);
 }
 
-BOOST_AUTO_TEST_CASE(TRectTestCase_Offset)
-{
+BOOST_AUTO_TEST_CASE(TRectTestCase_Offset) {
 	const s32 x = 8, y = 16, w = 32, h = 64;
 	const s32 xoffset = 2, yoffset = 4;
 
@@ -56,8 +53,7 @@ BOOST_AUTO_TEST_CASE(TRectTestCase_Offset)
 /*!
  * Убеждаемся, что преобразование в TSize<type> проходит правильно.
  */
-BOOST_AUTO_TEST_CASE(TRectTestCase_ConvertToSize)
-{
+BOOST_AUTO_TEST_CASE(TRectTestCase_ConvertToSize) {
 	const s32 x = 8, y = 16, w = 32, h = 64;
 
 	math::TRect<s32> rect = math::TRect<s32>(x, y, w, h);
@@ -67,8 +63,7 @@ BOOST_AUTO_TEST_CASE(TRectTestCase_ConvertToSize)
 	BOOST_CHECK_EQUAL(size.getH(), h);
 }
 
-BOOST_AUTO_TEST_CASE(TRectTestCase_IsEmpty)
-{
+BOOST_AUTO_TEST_CASE(TRectTestCase_IsEmpty) {
 	BOOST_CHECK(math::TRect<s32>(0, 0, 0, 32).isEmpty());
 	BOOST_CHECK(math::TRect<s32>(0, 0, 32, 0).isEmpty());
 }

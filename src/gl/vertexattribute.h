@@ -9,7 +9,7 @@ NAMESPACE_BEGIN(gl)
 
 struct VertexAttribute {
 	s32 location;
-	DataTypeInfo::Types dataType; /*!< Тип данных. */
+	u32 dataType; /*!< Тип данных. */
 	int componentCount;
 	const void *pointer;
 	bool isNormalized;

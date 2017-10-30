@@ -10,13 +10,11 @@ NAMESPACE_BEGIN(math)
  * \brief
  *   Структура представления вершины.
  */
-struct ColorVertex
-{
-	float x, y, z;
-	float r, g, b, a;
+struct ColorVertex {
+	f32 x, y, z;
+	f32 r, g, b, a;
 
-	static ColorVertex set(const TVector3<float> &position, const TColor<float> &color)
-	{
+	static ColorVertex set(const TVector3<f32> &position, const TColor<f32> &color) {
 		ColorVertex vertex;
 	
 		vertex.x = position.getX();

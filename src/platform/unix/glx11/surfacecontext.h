@@ -17,8 +17,7 @@ class Canvas;
  * \brief
  *   Контекст поверхности холста.
  */
-class SurfaceContext : private boost::noncopyable
-{
+class SurfaceContext : private boost::noncopyable {
 public:
 	/*!
 	 * \brief

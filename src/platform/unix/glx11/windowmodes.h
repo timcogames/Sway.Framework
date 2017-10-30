@@ -10,8 +10,7 @@ NAMESPACE_BEGIN(glx11)
  * \brief
  *   Перечисление режимов окна.
  */
-enum WindowModes
-{
+enum WindowModes {
 	kWindowMode_Windowed = 0,  /*!< Оконный режим. */
 	kWindowMode_Fullscreen = 1 /*!< Полноэкранный режим. */
 };

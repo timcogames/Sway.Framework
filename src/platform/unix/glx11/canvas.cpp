@@ -14,8 +14,8 @@ NAMESPACE_BEGIN(glx11)
  *   Выполняет инициализацию нового экземпляра класса.
  */
 Canvas::Canvas()
-	: _context(NULL)
-{
+	: _context(NULL) {
+
 	/* Открывает соединение с сервером. */
 	_internalData.xDisplay = XOpenDisplay(NULL);
 	if (_internalData.xDisplay == NULL)
@@ -34,8 +34,7 @@ Canvas::Canvas()
  *
  *   Освобождает захваченные ресурсы.
  */
-Canvas::~Canvas()
-{
+Canvas::~Canvas() {
 	/* Закрываем соединение с сервером. */
 	XCloseDisplay(_internalData.xDisplay);
 }
@@ -47,8 +46,7 @@ Canvas::~Canvas()
  * \param[in] params
  *   Параметры окна.
  */
-void Canvas::create(const WindowInitialParams &params)
-{
+void Canvas::create(const WindowInitialParams &params) {
 	_support = new VisualSupport();
 
 	_internalData.xVisual = _support->chooseBestSuitable(_internalData.xDisplay);
@@ -84,26 +82,22 @@ void Canvas::create(const WindowInitialParams &params)
  * \brief
  *   Уничтожает окно.
  */
-void Canvas::destroy()
-{
+void Canvas::destroy() {
 	_context->destroy();
 	SAFE_DELETE(_context);
 
-	if (_internalData.xWindow)
-	{
+	if (_internalData.xWindow) {
 		XDestroyWindow(_internalData.xDisplay, _internalData.xWindow);
 		XFlush(_internalData.xDisplay);
 	}
 
-	if (_internalData.xColormap)
-	{
+	if (_internalData.xColormap) {
 		XFreeColormap(_internalData.xDisplay, _internalData.xColormap);
 		_internalData.xColormap = 0;
 	}
 }
 
-void Canvas::connect(WindowListener *listener)
-{
+void Canvas::connect(WindowListener *listener) {
 	_onCreate = boost::bind(&WindowListener::onCreate, listener, _1);
 	_onResize = boost::bind(&WindowListener::onResize, listener, _1);
 	_onRedraw = boost::bind(&WindowListener::onRedraw, listener, _1);
@@ -115,13 +109,11 @@ void Canvas::connect(WindowListener *listener)
  * \brief
  *   Обрабатывает события.
  */
-bool Canvas::eventLoop(ois::InputManager *inputManager, bool keepgoing)
-{
+bool Canvas::eventLoop(ois::InputManager *inputManager, bool keepgoing) {
 	XEvent event = {};
 	XNextEvent(_internalData.xDisplay, &event);
 
-	if (inputManager)
-	{
+	if (inputManager) {
 		if (inputManager->_keyboardUsed)
 			static_cast<ois::Keyboard *>(inputManager->getObject("Keyboard"))->capture();
 
@@ -129,11 +121,9 @@ bool Canvas::eventLoop(ois::InputManager *inputManager, bool keepgoing)
 			static_cast<ois::Mouse *>(inputManager->getObject("Mouse"))->capture();
 	}
 
-	switch (event.type)
-	{
+	switch (event.type) {
 	case CreateNotify:
-		if (_onCreate)
-		{
+		if (_onCreate) {
 			WindowEventCreate create;
 			create.position.setX(event.xcreatewindow.x);
 			create.position.setY(event.xcreatewindow.y);
@@ -145,8 +135,7 @@ bool Canvas::eventLoop(ois::InputManager *inputManager, bool keepgoing)
 		break;
 
 	case ConfigureNotify:
-		if (_onResize)
-		{
+		if (_onResize) {
 			WindowEventResize resize;
 			resize.size.setW(event.xconfigure.width);
 			resize.size.setH(event.xconfigure.height);
@@ -157,8 +146,7 @@ bool Canvas::eventLoop(ois::InputManager *inputManager, bool keepgoing)
 
 	case Expose:
 		//needRedraw = true;
-		if (_onRedraw)
-		{
+		if (_onRedraw) {
 			WindowEventRedraw redraw;
 			redraw.position.setX(event.xexpose.x);
 			redraw.position.setY(event.xexpose.y);
@@ -195,8 +183,7 @@ bool Canvas::eventLoop(ois::InputManager *inputManager, bool keepgoing)
  * \param[in] title
  *   Заголовок окна.
  */
-void Canvas::setTitle(lpcstr title)
-{
+void Canvas::setTitle(lpcstr title) {
 	XStoreName(_internalData.xDisplay, _internalData.xWindow, title);
 	XFlush(_internalData.xDisplay);
 }
@@ -215,10 +202,8 @@ void Canvas::setTitle(lpcstr title)
  *   Canvas::getPosition(s32 *, s32 *)
  *   Canvas::getPosition() const
  */
-void Canvas::setPosition(s32 x, s32 y)
-{
-	if (NOT visible())
-	{
+void Canvas::setPosition(s32 x, s32 y) {
+	if (NOT visible()) {
 		s64 supplied;
 		XSizeHints *hints = XAllocSizeHints();
 		XGetWMNormalHints(_internalData.xDisplay, _internalData.xWindow, hints, &supplied);
@@ -248,8 +233,7 @@ void Canvas::setPosition(s32 x, s32 y)
  *   Canvas::getPosition() const
  *   Canvas::setPosition(s32, s32)
  */
-void Canvas::getPosition(s32 *x, s32 *y)
-{
+void Canvas::getPosition(s32 *x, s32 *y) {
 	::Window dummy;
 	s32 xpos, ypos;
 
@@ -269,8 +253,7 @@ void Canvas::getPosition(s32 *x, s32 *y)
  *   Canvas::getPosition(s32 *, s32 *)
  *   Canvas::setPosition(s32, s32)
  */
-math::TPoint<s32> Canvas::getPosition() const
-{
+math::TPoint<s32> Canvas::getPosition() const {
 	::Window dummy;
 	s32 xpos, ypos;
 
@@ -293,8 +276,7 @@ math::TPoint<s32> Canvas::getPosition() const
  *   Canvas::getSize(s32 *, s32 *)
  *   Canvas::getSize() const
  */
-void Canvas::setSize(u32 w, u32 h)
-{
+void Canvas::setSize(u32 w, u32 h) {
 	XResizeWindow(_internalData.xDisplay, _internalData.xWindow, w, h);
 	XFlush(_internalData.xDisplay);
 }
@@ -313,8 +295,7 @@ void Canvas::setSize(u32 w, u32 h)
  *   Canvas::getSize() const
  *   Canvas::setSize(s32, s32)
  */
-void Canvas::getSize(s32 *w, s32 *h)
-{
+void Canvas::getSize(s32 *w, s32 *h) {
 	XWindowAttributes attrs;
 	XGetWindowAttributes(_internalData.xDisplay, _internalData.xWindow, &attrs);
 
@@ -332,43 +313,34 @@ void Canvas::getSize(s32 *w, s32 *h)
  *   Canvas::getSize(s32 *, s32 *)
  *   Canvas::setSize(s32, s32)
  */
-math::TSize<s32> Canvas::getSize() const
-{
+math::TSize<s32> Canvas::getSize() const {
 	XWindowAttributes attrs;
 	XGetWindowAttributes(_internalData.xDisplay, _internalData.xWindow, &attrs);
 
 	return math::TSize<s32>(attrs.width, attrs.height);
 }
 
-void Canvas::_minSize(XSizeHints *hints, const math::TSize<s32> *sizes, bool resizable)
-{
-	if (resizable)
-	{
-		if (sizes[kWindowSize_Min].getW() != DONT_CARE AND sizes[kWindowSize_Min].getH() != DONT_CARE)
-		{
+void Canvas::_minSize(XSizeHints *hints, const math::TSize<s32> *sizes, bool resizable) {
+	if (resizable) {
+		if (sizes[kWindowSize_Min].getW() != DONT_CARE AND sizes[kWindowSize_Min].getH() != DONT_CARE) {
 			hints->min_width = sizes[kWindowSize_Min].getW();
 			hints->min_height = sizes[kWindowSize_Min].getH();
 		}
 	}
-	else
-	{
+	else {
 		hints->min_width = sizes[kWindowSize].getW();
 		hints->min_height = sizes[kWindowSize].getH();
 	}
 }
 
-void Canvas::_maxSize(XSizeHints *hints, const math::TSize<s32> *sizes, bool resizable)
-{
-	if (resizable)
-	{
-		if (sizes[kWindowSize_Max].getW() != DONT_CARE AND sizes[kWindowSize_Max].getH() != DONT_CARE)
-		{
+void Canvas::_maxSize(XSizeHints *hints, const math::TSize<s32> *sizes, bool resizable) {
+	if (resizable) {
+		if (sizes[kWindowSize_Max].getW() != DONT_CARE AND sizes[kWindowSize_Max].getH() != DONT_CARE) {
 			hints->max_width = sizes[kWindowSize_Max].getW();
 			hints->max_height = sizes[kWindowSize_Max].getH();
 		}
 	}
-	else
-	{
+	else {
 		hints->max_width = sizes[kWindowSize].getW();
 		hints->max_height = sizes[kWindowSize].getH();
 	}
@@ -404,10 +376,8 @@ void Canvas::setSizeHints(const math::TSize<s32> *sizes, bool resizable) {
  *   Canvas::hide()
  *   Canvas::visible()
  */
-void Canvas::show()
-{
-	if (NOT visible())
-	{
+void Canvas::show() {
+	if (NOT visible()) {
 		XMapRaised(_internalData.xDisplay, _internalData.xWindow);
 		XFlush(_internalData.xDisplay);
 	}
@@ -421,8 +391,7 @@ void Canvas::show()
  *   Canvas::show()
  *   Canvas::visible()
  */
-void Canvas::hide()
-{
+void Canvas::hide() {
 	XUnmapWindow(_internalData.xDisplay, _internalData.xWindow);
 	XFlush(_internalData.xDisplay);
 }
@@ -435,8 +404,7 @@ void Canvas::hide()
  *   Canvas::show()
  *   Canvas::hide()
  */
-bool Canvas::visible() const
-{
+bool Canvas::visible() const {
 	XWindowAttributes attrs;
 	XGetWindowAttributes(_internalData.xDisplay, _internalData.xWindow, &attrs);
 	return attrs.map_state == IsViewable;
@@ -449,8 +417,7 @@ bool Canvas::visible() const
  * \param[in] fullscreen
  *   Включить полноэкранный режим?
  */
-void Canvas::setFullscreen(bool fullscreen)
-{
+void Canvas::setFullscreen(bool fullscreen) {
 	XEvent event;
 	event.type = ClientMessage;
 	event.xclient.serial = 0;
@@ -465,8 +432,7 @@ void Canvas::setFullscreen(bool fullscreen)
 	XSendEvent(_internalData.xDisplay, _internalData.xRoot, False, SubstructureNotifyMask | SubstructureRedirectMask, &event);
 }
 
-void Canvas::setMaximize(bool maximized)
-{
+void Canvas::setMaximize(bool maximized) {
 	XEvent event;
 	event.xclient.type = ClientMessage;
 	event.xclient.window = _internalData.xWindow;
@@ -483,8 +449,7 @@ void Canvas::setMaximize(bool maximized)
 	XSendEvent(_internalData.xDisplay, _internalData.xRoot, False, SubstructureRedirectMask, &event);
 }
 
-void *Canvas::getXDisplay() const
-{
+void *Canvas::getXDisplay() const {
 	return _internalData.xDisplay;
 }
 
@@ -492,13 +457,11 @@ void *Canvas::getXDisplay() const
  * \brief
  *   Получает уникальный идентификатор окна.
  */
-u32 Canvas::getXWindow() const
-{
+u32 Canvas::getXWindow() const {
 	return _internalData.xWindow;
 }
 
-SurfaceContext *Canvas::getContext()
-{
+SurfaceContext *Canvas::getContext() {
 	return _context;
 }
 

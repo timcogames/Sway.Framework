@@ -15,7 +15,7 @@ GLenum MeshBuilder::getGLTopology(u32 topology) {
 	case kPrimitiveTopology_TriangleList: return GL_TRIANGLES;
 	case kPrimitiveTopology_TriangleStrip: return GL_TRIANGLE_STRIP;
 	case kPrimitiveTopology_TriangleFan: return GL_TRIANGLE_FAN;
-	default: return GL_TRIANGLES;
+	default: return INVALID_TYPE;
 	}
 }
 

@@ -10,9 +10,8 @@ NAMESPACE_BEGIN(math)
  * \brief
  *   Шаблонный класс представления вектора из трех компонентов.
  */
-template<typename type>
-class TVector3 final
-{
+template<typename type_t>
+class TVector3 final {
 public:
 	/*!
 	 * \brief 
@@ -20,9 +19,8 @@ public:
 	 *
 	 *   Выполняет инициализацию нового экземпляра класса.
 	 */
-	TVector3()
-	{
-		_x = _y = _z = (type)0;
+	TVector3() {
+		_x = _y = _z = (type_t)0;
 	}
 
 	/*!
@@ -40,8 +38,7 @@ public:
 	 * \param[in] z
 	 *   Компонент Z вектора.
 	 */
-	explicit TVector3(type x, type y, type z)
-	{
+	explicit TVector3(type_t x, type_t y, type_t z) {
 		set(x, y, z);
 	}
 
@@ -58,8 +55,7 @@ public:
 	 * \param[in] z
 	 *   Значение Z компонента.
 	 */
-	void set(type x, type y, type z)
-	{
+	void set(type_t x, type_t y, type_t z) {
 		_x = x;
 		_y = y;
 		_z = z;
@@ -73,8 +69,7 @@ public:
 	 *   TRect::getY() const
 	 *   TRect::getZ() const
 	 */
-	type getX() const
-	{
+	type_t getX() const {
 		return _x;
 	}
 
@@ -86,8 +81,7 @@ public:
 	 *   TRect::getX() const
 	 *   TRect::getZ() const
 	 */
-	type getY() const
-	{
+	type_t getY() const {
 		return _y;
 	}
 
@@ -99,13 +93,12 @@ public:
 	 *   TRect::getX() const
 	 *   TRect::getY() const
 	 */
-	type getZ() const
-	{
+	type_t getZ() const {
 		return _z;
 	}
 
 private:
-	type _x, _y, _z;
+	type_t _x, _y, _z;
 };
 
 NAMESPACE_END(math)

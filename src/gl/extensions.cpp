@@ -1,4 +1,5 @@
 #include "extensions.h"
+#include <string.h> // strstr
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
@@ -38,16 +39,39 @@ PFNGLGETATTRIBLOCATIONARBPROC Extensions::glGetAttribLocationARB = NULL;
 PFNGLVERTEXATTRIBPOINTERARBPROC Extensions::glVertexAttribPointerARB = NULL;
 PFNGLENABLEVERTEXATTRIBARRAYARBPROC Extensions::glEnableVertexAttribArrayARB = NULL;	
 
+b32 Extensions::checkSupport(lpcstr extensions, lpcstr name) {
+	if (NOT strstr(extensions, name)) {
+		printf("Extension %s is not supported.", name);
+		return false;
+	}
+
+	return true;
+}
+
+struct ExtensionAvailability {
+	b32 GL_ARB_vertex_buffer_object_supported;
+	b32 GL_ARB_map_buffer_range_available;
+	b32 vertexArrayObject;
+	b32 drawElementsBaseVertex;
+	b32 fragmentProgram;
+};
+
 void Extensions::define() {
-	glGenBuffersARB = (PFNGLGENBUFFERSARBPROC) glXGetProcAddressARB((const GLubyte*) "glGenBuffersARB");
-	glBindBufferARB = (PFNGLBINDBUFFERARBPROC) glXGetProcAddressARB((const GLubyte*) "glBindBufferARB");
-	glBufferDataARB = (PFNGLBUFFERDATAARBPROC) glXGetProcAddressARB((const GLubyte*) "glBufferDataARB");
-	glGetBufferParameterivARB = (PFNGLGETBUFFERPARAMETERIVARBPROC) glXGetProcAddressARB((const GLubyte*) "glGetBufferParameterivARB");
-	glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC) glXGetProcAddressARB((const GLubyte*) "glDeleteBuffersARB");
-	glIsBufferARB = (PFNGLISBUFFERARBPROC) glXGetProcAddressARB((const GLubyte*) "glIsBufferARB");
-	glBufferSubDataARB = (PFNGLBUFFERSUBDATAARBPROC) glXGetProcAddressARB((const GLubyte*) "glBufferSubDataARB");
-	glMapBufferARB = (PFNGLMAPBUFFERARBPROC) glXGetProcAddressARB((const GLubyte*) "glMapBufferARB");
-	glUnmapBufferARB = (PFNGLUNMAPBUFFERARBPROC) glXGetProcAddressARB((const GLubyte*) "glUnmapBufferARB");
+	ExtensionAvailability availability;
+	lpcstr extensions = (lpcstr) glGetString(GL_EXTENSIONS);
+
+	availability.GL_ARB_vertex_buffer_object_supported = checkSupport(extensions, "GL_ARB_vertex_buffer_object");
+	if (availability.GL_ARB_vertex_buffer_object_supported) {
+		glGenBuffersARB = (PFNGLGENBUFFERSARBPROC) glXGetProcAddressARB((const GLubyte*) "glGenBuffersARB");
+		glBindBufferARB = (PFNGLBINDBUFFERARBPROC) glXGetProcAddressARB((const GLubyte*) "glBindBufferARB");
+		glBufferDataARB = (PFNGLBUFFERDATAARBPROC) glXGetProcAddressARB((const GLubyte*) "glBufferDataARB");
+		glGetBufferParameterivARB = (PFNGLGETBUFFERPARAMETERIVARBPROC) glXGetProcAddressARB((const GLubyte*) "glGetBufferParameterivARB");
+		glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC) glXGetProcAddressARB((const GLubyte*) "glDeleteBuffersARB");
+		glIsBufferARB = (PFNGLISBUFFERARBPROC) glXGetProcAddressARB((const GLubyte*) "glIsBufferARB");
+		glBufferSubDataARB = (PFNGLBUFFERSUBDATAARBPROC) glXGetProcAddressARB((const GLubyte*) "glBufferSubDataARB");
+		glMapBufferARB = (PFNGLMAPBUFFERARBPROC) glXGetProcAddressARB((const GLubyte*) "glMapBufferARB");
+		glUnmapBufferARB = (PFNGLUNMAPBUFFERARBPROC) glXGetProcAddressARB((const GLubyte*) "glUnmapBufferARB");
+	}
 
 	glCreateProgramObjectARB = (PFNGLCREATEPROGRAMOBJECTARBPROC) glXGetProcAddressARB((const GLubyte*) "glCreateProgramObjectARB");
 	glCreateShaderObjectARB = (PFNGLCREATESHADEROBJECTARBPROC) glXGetProcAddressARB((const GLubyte*) "glCreateShaderObjectARB");

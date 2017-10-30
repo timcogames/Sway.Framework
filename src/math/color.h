@@ -10,9 +10,8 @@ NAMESPACE_BEGIN(math)
  * \brief
  *   Шаблонный класс представления цвета.
  */
-template<typename type>
-class TColor final
-{
+template<typename type_t>
+class TColor final {
 public:
 	/*!
 	 * \brief 
@@ -20,10 +19,9 @@ public:
 	 *
 	 *   Выполняет инициализацию нового экземпляра класса.
 	 */
-	TColor()
-	{
-		_r = _g = _b = (type)0;
-		_a = (type)1;
+	TColor() {
+		_r = _g = _b = (type_t)0;
+		_a = (type_t)1;
 	}
 
 	/*!
@@ -44,8 +42,7 @@ public:
 	 * \param[in] a
 	 *   Значение альфа-канала.
 	 */
-	explicit TColor(type r, type g, type b, type a = (type)1)
-	{
+	explicit TColor(type_t r, type_t g, type_t b, type_t a = (type_t)1) {
 		set(r, g, b, a);
 	}
 
@@ -65,8 +62,7 @@ public:
 	 * \param[in] a
 	 *   Значение альфа-канала.
 	 */
-	void set(type r, type g, type b, type a = (type)1)
-	{
+	void set(type_t r, type_t g, type_t b, type_t a = (type_t)1) {
 		_r = r;
 		_g = g;
 		_b = b;
@@ -82,8 +78,7 @@ public:
 	 *   TRect::getB() const
 	 *   TRect::getA() const
 	 */
-	type getR() const
-	{
+	type_t getR() const {
 		return _r;
 	}
 
@@ -96,8 +91,7 @@ public:
 	 *   TRect::getB() const
 	 *   TRect::getA() const
 	 */
-	type getG() const
-	{
+	type_t getG() const {
 		return _g;
 	}
 
@@ -110,8 +104,7 @@ public:
 	 *   TRect::getG() const
 	 *   TRect::getA() const
 	 */
-	type getB() const
-	{
+	type_t getB() const {
 		return _b;
 	}
 
@@ -124,22 +117,20 @@ public:
 	 *   TRect::getG() const
 	 *   TRect::getB() const
 	 */
-	type getA() const
-	{
+	type_t getA() const {
 		return _a;
 	}
 
 	/*!
 	 * \brief
-	 *   Преобразовывает в TVector4<type> класс.
+	 *   Преобразовывает в TVector4<type_t> класс.
 	 */
-	TVector4<type> toVec4() const
-	{
-		return TVector4<type>(_r, _g, _b, _a);
+	TVector4<type_t> toVec4() const {
+		return TVector4<type_t>(_r, _g, _b, _a);
 	}
 
 private:
-	type _r, _g, _b, _a;
+	type_t _r, _g, _b, _a;
 };
 
 NAMESPACE_END(math)

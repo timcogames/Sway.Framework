@@ -54,45 +54,45 @@ void VertexAttributeBinding::mergeLayout() {
 
 			switch (vertexElement.semantic) {
 			case kVertexElementSemantic_Position:
-				attribute.componentCount = vertexElement.getComponentCount();
+				attribute.componentCount = DataTypeInfo::getComponentCount(vertexElement.dataType);
 				attribute.pointer = BUFFER_OFFSET(_vertexLayoutOffset);
 
-				_vertexLayoutOffset += vertexElement.getElementSize();
+				_vertexLayoutOffset += DataTypeInfo::getElementSize(vertexElement.dataType);
 				break;
 
 			case kVertexElementSemantic_Color:
-				attribute.componentCount = vertexElement.getComponentCount();
+				attribute.componentCount = DataTypeInfo::getComponentCount(vertexElement.dataType);
 				attribute.pointer = BUFFER_OFFSET(_vertexLayoutOffset);
 
-				_vertexLayoutOffset += vertexElement.getElementSize();
+				_vertexLayoutOffset += DataTypeInfo::getElementSize(vertexElement.dataType);
 				break;
 
 			case kVertexElementSemantic_TexCoord:
-				attribute.componentCount = vertexElement.getComponentCount();
+				attribute.componentCount = DataTypeInfo::getComponentCount(vertexElement.dataType);
 				attribute.pointer = BUFFER_OFFSET(_vertexLayoutOffset);
 
-				_vertexLayoutOffset += vertexElement.getElementSize();
+				_vertexLayoutOffset += DataTypeInfo::getElementSize(vertexElement.dataType);
 				break;
 
 			case kVertexElementSemantic_Normal:
-				attribute.componentCount = vertexElement.getComponentCount();
+				attribute.componentCount = DataTypeInfo::getComponentCount(vertexElement.dataType);
 				attribute.pointer = BUFFER_OFFSET(_vertexLayoutOffset);
 
-				_vertexLayoutOffset += vertexElement.getElementSize();
+				_vertexLayoutOffset += DataTypeInfo::getElementSize(vertexElement.dataType);
 				break;
 
 			case kVertexElementSemantic_Tangent:
-				attribute.componentCount = vertexElement.getComponentCount();
+				attribute.componentCount = DataTypeInfo::getComponentCount(vertexElement.dataType);
 				attribute.pointer = BUFFER_OFFSET(_vertexLayoutOffset);
 
-				_vertexLayoutOffset += vertexElement.getElementSize();
+				_vertexLayoutOffset += DataTypeInfo::getElementSize(vertexElement.dataType);
 				break;
 
 			case kVertexElementSemantic_Binormal:
-				attribute.componentCount = vertexElement.getComponentCount();
+				attribute.componentCount = DataTypeInfo::getComponentCount(vertexElement.dataType);
 				attribute.pointer = BUFFER_OFFSET(_vertexLayoutOffset);
 
-				_vertexLayoutOffset += vertexElement.getElementSize();
+				_vertexLayoutOffset += DataTypeInfo::getElementSize(vertexElement.dataType);
 				break;
 
 			default:
@@ -123,7 +123,7 @@ void VertexAttributeBinding::addAttributes(std::initializer_list<std::string> at
 		addAttribute(attribute);
 }
 
-void VertexAttributeBinding::setVertexInputAttributeDescription(const std::string &attributeName, int size, DataTypeInfo::Types dataType, bool isNormalized) {
+void VertexAttributeBinding::setVertexInputAttributeDescription(const std::string &attributeName, int size, u32 dataType, bool isNormalized) {
 	if (_vertexAttributeOffset == 0)
 		_vertexAttributeOffset = getVertexLayoutOffset();
 

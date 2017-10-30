@@ -10,8 +10,7 @@ NAMESPACE_BEGIN(glx11)
  * \brief
  *   Внутренние данные поверхности холста.
  */
-struct SurfaceInternalData
-{
+struct SurfaceInternalData {
 	::Display *xDisplay;
 	GLXDrawable glxDrawable;
 	GLXFBConfig glxFBConfig;

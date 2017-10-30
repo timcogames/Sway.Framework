@@ -5,32 +5,48 @@ NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(graphics)
 
 /*!
- * \brief Конструктор класса.
+ * \brief
+ *   Конструктор класса.
  *
- * Выполняет инициализацию нового экземпляра класса.
+ *   Выполняет инициализацию нового экземпляра класса.
  */
 RenderSubqueue::RenderSubqueue()
-	: _group(kRenderSubqueueGroup_Opaque)
-{
+	: _group(kRenderSubqueueGroup_Opaque) {
 	// Empty
 }
 
 /*!
- * \brief Деструктор класса.
+ * \brief
+ *   Деструктор класса.
  *
- * Освобождает захваченные ресурсы.
+ *   Освобождает захваченные ресурсы.
  */
-RenderSubqueue::~RenderSubqueue()
-{
+RenderSubqueue::~RenderSubqueue() {
 	// Empty
 }
 
 /*!
- * \brief Метод отрисовки.
+ * \brief
+ *   Метод отрисовки.
  */
-void RenderSubqueue::render()
-{
+void RenderSubqueue::render() {
 	// Empty
+}
+
+/*!
+ * \brief
+ *   Устанавливает индекс группы.
+ */
+void RenderSubqueue::setGroupIdx(u32 groupIdx) {
+	_group = groupIdx;
+}
+
+/*!
+ * \brief
+ *   Получает индекс группы.
+ */
+u32 RenderSubqueue::getGroupIdx() const {
+	return _group;
 }
 
 NAMESPACE_END(graphics)

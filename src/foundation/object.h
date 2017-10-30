@@ -12,11 +12,10 @@ class Context;
  * \brief
  *   Базовый класс для объектов.
  */
-class Object
-{
+class Object {
 	friend class Context;
 
-  public:
+public:
 	/*!
 	 * \brief
 	 *   Конструктор класса.
@@ -27,8 +26,7 @@ class Object
 	 *   Контекст.
 	 */
 	Object(Context *context)
-		 : _context(context)
-	{
+		 : _context(context) {
 		// Empty
 	}
 
@@ -38,8 +36,7 @@ class Object
 	 *
 	 *   Освобождает захваченные ресурсы.
 	 */
-	virtual ~Object()
-	{
+	virtual ~Object() {
 		// Empty
 	}
 
@@ -65,9 +62,11 @@ class Object
 	 * \brief
 	 *   Получает контекст.
 	 */
-	Context *getContext() const { return _context; }
+	Context *getContext() const {
+		return _context;
+	}
 
-  private:
+private:
 	Context *_context; /*!< Контекст. */
 };
 

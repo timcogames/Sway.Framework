@@ -17,8 +17,8 @@ NAMESPACE_BEGIN(ois)
  *   Выполняет инициализацию нового экземпляра класса.
  */
 Keyboard::Keyboard(InputManager *creator)
-	: foundation::Object(creator), _display(NULL), _window(None)
-{
+	: foundation::Object(creator), _display(NULL), _window(None) {
+
 	static_cast<InputManager *>(getContext())->setKeyboardUsed(true);
 
 	_initialize();
@@ -30,10 +30,8 @@ Keyboard::Keyboard(InputManager *creator)
  *
  *   Освобождает захваченные ресурсы.
  */
-Keyboard::~Keyboard()
-{
-	if (_display)
-	{
+Keyboard::~Keyboard() {
+	if (_display) {
 		if (_grab)
 			XUngrabKeyboard(_display, CurrentTime);
 
@@ -53,8 +51,7 @@ Keyboard::~Keyboard()
  * \note
  *   Внутренний метод, вызывается в конструкторе.
  */
-void Keyboard::_initialize()
-{
+void Keyboard::_initialize() {
 	if (_display)
 		XCloseDisplay(_display);
 	_display = NULL;
@@ -69,18 +66,15 @@ void Keyboard::_initialize()
 		XGrabKeyboard(_display, _window, True, GrabModeAsync, GrabModeAsync, CurrentTime);
 }
 
-void Keyboard::connect(KeyboardListener *listener)
-{
+void Keyboard::connect(KeyboardListener *listener) {
 	onKeyPressed = boost::bind(&KeyboardListener::onKeyPressed, listener, _1);
 	onKeyReleased = boost::bind(&KeyboardListener::onKeyReleased, listener, _1);
 }
 
-void Keyboard::capture()
-{
+void Keyboard::capture() {
 	XEvent event = {};
 
-	while (XPending(_display) > 0)
-	{
+	while (XPending(_display) > 0) {
 		XNextEvent(_display, &event);
 
 		if (event.type == KeyPress AND onKeyPressed)
@@ -90,15 +84,12 @@ void Keyboard::capture()
 	}
 }
 
-void Keyboard::_injectKeyDown(XEvent event)
-{
+void Keyboard::_injectKeyDown(XEvent event) {
 	KeySym key = NoSymbol;
 	XLookupString(&event.xkey, 0, 0, &key, 0);
 
-	for (const KeyMapping &mapping : XtoKeycode)
-	{
-		if (mapping.keysym == key)
-		{
+	for (const KeyMapping &mapping : XtoKeycode) {
+		if (mapping.keysym == key) {
 			InputEventKeyPress keyPress;
 			keyPress.keycode = mapping.keycode;
 
@@ -107,15 +98,12 @@ void Keyboard::_injectKeyDown(XEvent event)
 	}
 }
 
-void Keyboard::_injectKeyUp(XEvent event)
-{
+void Keyboard::_injectKeyUp(XEvent event) {
 	KeySym key = NoSymbol;
 	XLookupString(&event.xkey, 0, 0, &key, 0);
 
-	for (const KeyMapping &mapping : XtoKeycode)
-	{
-		if (mapping.keysym == key)
-		{
+	for (const KeyMapping &mapping : XtoKeycode) {
+		if (mapping.keysym == key) {
 			InputEventKeyRelease keyRelease;
 			keyRelease.keycode = mapping.keycode;
 

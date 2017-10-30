@@ -6,8 +6,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(ois)
 
-class KeyboardListener
-{
+class KeyboardListener {
 public:
 	/*!
 	 * \brief
@@ -15,10 +14,17 @@ public:
 	 *
 	 *   Освобождает захваченные ресурсы.
 	 */
-	virtual ~KeyboardListener() {}
+	virtual ~KeyboardListener() {
+		// Empty
+	}
 
-	virtual void onKeyPressed(const InputEventKeyPress &) {}
-	virtual void onKeyReleased(const InputEventKeyRelease &) {}
+	virtual void onKeyPressed(const InputEventKeyPress &) {
+		// Empty
+	}
+
+	virtual void onKeyReleased(const InputEventKeyRelease &) {
+		// Empty
+	}
 };
 
 NAMESPACE_END(ois)

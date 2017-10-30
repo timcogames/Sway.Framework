@@ -6,54 +6,67 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(graphics)
 
-class RenderSubsystem
-{
- public:
+class RenderSubsystem {
+public:
 	/*!
-	 * \brief Конструктор класса.
+	 * \brief
+	 *   Конструктор класса.
 	 *
-	 * Выполняет инициализацию нового экземпляра класса.
+	 *   Выполняет инициализацию нового экземпляра класса.
 	 */
 	RenderSubsystem();
 
 	/*!
-	 * \brief Деструктор класса.
+	 * \brief
+	 *   Деструктор класса.
 	 *
-	 * Освобождает захваченные ресурсы.
+	 *   Освобождает захваченные ресурсы.
 	 */
 	virtual ~RenderSubsystem();
 
 	/*!
-	 * \brief Создает новую очередь и добавляет её в контейнер.
+	 * \brief
+	 *   Создает новую очередь и добавляет её в контейнер.
 	 *
-	 * \return Умный указатель на объект класса очереди.
+	 * \return
+	 *   Умный указатель на объект класса очереди.
 	 */
 	virtual RenderQueuePtr createQueue();
 
 	/*!
-	 * \brief Получает очередь по индексу.
+	 * \brief
+	 *   Получает очередь по индексу.
 	 *
-	 * \param index Индекс очереди.
-	 * \return Умный указатель на объект класса очереди.
+	 * \param[in] index
+	 *   Индекс очереди.
+	 * 
+	 * \return
+	 *   Умный указатель на объект класса очереди.
 	 */
 	virtual RenderQueuePtr getQueueByIdx(u32 index);
 
 	/*!
-	 * \brief Получает все очереди.
+	 * \brief
+	 *   Получает все очереди.
 	 */
 	virtual RenderQueueVec getQueues();
 
 	/*!
-	 * \brief Сортирует очереди по приоритету.
+	 * \brief
+	 *   Сортирует очереди по приоритету.
 	 */
 	virtual void sortQueues();
 
 	/*!
-	 * \brief Метод отрисовки.
+	 * \brief
+	 *   Метод отрисовки.
 	 */
 	virtual void render();
 
- private:
+private:
+	void _renderSubqueues(RenderQueuePtr queue, u32 group);
+
+private:
 	RenderQueueVec _queues; /*!< Контейнер очередей. */
 };
 

@@ -10,9 +10,8 @@ NAMESPACE_BEGIN(math)
  * \brief
  *   Шаблонный класс представления матрицы.
  */
-template<typename type>
-class TMatrix4 final
-{
+template<typename type_t>
+class TMatrix4 final {
 public:
 	/*!
 	 * \brief 
@@ -20,8 +19,7 @@ public:
 	 *
 	 *   Выполняет инициализацию нового экземпляра класса.
 	 */
-	TMatrix4()
-	{
+	TMatrix4() {
 		makeIdentity();
 	}
 
@@ -38,8 +36,7 @@ public:
 	 * \param[in] value
 	 *   Значения для установки.
 	 */
-	void set(u32 row, u32 col, type value)
-	{
+	void set(u32 row, u32 col, type_t value) {
 		_values[row * 4 + col] = value;
 	}
 
@@ -56,8 +53,7 @@ public:
 	 * \return
 	 *   Значения элемента.
 	 */
-	type get(u32 row, u32 col) const
-	{
+	type_t get(u32 row, u32 col) const {
 		return _values[row * 4 + col];
 	}
 
@@ -71,8 +67,7 @@ public:
 	 * \param[in] value
 	 *   Значения для установки.
 	 */
-	void setRow(u32 i, const TVector4<type> &value)
-	{
+	void setRow(u32 i, const TVector4<type_t> &value) {
 		set(i, 0, value.getX());
 		set(i, 1, value.getY());
 		set(i, 2, value.getZ());
@@ -89,9 +84,8 @@ public:
 	 * \return
 	 *   Значения элементов.
 	 */
-	TVector4<type> getRow(u32 i) const
-	{
-		return TVector4<type>(get(i, 0), get(i, 1), get(i, 2), get(i, 3));
+	TVector4<type_t> getRow(u32 i) const {
+		return TVector4<type_t>(get(i, 0), get(i, 1), get(i, 2), get(i, 3));
 	}
 
 	/*!
@@ -104,8 +98,7 @@ public:
 	 * \param[in] value
 	 *   Значения для установки.
 	 */
-	void setCol(u32 i, const TVector4<type> &value)
-	{
+	void setCol(u32 i, const TVector4<type_t> &value) {
 		set(0, i, value.getX());
 		set(1, i, value.getY());
 		set(2, i, value.getZ());
@@ -122,18 +115,16 @@ public:
 	 * \return
 	 *   Значения элементов.
 	 */
-	TVector4<type> getCol(u32 i) const
-	{
-		return TVector4<type>(get(0, i), get(1, i), get(2, i), get(3, i));
+	TVector4<type_t> getCol(u32 i) const {
+		return TVector4<type_t>(get(0, i), get(1, i), get(2, i), get(3, i));
 	}
 
 	/*!
 	 * \brief 
 	 *   Обнуляет все элементы матрицы.
 	 */
-	TMatrix4<type> &makeZero()
-	{
-		memset(_values, 0, sizeof(type) * 16);
+	TMatrix4<type_t> &makeZero() {
+		memset(_values, 0, sizeof(type_t) * 16);
 		
 		return *this;
 	}
@@ -142,29 +133,26 @@ public:
 	 * \brief 
 	 *   Приводит к единичной матрице.
 	 */
-	TMatrix4<type> &makeIdentity()
-	{
+	TMatrix4<type_t> &makeIdentity() {
 		makeZero();
-		set(0, 0, (type)1);
-		set(1, 1, (type)1);
-		set(2, 2, (type)1);
-		set(3, 3, (type)1);
+		set(0, 0, (type_t)1);
+		set(1, 1, (type_t)1);
+		set(2, 2, (type_t)1);
+		set(3, 3, (type_t)1);
 
 		return *this;
 	}
 
-	type *get()
-	{
+	type_t *get() {
 		return _values;
 	}
 	
-	const type *get() const
-	{
+	const type_t *get() const {
 		return _values;
 	}
 
 private:
-	type _values[16]; /*!< Элементы матрицы. */
+	type_t _values[16]; /*!< Элементы матрицы. */
 };
 
 NAMESPACE_END(math)

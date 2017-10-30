@@ -5,34 +5,35 @@ NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(graphics)
 
 /*!
- * \brief Конструктор класса.
+ * \brief
+ *   Конструктор класса.
  *
- * Выполняет инициализацию нового экземпляра класса.
+ *   Выполняет инициализацию нового экземпляра класса.
  */
 RenderQueue::RenderQueue()
-	: _priority(kRenderQueuePriority_Normal)
-{
+	: _priority(kRenderQueuePriority_Normal) {
 	// Empty
 }
 
 /*!
- * \brief Деструктор класса.
+ * \brief
+ *   Деструктор класса.
  *
- * Освобождает захваченные ресурсы.
+ *   Освобождает захваченные ресурсы.
  */
-RenderQueue::~RenderQueue()
-{
+RenderQueue::~RenderQueue() {
 	for (u32 i = 0; i < RENDER_SUBQUEUE_GROUP_COUNT; ++i)
 		_subqueues[i].clear();
 }
 
 /*!
- * \brief Добавляет подочередь \ref RenderSubqueue в группу.
+ * \brief
+ *   Добавляет подочередь \ref RenderSubqueue в группу.
  *
- * \param subqueue Указатель на обьект класса подочереди, которой следует добавить в контейнер.
+ * \param[in] subqueue
+ *   Указатель на обьект класса подочереди, которой следует добавить в контейнер.
  */
-void RenderQueue::addSubqueue(const RenderSubqueuePtr &subqueue)
-{
+void RenderQueue::addSubqueue(const RenderSubqueuePtr &subqueue) {
 	u32 groupIndex = subqueue->getGroupIdx();
 	if (groupIndex > RENDER_SUBQUEUE_GROUP_COUNT)
 		std::invalid_argument("groupIndex");
@@ -41,12 +42,13 @@ void RenderQueue::addSubqueue(const RenderSubqueuePtr &subqueue)
 }
 
 /*!
- * \brief Удаляет подочередь \ref RenderSubqueue из группы.
+ * \brief
+ *   Удаляет подочередь \ref RenderSubqueue из группы.
  *
- * \param subqueue Указатель на обьект класса подочереди, которой следует удалить из контейнера.
+ * \param[in] subqueue
+ *   Указатель на обьект класса подочереди, которой следует удалить из контейнера.
  */
-void RenderQueue::removeSubqueue(const RenderSubqueuePtr &subqueue)
-{
+void RenderQueue::removeSubqueue(const RenderSubqueuePtr &subqueue) {
 	u32 groupIndex = subqueue->getGroupIdx();
 	if (groupIndex > RENDER_SUBQUEUE_GROUP_COUNT)
 		std::invalid_argument("groupIndex");
@@ -55,13 +57,30 @@ void RenderQueue::removeSubqueue(const RenderSubqueuePtr &subqueue)
 }
 
 /*!
- * \brief Получает группу подочередей по индексу.
+ * \brief
+ *   Получает группу подочередей по индексу.
  *
- * \param groupIdx Индекс группы.
+ * \param[in] groupIdx
+ *   Индекс группы.
  */
-RenderSubqueueVec &RenderQueue::getSubqueueGroupByIdx(u32 groupIdx)
-{
+RenderSubqueueVec &RenderQueue::getSubqueueGroupByIdx(u32 groupIdx) {
 	return _subqueues[groupIdx];
+}
+
+/*!
+ * \brief
+ *   Устанавливает значение приоритета.
+ */
+void RenderQueue::setPriority(u32 priority) {
+	_priority = priority;
+}
+
+/*!
+ * \brief
+ *   Получает значение приоритета.
+ */
+u32 RenderQueue::getPriority() const {
+	return _priority;
 }
 
 NAMESPACE_END(graphics)

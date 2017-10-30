@@ -15,8 +15,7 @@ NAMESPACE_BEGIN(glx11)
  *
  *   Выполняет инициализацию нового экземпляра класса.
  */
-SurfaceContext::SurfaceContext(Canvas *canvas, VisualSupport *support, s32 visualId)
-{
+SurfaceContext::SurfaceContext(Canvas *canvas, VisualSupport *support, s32 visualId) {
 	_internalData.xDisplay = static_cast<::Display *>(canvas->getXDisplay());
 	_internalData.glxDrawable = static_cast<::Window>(canvas->getXWindow());
 	_internalData.glxFBConfig = support->getFrameBufferConfig(_internalData.xDisplay, visualId);
@@ -28,16 +27,13 @@ SurfaceContext::SurfaceContext(Canvas *canvas, VisualSupport *support, s32 visua
  *
  *   Освобождает захваченные ресурсы.
  */
-SurfaceContext::~SurfaceContext()
-{
+SurfaceContext::~SurfaceContext() {
 	// Empty
 }
 
-bool SurfaceContext::checkGLXExtension()
-{
+bool SurfaceContext::checkGLXExtension() {
 	int glxErrorBase, glxEventBase;
-	if (NOT glXQueryExtension(_internalData.xDisplay, &glxErrorBase, &glxEventBase))
-	{
+	if (NOT glXQueryExtension(_internalData.xDisplay, &glxErrorBase, &glxEventBase)) {
 		fprintf(stderr, "X display does not support the GLX extension.\n");
 		return false;
 	}
@@ -45,11 +41,9 @@ bool SurfaceContext::checkGLXExtension()
 	return true;
 }
 
-bool SurfaceContext::checkGLXVersion()
-{
+bool SurfaceContext::checkGLXVersion() {
 	int glxVersionMajor, glxVersionMinor;
-	if (NOT glXQueryVersion(_internalData.xDisplay, &glxVersionMajor, &glxVersionMinor))
-	{
+	if (NOT glXQueryVersion(_internalData.xDisplay, &glxVersionMajor, &glxVersionMinor)) {
 		fprintf(stderr, "Unable to retrieve GLX version.\n");
 		return false;
 	}
@@ -58,42 +52,35 @@ bool SurfaceContext::checkGLXVersion()
 	return true;
 }
 
-void SurfaceContext::printServerVendor()
-{
+void SurfaceContext::printServerVendor() {
 	lpcstr serverVendor = glXQueryServerString(_internalData.xDisplay, XDefaultScreen(_internalData.xDisplay), GLX_VENDOR);
 	printf("Server glx vendor string: %s\n", serverVendor);
 }
 
-void SurfaceContext::printClientVendor()
-{
+void SurfaceContext::printClientVendor() {
 	lpcstr clientVendor = glXGetClientString(_internalData.xDisplay, GLX_VENDOR);
 	printf("Client glx vendor string: %s\n", clientVendor);
 }
 
-void SurfaceContext::printServerVersion()
-{
+void SurfaceContext::printServerVersion() {
 	lpcstr serverVersion = glXQueryServerString(_internalData.xDisplay, XDefaultScreen(_internalData.xDisplay), GLX_VERSION);
 	printf("Server glx version string: %s\n", serverVersion);
 }
 
-void SurfaceContext::printClientVersion()
-{
+void SurfaceContext::printClientVersion() {
 	lpcstr clientVersion = glXGetClientString(_internalData.xDisplay, GLX_VERSION);
 	printf("Client glx version string: %s\n", clientVersion);
 }
 
-void SurfaceContext::printServerExtensions()
-{
+void SurfaceContext::printServerExtensions() {
 	//lpcstr serverExtensions = glXQueryServerString(_internalData.xDisplay, XDefaultScreen(_internalData.xDisplay), GLX_EXTENSIONS);
 }
 
-void SurfaceContext::printClientExtensions()
-{
+void SurfaceContext::printClientExtensions() {
 	//lpcstr clientExtensions = glXGetClientString(_internalData.xDisplay, GLX_EXTENSIONS);
 }
 
-void SurfaceContext::printGLXExtensions()
-{
+void SurfaceContext::printGLXExtensions() {
 	//lpcstr glxExtensions = glXQueryExtensionsString(_internalData.xDisplay, XDefaultScreen(_internalData.xDisplay));
 }
 
@@ -101,8 +88,7 @@ void SurfaceContext::printGLXExtensions()
  * \brief
  *   Создает контекст визуализации.
  */
-void SurfaceContext::create()
-{
+void SurfaceContext::create() {
 	_internalData.glxContext = glXCreateNewContext(_internalData.xDisplay, _internalData.glxFBConfig, GLX_RGBA_TYPE, 0, True);
 	if (NOT _internalData.glxContext)
 		throw std::runtime_error("Unable to create GLX context.");
@@ -115,8 +101,7 @@ void SurfaceContext::create()
  * \brief
  *   Уничтожает контекст визуализации.
  */
-void SurfaceContext::destroy()
-{
+void SurfaceContext::destroy() {
 	if (NOT doneCurrent())
 		printf("Failed to deactivate shared context before sharing.\n");
 
@@ -130,8 +115,7 @@ void SurfaceContext::destroy()
  * \sa
  *   SurfaceContext::doneCurrent()
  */
-bool SurfaceContext::makeCurrent()
-{
+bool SurfaceContext::makeCurrent() {
 	if (glXGetCurrentContext() != _internalData.glxContext)
 		return glXMakeCurrent(_internalData.xDisplay, _internalData.glxDrawable, _internalData.glxContext);
 
@@ -145,8 +129,7 @@ bool SurfaceContext::makeCurrent()
  * \sa
  *   SurfaceContext::makeCurrent()
  */
-bool SurfaceContext::doneCurrent()
-{
+bool SurfaceContext::doneCurrent() {
 	return glXMakeCurrent(_internalData.xDisplay, None, NULL);
 }
 
@@ -154,8 +137,7 @@ bool SurfaceContext::doneCurrent()
  * \brief
  *   Обмен буферов.
  */
-void SurfaceContext::present()
-{
+void SurfaceContext::present() {
 	glXSwapBuffers(_internalData.xDisplay, _internalData.glxDrawable);
 }
 

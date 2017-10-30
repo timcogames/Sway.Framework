@@ -72,9 +72,9 @@ math::TRect<s32> Viewport::get() const {
  * \brief
  *   Получает соотношение сторон.
  */
-float Viewport::aspect() const {
+f32 Viewport::aspect() const {
 	math::TRect<s32> nativeRectArea = get();
-	return (float) nativeRectArea.getW() / (float) nativeRectArea.getH();
+	return (f32) nativeRectArea.getW() / (f32) nativeRectArea.getH();
 }
 
 NAMESPACE_END(gl)

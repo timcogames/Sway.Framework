@@ -6,13 +6,11 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(ois)
 
-struct InputEventKeyPress
-{
+struct InputEventKeyPress {
 	u32 keycode;
 };
 
-struct InputEventKeyRelease
-{
+struct InputEventKeyRelease {
 	u32 keycode;
 };
 

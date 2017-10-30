@@ -16,8 +16,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
 
-class Canvas : private boost::noncopyable
-{
+class Canvas : private boost::noncopyable {
 public:
 	/*!
 	 * \brief

@@ -8,7 +8,7 @@ GLenum HardwareBuffer::getGLTarget(u32 target) {
 	switch (target) {
 	case kHardwareBufferTarget_Array: return GL_ARRAY_BUFFER_ARB;
 	case kHardwareBufferTarget_ElementArray: return GL_ELEMENT_ARRAY_BUFFER_ARB;
-	default: return GL_ARRAY_BUFFER_ARB;
+	default: return INVALID_TYPE;
 	}
 }
 
@@ -17,7 +17,7 @@ GLenum HardwareBuffer::getGLUsage(u32 usage) {
 	case kHardwareBufferUsage_Static: return GL_STATIC_DRAW_ARB;
 	case kHardwareBufferUsage_Dynamic: return GL_DYNAMIC_DRAW_ARB;
 	case kHardwareBufferUsage_Stream: return GL_STREAM_DRAW_ARB;
-	default: return GL_DYNAMIC_DRAW_ARB;
+	default: return INVALID_TYPE;
 	}
 }
 
@@ -28,8 +28,8 @@ GLenum HardwareBuffer::getGLUsage(u32 usage) {
 HardwareBuffer *HardwareBuffer::create(const HardwareBufferCreateInfo &info) {
 	HardwareBuffer *instance = new HardwareBuffer(info.description);
 	if (instance->allocate(info.data) == SUCCESS_STATUS) return instance;
-    SAFE_DELETE(instance);
-    return 0;
+	SAFE_DELETE(instance);
+	return 0;
 }
 
 /*!

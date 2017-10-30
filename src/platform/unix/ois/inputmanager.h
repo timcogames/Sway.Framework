@@ -9,8 +9,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(ois)
 
-class InputManager : public foundation::Context
-{
+class InputManager : public foundation::Context {
 public:
 	/*!
 	 * \brief
@@ -35,7 +34,7 @@ public:
 	 * \brief
 	 *   Создает объект устройства ввода.
 	 *
-	 * \param type
+	 * \param[in] type
 	 *   Тип устройства.
 	 */
 	foundation::Object *createDevice(DeviceTypes type);
@@ -47,7 +46,7 @@ public:
 	 * \brief
 	 *   Проверяет устройство.
 	 *
-	 * \param type
+	 * \param[in] type
 	 *   Тип устройства для проверки.
 	 */
 	int hasFreeDevice(DeviceTypes type);
@@ -56,7 +55,7 @@ public:
 	 * \brief
 	 *   Устанавливает логическое значение использования клавиатуры.
 	 *
-	 * \param used
+	 * \param[in] used
 	 *   Обрабатывать события от клавиатуры?
 	 *
 	 * \note
@@ -68,7 +67,7 @@ public:
 	 * \brief
 	 *   Устанавливает логическое значение использования мышки.
 	 *
-	 * \param used
+	 * \param[in] used
 	 *   Обрабатывать события от мышки?
 	 *
 	 * \note

@@ -3,7 +3,6 @@
 
 #include "../math/math.h"
 #include "shadertypes.h"
-
 #include "shader.h"
 #include "glprereqs.h"
 
@@ -12,6 +11,8 @@ NAMESPACE_BEGIN(gl)
 
 class ShaderBuilder : public IShader {
 public:
+	static GLenum getGLType(u32 type);
+
 	/*!
 	 * \brief
 	 *   Конструктор класса.
@@ -47,7 +48,9 @@ public:
 	 * \param[in] source
 	 *   Исходный код шейдера.
 	 */
-	virtual ShaderHandle_t compile(ShaderTypes type, lpcstr source);
+	virtual ShaderHandle_t compile(u32 type, lpcstr source);
+
+	u32 isCompiled() const;
 
 	/*!
 	 * \brief
@@ -72,12 +75,16 @@ public:
 	 *   Компоновка шей­дерных объектов.
 	 */
 	virtual void link();
+
+	u32 isLinked() const;
 	
 	/*!
 	 * \brief
 	 *   Проверяет программный объект.
 	 */
 	virtual void validate();
+
+	u32 isValidated() const;
 
 	virtual void use();
 
@@ -99,7 +106,16 @@ private:
 	ShaderHandle_t _vertexShader;
 	ShaderHandle_t _fragmentShader;
 
-	std::unordered_map<std::string, math::TVector4<f32>> _uniformVec4fSets;
+	u32 _compiled;
+	u32 _linked;
+	u32 _validated;
+
+	UniformVec4fContainer_t _uniformVec4fSets;
+
+	s32 _numActiveUniforms;
+	s32 _numActiveAttributes;
+	s32 _uniformMaxLength;
+	s32 _attributeMaxLength;
 };
 
 NAMESPACE_END(gl)

@@ -6,8 +6,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(ois)
 
-class Mouse : public foundation::Object
-{
+class Mouse : public foundation::Object {
 	DECLARE_OBJECT(Mouse, foundation::Object)
 
 public:
@@ -50,7 +49,7 @@ private:
 	 * \brief
 	 *   Функция, которая отправляет событие с кнопки мыши в приемник.
 	 * 
-	 * \param event
+	 * \param[in] event
 	 *   Событие кнопки мыши.
 	 * 
 	 * \return

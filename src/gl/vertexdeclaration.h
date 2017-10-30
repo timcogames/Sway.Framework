@@ -3,7 +3,6 @@
 
 #include "vertexelement.h"
 #include "vertexelementsemantics.h"
-#include "vertexdatatypes.h"
 
 #include "glprereqs.h"
 
@@ -36,7 +35,7 @@ public:
 
 	u32 getTotalSize() const;
 
-	bool hasElement(u32 stream, VertexElementSemantics semantic, VertexDataTypes dataType) const;
+	bool hasElement(u32 stream, VertexElementSemantics semantic, u32 dataType) const;
 
 private:
 	VertexElementContainer_t _elements;

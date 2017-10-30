@@ -1,4 +1,5 @@
 #include "vertexdeclaration.h"
+#include "datatypeinfo.h"
 #include <algorithm> // std::find_if
 
 NAMESPACE_BEGIN(sway)
@@ -14,7 +15,7 @@ VertexDeclaration::VertexDeclaration(VertexElementContainer_t elements)
 	: _elements(elements)
 	, _totalSize(0) {
 	for (auto element : elements)
-		_totalSize += element.getElementSize();
+		_totalSize += DataTypeInfo::getElementSize(element.dataType);
 }
 
 /*!
@@ -43,7 +44,7 @@ u32 VertexDeclaration::getTotalSize() const {
 	return _totalSize;
 }
 
-bool VertexDeclaration::hasElement(u32 stream, VertexElementSemantics semantic, VertexDataTypes dataType) const {
+bool VertexDeclaration::hasElement(u32 stream, VertexElementSemantics semantic, u32 dataType) const {
 	/* Критерий поиска. */
 	auto pred = [stream, semantic, dataType](const VertexElement &element) {
 		return element.stream == stream AND element.semantic == semantic AND element.dataType == dataType;

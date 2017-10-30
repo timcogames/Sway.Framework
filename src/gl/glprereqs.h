@@ -1,7 +1,7 @@
 #ifndef SWAY_GL_GLPREREQS_H
 #define SWAY_GL_GLPREREQS_H
 
-#define BUFFER_OFFSET(x)((char *) NULL + (x))
+#define BUFFER_OFFSET(x)((lpstr) NULL + (x))
 
 /* Имена униформ. */
 #define SHADER_UNIFORM_NAME_MODEL_MATRIX "modelMatrix"
@@ -59,6 +59,7 @@ typedef u32 ShaderProgramHandle_t;
 typedef u32 ShaderHandle_t;
 typedef u32 HardwareBufferHandle_t;
 
+typedef std::unordered_map<std::string, math::TVector4<f32>> UniformVec4fContainer_t;
 typedef std::unordered_map<std::string, VertexAttribute> VertexAttributeContainer_t;
 typedef std::vector<VertexElement> VertexElementContainer_t;
 

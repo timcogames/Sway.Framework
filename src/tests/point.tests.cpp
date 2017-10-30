@@ -9,8 +9,7 @@ BOOST_AUTO_TEST_SUITE(TPointTestSuite)
 /*!
  * Убеждаемся, что конструктор по умолчанию приводит все компоненты к нулю.
  */
-BOOST_AUTO_TEST_CASE(TPointTestCase_DefaultConstructor)
-{
+BOOST_AUTO_TEST_CASE(TPointTestCase_DefaultConstructor) {
 	const math::TPoint<s32> point;
 
 	BOOST_CHECK_EQUAL(point.getX(), 0);
@@ -21,8 +20,7 @@ BOOST_AUTO_TEST_CASE(TPointTestCase_DefaultConstructor)
  * Убеждаемся, что конструктор устанавливает все значения компонентов в те, 
  * которые были заданы.
  */
-BOOST_AUTO_TEST_CASE(TPointTestCase_ComponentConstructor)
-{
+BOOST_AUTO_TEST_CASE(TPointTestCase_ComponentConstructor) {
 	const s32 x = 1, y = 2;
 	const math::TPoint<s32> point(x, y);
 
@@ -30,8 +28,7 @@ BOOST_AUTO_TEST_CASE(TPointTestCase_ComponentConstructor)
 	BOOST_CHECK_EQUAL(point.getY(), y);
 }
 
-BOOST_AUTO_TEST_CASE(TPointTestCase_ScalarConstructor)
-{
+BOOST_AUTO_TEST_CASE(TPointTestCase_ScalarConstructor) {
 	const s32 x = 1, y = 2;
 	const math::TPoint<s32> size(math::TPoint<s32>(x, y));
 
@@ -42,8 +39,7 @@ BOOST_AUTO_TEST_CASE(TPointTestCase_ScalarConstructor)
 /*!
  * Тест для оператора равенства.
  */
-BOOST_AUTO_TEST_CASE(TPointTestCase_EqualityOperator1)
-{
+BOOST_AUTO_TEST_CASE(TPointTestCase_EqualityOperator1) {
 	const math::TPoint<s32> point1(0, 0), point2(0, 0);
 
 	BOOST_CHECK_EQUAL(point1 == point2, true);
@@ -52,8 +48,7 @@ BOOST_AUTO_TEST_CASE(TPointTestCase_EqualityOperator1)
 /*!
  * Тест для оператора равенства.
  */
-BOOST_AUTO_TEST_CASE(TPointTestCase_EqualityOperator2)
-{
+BOOST_AUTO_TEST_CASE(TPointTestCase_EqualityOperator2) {
 	const math::TPoint<s32> point1(1, 0), point2(0, 0);
 
 	BOOST_CHECK_EQUAL(point1 == point2, false);
@@ -62,8 +57,7 @@ BOOST_AUTO_TEST_CASE(TPointTestCase_EqualityOperator2)
 /*!
  * Тест для оператора равенства.
  */
-BOOST_AUTO_TEST_CASE(TPointTestCase_EqualityOperator3)
-{
+BOOST_AUTO_TEST_CASE(TPointTestCase_EqualityOperator3) {
 	const math::TPoint<s32> point1(0, 0), point2(0, 2);
 
 	BOOST_CHECK_EQUAL(point1 == point2, false);
@@ -72,8 +66,7 @@ BOOST_AUTO_TEST_CASE(TPointTestCase_EqualityOperator3)
 /*!
  * Тест для оператора неравенства.
  */
-BOOST_AUTO_TEST_CASE(TPointTestCase_NonEqualityOperator1)
-{
+BOOST_AUTO_TEST_CASE(TPointTestCase_NonEqualityOperator1) {
 	const math::TPoint<s32> point1(1, 2), point2(1, 2);
 
 	BOOST_CHECK_EQUAL(point1 != point2, false);
@@ -82,8 +75,7 @@ BOOST_AUTO_TEST_CASE(TPointTestCase_NonEqualityOperator1)
 /*!
  * Тест для оператора неравенства.
  */
-BOOST_AUTO_TEST_CASE(TPointTestCase_NonEqualityOperator2)
-{
+BOOST_AUTO_TEST_CASE(TPointTestCase_NonEqualityOperator2) {
 	const math::TPoint<s32> point1(1, 2), point2(0, 2);
 
 	BOOST_CHECK_EQUAL(point1 != point2, true);
@@ -92,8 +84,7 @@ BOOST_AUTO_TEST_CASE(TPointTestCase_NonEqualityOperator2)
 /*!
  * Тест для оператора неравенства.
  */
-BOOST_AUTO_TEST_CASE(TPointTestCase_NonEqualityOperator3)
-{
+BOOST_AUTO_TEST_CASE(TPointTestCase_NonEqualityOperator3) {
 	const math::TPoint<s32> point1(1, 2), point2(1, 0);
 
 	BOOST_CHECK_EQUAL(point1 != point2, true);

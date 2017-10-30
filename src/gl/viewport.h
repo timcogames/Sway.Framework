@@ -65,7 +65,7 @@ public:
 	 * \brief
 	 *   Получает соотношение сторон.
 	 */
-	float aspect() const;
+	f32 aspect() const;
 };
 
 NAMESPACE_END(gl)

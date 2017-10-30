@@ -1,5 +1,4 @@
 #include "shaderbuilder.h"
-#include "shadertypeutils.h"
 #include "extensions.h"
 #include <string.h>
 
@@ -14,6 +13,14 @@ void freeShader(IShader *object) {
 	delete object;
 }
 
+GLenum ShaderBuilder::getGLType(u32 type) {
+	switch (type) {
+	case kShaderType_Vertex: return GL_VERTEX_SHADER_ARB;
+	case kShaderType_Fragment: return GL_FRAGMENT_SHADER_ARB;
+	default: return INVALID_TYPE;
+	}
+}
+
 /*!
  * \brief
  *   Конструктор класса.
@@ -23,11 +30,19 @@ void freeShader(IShader *object) {
 ShaderBuilder::ShaderBuilder()
 	: _program(0)
 	, _vertexShader(0)
-	, _fragmentShader(0) {
+	, _fragmentShader(0)
+	, _compiled(FAILURE_STATUS)
+	, _linked(FAILURE_STATUS)
+	, _validated(FAILURE_STATUS) {
 
 	Extensions::define();
 
 	_program = Extensions::glCreateProgramObjectARB();
+
+	Extensions::glGetProgramivARB(_program, GL_OBJECT_ACTIVE_UNIFORMS_ARB, &_numActiveUniforms);
+	Extensions::glGetProgramivARB(_program, GL_OBJECT_ACTIVE_ATTRIBUTES_ARB, &_numActiveAttributes);
+	Extensions::glGetProgramivARB(_program, GL_OBJECT_ACTIVE_UNIFORM_MAX_LENGTH_ARB, &_uniformMaxLength);
+	Extensions::glGetProgramivARB(_program, GL_OBJECT_ACTIVE_ATTRIBUTE_MAX_LENGTH_ARB, &_attributeMaxLength);
 }
 
 /*!
@@ -71,16 +86,25 @@ std::string ShaderBuilder::readFile(lpcstr filename){
  * \param[in] source
  *   Исходный код шейдера.
  */
-ShaderHandle_t ShaderBuilder::compile(ShaderTypes type, lpcstr source) {
-	auto shader = Extensions::glCreateShaderObjectARB(ShaderTypeUtils::toGL(type));
-	Extensions::glShaderSourceARB(shader, 1, &source, NULL);
-	Extensions::glCompileShaderARB(shader);
-
-	if (_checkStatus(shader, GL_OBJECT_COMPILE_STATUS_ARB)) {
+ShaderHandle_t ShaderBuilder::compile(u32 type, lpcstr source) {
+	GLenum shaderType = getGLType(type);
+	if (type == INVALID_TYPE) {
 		// Empty
 	}
 
+	auto shader = Extensions::glCreateShaderObjectARB(shaderType);
+	Extensions::glShaderSourceARB(shader, 1, &source, NULL);
+	Extensions::glCompileShaderARB(shader);
+
+	_compiled = _checkStatus(shader, GL_OBJECT_COMPILE_STATUS_ARB);
+	if (_compiled == FAILURE_STATUS)
+		throw std::runtime_error("Fails to compile GL shader.");
+
 	return shader;
+}
+
+u32 ShaderBuilder::isCompiled() const {
+	return _compiled;
 }
 
 /*!
@@ -115,9 +139,14 @@ void ShaderBuilder::detach(std::vector<ShaderHandle_t> shaders) {
  */
 void ShaderBuilder::link() {
 	Extensions::glLinkProgramARB(_program);
-	if (_checkStatus(_program, GL_OBJECT_LINK_STATUS_ARB)) {
-		// Empty
+	_linked = _checkStatus(_program, GL_OBJECT_LINK_STATUS_ARB);
+	if (_linked == FAILURE_STATUS) {
+		throw std::runtime_error("Fails to link shaders.");
 	}
+}
+
+u32 ShaderBuilder::isLinked() const {
+	return _linked;
 }
 
 /*!
@@ -126,9 +155,14 @@ void ShaderBuilder::link() {
  */
 void ShaderBuilder::validate() {
 	Extensions::glValidateProgramARB(_program);
-	if (_checkStatus(_program, GL_OBJECT_VALIDATE_STATUS_ARB)) {
+	_validated = _checkStatus(_program, GL_OBJECT_VALIDATE_STATUS_ARB);
+	if (_validated == FAILURE_STATUS) {
 		// Empty
 	}
+}
+
+u32 ShaderBuilder::isValidated() const {
+	return _validated;
 }
 
 void ShaderBuilder::use() {
@@ -173,7 +207,7 @@ s32 ShaderBuilder::_checkStatus(ShaderHandle_t shader, u32 name) {
 		if (length > 1) {
 			lpstr info = (lpstr)malloc(length);
 			Extensions::glGetInfoLogARB(shader, length, NULL, info);
-			printf("Failed:\n%s", info);
+			std::cerr << "Failed:\n" << info << std::endl;
 			free(info);
 		}
 	}

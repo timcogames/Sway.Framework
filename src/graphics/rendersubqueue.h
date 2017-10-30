@@ -6,37 +6,41 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(graphics)
 
-class RenderSubqueue
-{
-  public:
+class RenderSubqueue {
+public:
 	/*!
-	 * \brief Конструктор класса.
+	 * \brief
+	 *   Конструктор класса.
 	 *
-	 * Выполняет инициализацию нового экземпляра класса.
+	 *   Выполняет инициализацию нового экземпляра класса.
 	 */
 	RenderSubqueue();
 
 	/*!
-	 * \brief Деструктор класса.
+	 * \brief
+	 *   Деструктор класса.
 	 *
-	 * Освобождает захваченные ресурсы.
+	 *   Освобождает захваченные ресурсы.
 	 */
 	virtual ~RenderSubqueue();
 
 	/*!
-	 * \brief Метод отрисовки.
+	 * \brief
+	 *   Метод отрисовки.
 	 */
 	virtual void render();
 
 	/*!
-	 * \brief Устанавливает индекс группы.
+	 * \brief
+	 *   Устанавливает индекс группы.
 	 */
-	virtual void setGroupIdx(u32 groupIdx) { _group = groupIdx; }
+	virtual void setGroupIdx(u32 groupIdx);
 
 	/*!
-	 * \brief Получает индекс группы.
+	 * \brief
+	 *   Получает индекс группы.
 	 */
-	virtual u32 getGroupIdx() const { return _group; }
+	virtual u32 getGroupIdx() const;
 
 private:
 	u32 _group; /*!< Индекс группы подочереди. */

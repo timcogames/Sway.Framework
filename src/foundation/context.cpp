@@ -9,8 +9,7 @@ NAMESPACE_BEGIN(foundation)
  *
  *   Выполняет инициализацию нового экземпляра класса.
  */
-Context::Context()
-{
+Context::Context() {
 	// Empty
 }
 
@@ -20,8 +19,7 @@ Context::Context()
  *
  *   Освобождает захваченные ресурсы.
  */
-Context::~Context()
-{
+Context::~Context() {
 	_objects.clear();
 }
 
@@ -35,8 +33,7 @@ Context::~Context()
  * \sa
  *   Context::unregisterObject(const std::string &)
  */
-void Context::registerObject(Object *object)
-{
+void Context::registerObject(Object *object) {
 	if (NOT object)
 		return;
 
@@ -53,8 +50,7 @@ void Context::registerObject(Object *object)
  * \sa
  *   Context::registerObject(Object *)
  */
-void Context::unregisterObject(const std::string &objectType)
-{
+void Context::unregisterObject(const std::string &objectType) {
 	ObjectMapConstIter iter = _objects.find(objectType);
 	if (iter != _objects.end())
 		_objects.erase(iter);
@@ -67,8 +63,7 @@ void Context::unregisterObject(const std::string &objectType)
  * \param[in] objectType
  *   Тип объекта.
  */
-Object *Context::getObject(const std::string &objectType) const
-{
+Object *Context::getObject(const std::string &objectType) const {
 	ObjectMapConstIter iter = _objects.find(objectType);
 	if (iter != _objects.end())
 		return iter->second;
@@ -80,8 +75,7 @@ Object *Context::getObject(const std::string &objectType) const
  * \brief
  *   Получает количество зарегистрированных объектов.
  */
-u32 Context::getObjectCount() const
-{
+u32 Context::getObjectCount() const {
 	return _objects.size();
 }
 

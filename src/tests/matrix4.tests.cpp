@@ -4,16 +4,14 @@
 
 USING_NAMESPACE(sway)
 
-static const s32 IDEN_MAT4[4][4] =
-{
+static const s32 IDEN_MAT4[4][4] = {
 	1, 0, 0, 0,
 	0, 1, 0, 0,
 	0, 0, 1, 0,
 	0, 0, 0, 1
 };
 
-static const s32 RAND_MAT4[4][4] =
-{
+static const s32 RAND_MAT4[4][4] = {
 	6, 5, 9, 8,
 	8, 0, 3, 4,
 	8, 2, 7, 9,
@@ -25,8 +23,7 @@ BOOST_AUTO_TEST_SUITE(TMatrix4TestSuite)
 /*!
  * Убеждаемся, что конструктор по умолчанию приводит матрицу к единичной.
  */
-BOOST_AUTO_TEST_CASE(TMatrix4TestCase_DefaultConstructor)
-{
+BOOST_AUTO_TEST_CASE(TMatrix4TestCase_DefaultConstructor) {
 	const math::TMatrix4<s32> mat4;
 
 	BOOST_CHECK_EQUAL(mat4.get(0, 0), 1);
@@ -53,8 +50,7 @@ BOOST_AUTO_TEST_CASE(TMatrix4TestCase_DefaultConstructor)
 /*!
  * Убеждаемся, что установка всех компонентов матрицы проходит правильно.
  */
-BOOST_AUTO_TEST_CASE(TMatrix4TestCase_Set)
-{
+BOOST_AUTO_TEST_CASE(TMatrix4TestCase_Set) {
 	math::TMatrix4<s32> mat4;
 
 	mat4.set(0, 0, RAND_MAT4[0][0]);

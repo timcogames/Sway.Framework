@@ -6,8 +6,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(glx11)
 
-struct VisualAttributes
-{
+struct VisualAttributes {
 	s32 configId;
 	s32 visualId;
 	s32 visualType;

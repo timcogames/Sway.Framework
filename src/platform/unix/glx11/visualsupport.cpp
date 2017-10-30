@@ -15,8 +15,7 @@ NAMESPACE_BEGIN(glx11)
  *
  *   Выполняет инициализацию нового экземпляра класса.
  */
-VisualSupport::VisualSupport()
-{
+VisualSupport::VisualSupport() {
 	// Empty
 }
 
@@ -26,25 +25,19 @@ VisualSupport::VisualSupport()
  *
  *   Освобождает захваченные ресурсы.
  */
-VisualSupport::~VisualSupport()
-{
+VisualSupport::~VisualSupport() {
 	// Empty
 }
 
-XVisualInfo VisualSupport::chooseBestSuitable(void *display)
-{
+XVisualInfo VisualSupport::chooseBestSuitable(void *display) {
 	int numVisuals;
 	XVisualInfo *visuals = XGetVisualInfo(static_cast<::Display *>(display), 0, NULL, &numVisuals);
 
-	printf("Found %d matching visual configs.\n", numVisuals);
-
-	if (visuals AND (numVisuals > 0))
-	{
+	if (visuals AND (numVisuals > 0)) {
 		int bestScore = -1, bestNumSamples = -1;
 		XVisualInfo bestVisual = XVisualInfo();
 
-		for (int i = 0; i < numVisuals; ++i)
-		{
+		for (int i = 0; i < numVisuals; ++i) {
 			VisualAttributes attrs = _getMultisampleAttrs(static_cast<::Display *>(display), visuals[i]);
 			
 			if (bestScore < 0 OR (attrs.numMultisample AND (attrs.numSamples > bestNumSamples)))
@@ -57,14 +50,12 @@ XVisualInfo VisualSupport::chooseBestSuitable(void *display)
 
 		return bestVisual;
 	}
-	else
-	{
+	else {
 		return XVisualInfo();
 	}
 }
 
-VisualAttributes VisualSupport::_getMultisampleAttrs(::Display *display, XVisualInfo visual)
-{
+VisualAttributes VisualSupport::_getMultisampleAttrs(::Display *display, XVisualInfo visual) {
 	lpcstr extensions = glXQueryExtensionsString(display, visual.screen);
 	VisualAttributes attrs;
 
@@ -80,8 +71,7 @@ VisualAttributes VisualSupport::_getMultisampleAttrs(::Display *display, XVisual
 	return attrs;
 }
 
-GLXFBConfig VisualSupport::getFrameBufferConfig(void *display, u32 visualId)
-{
+GLXFBConfig VisualSupport::getFrameBufferConfig(void *display, u32 visualId) {
 	const int attrs[] = {None};
 
 	int xScreen = XDefaultScreen(static_cast<::Display *>(display));
@@ -92,11 +82,9 @@ GLXFBConfig VisualSupport::getFrameBufferConfig(void *display, u32 visualId)
 		throw std::runtime_error("Failed to retrieve a VisualSupport configurations.");
 
 	GLXFBConfig fbconfig = 0;
-	for (int i = 0; i < numConfigs; ++i)
-	{
+	for (int i = 0; i < numConfigs; ++i) {
 		XVisualInfo *visual = glXGetVisualFromFBConfig(static_cast<::Display *>(display), configs[i]);
-		if (visual->visualid == visualId)
-		{
+		if (visual->visualid == visualId) {
 			fbconfig = configs[i];
 
 			XFree(visual);

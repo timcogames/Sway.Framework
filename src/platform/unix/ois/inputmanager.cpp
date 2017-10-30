@@ -12,12 +12,11 @@ NAMESPACE_BEGIN(ois)
  *
  *   Выполняет инициализацию нового экземпляра класса.
  * 
- * \param window
+ * \param[in] window
  *   Уникальный идентификатор окна.
  */
 InputManager::InputManager(u32 window)
-	: _window(static_cast<::Window>(window)), _keyboardUsed(false), _mouseUsed(false)
-{
+	: _window(static_cast<::Window>(window)), _keyboardUsed(false), _mouseUsed(false) {
 }
 
 /*!
@@ -26,8 +25,7 @@ InputManager::InputManager(u32 window)
  *
  *   Освобождает захваченные ресурсы.
  */
-InputManager::~InputManager()
-{
+InputManager::~InputManager() {
 	// Empty
 }
 
@@ -35,18 +33,16 @@ InputManager::~InputManager()
  * \brief
  *   Создает объект устройства ввода.
  *
- * \param type
+ * \param[in] type
  *   Тип устройства.
  */
-foundation::Object *InputManager::createDevice(DeviceTypes type)
-{
+foundation::Object *InputManager::createDevice(DeviceTypes type) {
 	if (NOT _window AND hasFreeDevice(type))
 		return NULL;
 
 	foundation::Object *device = NULL;
 
-	switch(type)
-	{
+	switch(type) {
 	case kDeviceType_Keyboard:
 		device = createKeyboard();
 		break;
@@ -63,8 +59,7 @@ foundation::Object *InputManager::createDevice(DeviceTypes type)
 	return device;
 }
 
-foundation::Object *InputManager::createKeyboard()
-{
+foundation::Object *InputManager::createKeyboard() {
 	foundation::Object *device = new Keyboard(this);
 	if (NOT device)
 		return NULL;
@@ -74,8 +69,7 @@ foundation::Object *InputManager::createKeyboard()
 	return device;
 }
 
-foundation::Object *InputManager::createMouse()
-{
+foundation::Object *InputManager::createMouse() {
 	foundation::Object *device = new Mouse(this);
 	if (NOT device)
 		return NULL;
@@ -89,13 +83,11 @@ foundation::Object *InputManager::createMouse()
  * \brief
  *   Проверяет устройство.
  *
- * \param type
+ * \param[in] type
  *   Тип устройства для проверки.
  */
-int InputManager::hasFreeDevice(DeviceTypes type)
-{
-	switch(type)
-	{
+int InputManager::hasFreeDevice(DeviceTypes type) {
+	switch(type) {
 	case kDeviceType_Keyboard:
 		return _keyboardUsed;
 	case kDeviceType_Mouse:
@@ -109,14 +101,13 @@ int InputManager::hasFreeDevice(DeviceTypes type)
  * \brief
  *   Устанавливает логическое значение использования клавиатуры.
  *
- * \param used
+ * \param[in] used
  *   Обрабатывать события от клавиатуры?
  *
  * \note
  *   Внутренний метод.
  */
-void InputManager::setKeyboardUsed(bool used)
-{
+void InputManager::setKeyboardUsed(bool used) {
 	_keyboardUsed = used;
 }
 
@@ -124,14 +115,13 @@ void InputManager::setKeyboardUsed(bool used)
  * \brief
  *   Устанавливает логическое значение использования мышки.
  *
- * \param used
+ * \param[in] used
  *   Обрабатывать события от мышки?
  *
  * \note
  *   Внутренний метод.
  */
-void InputManager::setMouseUsed(bool used)
-{
+void InputManager::setMouseUsed(bool used) {
 	_mouseUsed = used;
 }
 
@@ -139,8 +129,7 @@ void InputManager::setMouseUsed(bool used)
  * \brief
  *   Получает идентификатор окна.
  */
-::Window InputManager::getWindow()
-{
+::Window InputManager::getWindow() {
 	return _window;
 }
 

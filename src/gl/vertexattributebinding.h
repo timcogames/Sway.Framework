@@ -37,7 +37,7 @@ public:
 
 	void addAttributes(std::initializer_list<std::string> attributeNames);
 
-	void setVertexInputAttributeDescription(const std::string &attributeName, int size, DataTypeInfo::Types dataType, bool isNormalized);
+	void setVertexInputAttributeDescription(const std::string &attributeName, int size, u32 dataType, bool isNormalized);
 
 	void enable(u32 byteStride);
 
