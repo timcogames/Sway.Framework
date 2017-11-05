@@ -1,16 +1,13 @@
 #ifndef SWAY_GL_MESHBUILDER_H
 #define SWAY_GL_MESHBUILDER_H
 
-#include "shader.h"
+#include "shaderprogram.h"
 #include "hardwarebufferdescription.h"
 #include "hardwarebuffertargets.h"
 #include "primitivetopologies.h"
-#include "datatypeinfo.h"
+#include "typeutils.h"
 
 #include "glprereqs.h"
-
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
@@ -21,7 +18,7 @@ struct HardwareBufferSet {
 };
 
 struct MeshDescription {
-	b32 indexed;
+	bool indexed;
 	u32 topology; /*!< Способ соединения вершин примитива между собой. */
 };
 
@@ -52,7 +49,7 @@ public:
 	 */
 	~MeshBuilder();
 
-	void create(const MeshCreateInfo &info, IShader *shader, VertexElementContainer_t vertexElements);
+	void create(const MeshCreateInfo &info, ShaderProgram *shader, VertexElementContainer_t vertexElements);
 
 	/*!
 	 * \brief
@@ -62,37 +59,55 @@ public:
 
 	u32 getTopology() const;
 
-	b32 hasIndexes() const;
+	bool hasIndexes() const;
 
 	/*!
 	 * \brief
 	 *   Получает вершинный буфер.
+	 * 
+	 * \return
+	 *   Вершинный буфер.
+	 * 
+	 * \sa
+	 *   MeshBuilder::getIndexBuffer()
 	 */
 	HardwareBuffer *getVertexBuffer();
 
 	/*!
 	 * \brief
 	 *   Получает буфер индексов.
+	 * 
+	 * \return
+	 *   Буфер индексов.
+	 * 
+	 * \sa
+	 *   MeshBuilder::getVertexBuffer()
 	 */
 	HardwareBuffer *getIndexBuffer();
 
 private:
 	/*!
 	 * \brief
-	 *   Выводит примитивы.
+	 *   Выводит индексные примитивы по данным в массивах.
+	 * 
+	 * \sa
+	 *   MeshBuilder::_drawPrimitives()
 	 */
 	void _drawIndexedPrimitives();
 
 	/*!
 	 * \brief
-	 *   Выводит примитивы.
+	 *   Выводит примитивы по данным в массивах.
+	 * 
+	 * \sa
+	 *   MeshBuilder::_drawIndexedPrimitives()
 	 */
 	void _drawPrimitives();
 
 private:
 	HardwareBufferSet _bufferSet;
 	VertexAttributeBinding *_vertexAttributeBinding;
-	b32 _indexed;
+	bool _indexed;
 	GLenum _topology; /*!< Способ соединения вершин примитива между собой. */
 
 	s32 _maxElementsVertices;

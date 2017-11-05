@@ -1,14 +1,11 @@
 #ifndef SWAY_GL_VERTEXATTRIBUTEBINDING_H
 #define SWAY_GL_VERTEXATTRIBUTEBINDING_H
 
-#include "shader.h"
+#include "shaderprogram.h"
 #include "vertexelementsemantics.h"
 #include "vertexattribute.h"
-#include "datatypeinfo.h"
+#include "typeutils.h"
 #include "glprereqs.h"
-
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
@@ -37,7 +34,7 @@ public:
 
 	void addAttributes(std::initializer_list<std::string> attributeNames);
 
-	void setVertexInputAttributeDescription(const std::string &attributeName, int size, u32 dataType, bool isNormalized);
+	void setVertexInputAttributeDescription(const std::string &attributeName, int size, u32 dataType, bool normalized);
 
 	void enable(u32 byteStride);
 
@@ -45,9 +42,7 @@ public:
 
 	u32 getVertexLayoutOffset() const;
 
-	void setShader(IShader *shader);
-	
-	IShader *getShader();
+	void setShaderProgram(ShaderProgram *program);
 
 	void setVertexDeclaration(boost::shared_ptr<VertexDeclaration> vertexDeclaration);
 
@@ -65,7 +60,7 @@ protected:
 	std::string getAttributeNameBySemantic(VertexElementSemantics semantic) const;
 
 private:
-	IShader *_shader;
+	ShaderProgram *_program;
 	boost::shared_ptr<VertexDeclaration> _vertexDeclaration;
 	VertexAttributeContainer_t _attributes;
 	int _maxVertexAttributes;

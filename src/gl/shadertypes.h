@@ -6,8 +6,12 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
+/*!
+ * \brief
+ *   Перечисление типов шейдера.
+ */
 enum ShaderTypes {
-	kShaderType_Vertex = 0x8B31,  /*!< Вершинный шейдер. */
+	kShaderType_Vertex   = 0x8B31,  /*!< Вершинный шейдер. */
 	kShaderType_Fragment = 0x8B30 /*!< Фрагментный шейдер. */
 };
 

@@ -31,7 +31,7 @@ public:
 	 * \param[in] subqueue
 	 *   Указатель на обьект класса подочереди, которой следует добавить в контейнер.
 	 */
-	virtual void addSubqueue(const RenderSubqueuePtr &subqueue);
+	virtual void addSubqueue(const RenderSubqueueRef_t &subqueue);
 
 	/*!
 	 * \brief
@@ -40,7 +40,7 @@ public:
 	 * \param[in] subqueue
 	 *   Указатель на обьект класса подочереди, которой следует удалить из контейнера.
 	 */
-	virtual void removeSubqueue(const RenderSubqueuePtr &subqueue);
+	virtual void removeSubqueue(const RenderSubqueueRef_t &subqueue);
 
 	/*!
 	 * \brief
@@ -49,7 +49,7 @@ public:
 	 * \param[in] groupIdx
 	 *   Индекс группы.
 	 */
-	virtual RenderSubqueueVec &getSubqueueGroupByIdx(u32 groupIdx);
+	virtual RenderSubqueueRefVector_t &getSubqueueGroupByIdx(u32 groupIdx);
 
 	/*!
 	 * \brief
@@ -64,14 +64,14 @@ public:
 	virtual u32 getPriority() const;
 
 	struct PriorityInDescendingOrder {
-		bool operator()(const RenderQueuePtr &lhs, const RenderQueuePtr &rhs) const {
+		bool operator()(const RenderQueueRef_t &lhs, const RenderQueueRef_t &rhs) const {
 			return lhs->getPriority() > rhs->getPriority();
 		}
 	};
 
   private:
 	u32 _priority; /*!< Приоритет очереди. */
-	RenderSubqueueVec _subqueues[RENDER_SUBQUEUE_GROUP_COUNT]; /*!< Контейнер подочередей. */
+	RenderSubqueueRefVector_t _subqueues[RENDER_SUBQUEUE_GROUP_COUNT]; /*!< Контейнер подочередей. */
 };
 
 NAMESPACE_END(graphics)

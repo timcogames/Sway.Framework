@@ -36,7 +36,7 @@ RenderSubsystem::~RenderSubsystem() {
  * \return
  *   Умный указатель на объект класса очереди.
  */
-RenderQueuePtr RenderSubsystem::createQueue() {
+RenderQueueRef_t RenderSubsystem::createQueue() {
 	_queues.push_back(boost::make_shared<RenderQueue>());
 	return _queues.back();
 }
@@ -51,7 +51,7 @@ RenderQueuePtr RenderSubsystem::createQueue() {
  * \return
  *   Умный указатель на объект класса очереди.
  */
-RenderQueuePtr RenderSubsystem::getQueueByIdx(u32 index) {
+RenderQueueRef_t RenderSubsystem::getQueueByIdx(u32 index) {
 	return _queues[index];
 }
 
@@ -59,7 +59,7 @@ RenderQueuePtr RenderSubsystem::getQueueByIdx(u32 index) {
  * \brief
  *   Получает все очереди.
  */
-RenderQueueVec RenderSubsystem::getQueues() {
+RenderQueueRefVector_t RenderSubsystem::getQueues() {
 	return _queues;
 }
 
@@ -83,11 +83,11 @@ void RenderSubsystem::render() {
 	}
 }
 
-void RenderSubsystem::_renderSubqueues(RenderQueuePtr queue, u32 group) {
-	const RenderSubqueueVec &subqueues = queue->getSubqueueGroupByIdx(group);
+void RenderSubsystem::_renderSubqueues(RenderQueueRef_t queue, u32 group) {
+	const RenderSubqueueRefVector_t &subqueues = queue->getSubqueueGroupByIdx(group);
 
 	if (subqueues.size() > 0) {
-		BOOST_FOREACH (const RenderSubqueuePtr &subqueue, subqueues)
+		BOOST_FOREACH (const RenderSubqueueRef_t &subqueue, subqueues)
 			subqueue->render();
 	}
 }

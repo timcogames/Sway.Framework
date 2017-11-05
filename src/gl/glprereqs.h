@@ -1,7 +1,10 @@
 #ifndef SWAY_GL_GLPREREQS_H
 #define SWAY_GL_GLPREREQS_H
 
-#define BUFFER_OFFSET(x)((lpstr) NULL + (x))
+#define LOAD_EXTENSION(proc, name) \
+	name = (proc) glXGetProcAddressARB((const unsigned char *) #name);
+
+#define BUFFER_OFFSET(x) ((lpstr) NULL + (x))
 
 /* Имена униформ. */
 #define SHADER_UNIFORM_NAME_MODEL_MATRIX "modelMatrix"
@@ -21,6 +24,7 @@
 #define VERTEX_ATTRIBUTE_BLEND_WEIGHTS "attr_blendWeights"
 #define VERTEX_ATTRIBUTE_BLEND_INDICES "attr_blendIndices"
 
+#include "../math/math.h"
 #include "../memory/safedeletemacros.h"
 #include "../defines.h"
 #include "../types.h"
@@ -29,10 +33,16 @@
 #include <string> // std::string
 #include <fstream> // std::ifstream
 #include <iostream> // std::cout, std::ios
-#include <algorithm> // std::for_each
+#include <algorithm> // std::for_each, std::find_if
 #include <map> // std::map
 #include <unordered_map> // std::unordered_map
 #include <initializer_list> // std::initializer_list
+#include <functional> //std::bind, std::placeholders
+
+#include <boost/shared_ptr.hpp> // boost::shared_ptr
+#include <boost/make_shared.hpp> // boost::make_shared
+#include <boost/foreach.hpp> // BOOST_FOREACH
+#include <boost/range/adaptor/map.hpp> // boost::adaptors::map_values
 
 #include <GL/gl.h>
 #include <GL/glx.h>
@@ -47,18 +57,26 @@ struct HardwareBufferCreateInfo;
 struct VertexAttribute;
 struct VertexElement;
 
-class ShaderBuilder;
-class ShaderTypeUtils;
+class ShaderPreprocessor;
+class ShaderObject;
+class ShaderProgram;
 class HardwareBuffer;
-class HardwareBufferTargetUtils;
-class PrimitiveTopologyUtils;
 class VertexAttributeBinding;
 class VertexDeclaration;
 
-typedef u32 ShaderProgramHandle_t;
-typedef u32 ShaderHandle_t;
-typedef u32 HardwareBufferHandle_t;
+/*!
+ * \brief
+ *   Дескриптор ресурса.
+ */
+typedef u32 ResourceHandle_t;
 
+/*!
+ * \brief
+ *   Недопустимое значение дескриптора.
+ */
+static const ResourceHandle_t INVALID_HANDLE = 0;
+
+typedef boost::shared_ptr<class ShaderPreprocessor> ShaderPreprocessorRef_t;
 typedef std::unordered_map<std::string, math::TVector4<f32>> UniformVec4fContainer_t;
 typedef std::unordered_map<std::string, VertexAttribute> VertexAttributeContainer_t;
 typedef std::vector<VertexElement> VertexElementContainer_t;

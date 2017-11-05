@@ -21,11 +21,11 @@ class RenderSubqueue;
 class RenderQueue;
 class RenderSubsystem;
 
-typedef boost::shared_ptr<RenderSubqueue> RenderSubqueuePtr;
-typedef std::vector<RenderSubqueuePtr> RenderSubqueueVec;
+typedef boost::shared_ptr<class RenderSubqueue> RenderSubqueueRef_t;;
+typedef std::vector<RenderSubqueueRef_t> RenderSubqueueRefVector_t;
 
-typedef boost::shared_ptr<RenderQueue> RenderQueuePtr;
-typedef std::vector<RenderQueuePtr> RenderQueueVec;
+typedef boost::shared_ptr<class RenderQueue> RenderQueueRef_t;
+typedef std::vector<RenderQueueRef_t> RenderQueueRefVector_t;
 
 NAMESPACE_END(graphics)
 NAMESPACE_END(sway)

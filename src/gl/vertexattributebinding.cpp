@@ -3,11 +3,7 @@
 #include "vertexattribute.h"
 #include "vertexelement.h"
 #include "hardwarebuffer.h"
-#include "shaderbuilder.h"
 #include "extensions.h"
-
-#include <boost/foreach.hpp> // BOOST_FOREACH
-#include <boost/range/adaptor/map.hpp>
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
@@ -19,9 +15,9 @@ NAMESPACE_BEGIN(gl)
  *   Выполняет инициализацию нового экземпляра класса.
  */
 VertexAttributeBinding::VertexAttributeBinding()
-	: _shader(NULL)
-	, _vertexLayoutOffset(0)
+	: _vertexLayoutOffset(0)
 	, _vertexAttributeOffset(0) {
+
 	/* Получаем максимальный номер для положения вершинного атрибута. */
 	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &_maxVertexAttributes);
 }
@@ -47,52 +43,52 @@ void VertexAttributeBinding::mergeLayout() {
 		if (iter != _attributes.end()) {
 			VertexAttribute &attribute = iter->second;
 
-			attribute.isEnabled = true;
-			attribute.dataType = DataTypeInfo::kType_Float;
-			attribute.isNormalized = false;
-			attribute.isCustomAttribute = false;
+			attribute.dataType = kType_Float;
+			attribute.enabled = true;
+			attribute.normalized = false;
+			attribute.customized = false;
 
 			switch (vertexElement.semantic) {
 			case kVertexElementSemantic_Position:
-				attribute.componentCount = DataTypeInfo::getComponentCount(vertexElement.dataType);
+				attribute.componentCount = TypeInfo::getComponentCount(vertexElement.dataType);
 				attribute.pointer = BUFFER_OFFSET(_vertexLayoutOffset);
-
-				_vertexLayoutOffset += DataTypeInfo::getElementSize(vertexElement.dataType);
+				
+				_vertexLayoutOffset += TypeInfo::getElementSize(vertexElement.dataType);
 				break;
 
 			case kVertexElementSemantic_Color:
-				attribute.componentCount = DataTypeInfo::getComponentCount(vertexElement.dataType);
+				attribute.componentCount = TypeInfo::getComponentCount(vertexElement.dataType);
 				attribute.pointer = BUFFER_OFFSET(_vertexLayoutOffset);
-
-				_vertexLayoutOffset += DataTypeInfo::getElementSize(vertexElement.dataType);
+				
+				_vertexLayoutOffset += TypeInfo::getElementSize(vertexElement.dataType);
 				break;
 
 			case kVertexElementSemantic_TexCoord:
-				attribute.componentCount = DataTypeInfo::getComponentCount(vertexElement.dataType);
+				attribute.componentCount = TypeInfo::getComponentCount(vertexElement.dataType);
 				attribute.pointer = BUFFER_OFFSET(_vertexLayoutOffset);
 
-				_vertexLayoutOffset += DataTypeInfo::getElementSize(vertexElement.dataType);
+				_vertexLayoutOffset += TypeInfo::getElementSize(vertexElement.dataType);
 				break;
 
 			case kVertexElementSemantic_Normal:
-				attribute.componentCount = DataTypeInfo::getComponentCount(vertexElement.dataType);
+				attribute.componentCount = TypeInfo::getComponentCount(vertexElement.dataType);
 				attribute.pointer = BUFFER_OFFSET(_vertexLayoutOffset);
 
-				_vertexLayoutOffset += DataTypeInfo::getElementSize(vertexElement.dataType);
+				_vertexLayoutOffset += TypeInfo::getElementSize(vertexElement.dataType);
 				break;
 
 			case kVertexElementSemantic_Tangent:
-				attribute.componentCount = DataTypeInfo::getComponentCount(vertexElement.dataType);
+				attribute.componentCount = TypeInfo::getComponentCount(vertexElement.dataType);
 				attribute.pointer = BUFFER_OFFSET(_vertexLayoutOffset);
 
-				_vertexLayoutOffset += DataTypeInfo::getElementSize(vertexElement.dataType);
+				_vertexLayoutOffset += TypeInfo::getElementSize(vertexElement.dataType);
 				break;
 
 			case kVertexElementSemantic_Binormal:
-				attribute.componentCount = DataTypeInfo::getComponentCount(vertexElement.dataType);
+				attribute.componentCount = TypeInfo::getComponentCount(vertexElement.dataType);
 				attribute.pointer = BUFFER_OFFSET(_vertexLayoutOffset);
 
-				_vertexLayoutOffset += DataTypeInfo::getElementSize(vertexElement.dataType);
+				_vertexLayoutOffset += TypeInfo::getElementSize(vertexElement.dataType);
 				break;
 
 			default:
@@ -103,15 +99,15 @@ void VertexAttributeBinding::mergeLayout() {
 }
 
 void VertexAttributeBinding::addAttribute(const std::string &attributeName) {
-	s32 location = Extensions::glGetAttribLocationARB(_shader->getShaderProgram(), attributeName.c_str());
+	s32 location = Extensions::glGetAttribLocationARB(_program->getHandle(), attributeName.c_str());
 	if (location >= 0 AND location <= _maxVertexAttributes) {
 		VertexAttribute attribute;
-		attribute.isEnabled = false;
 		attribute.location = location;
 		attribute.componentCount = 0;
-		attribute.dataType = DataTypeInfo::kType_Float;
-		attribute.isNormalized = false;
-		attribute.isCustomAttribute = false;
+		attribute.dataType = kType_Float;
+		attribute.enabled = false;
+		attribute.normalized = false;
+		attribute.customized = false;
 		attribute.pointer = NULL;
 
 		_attributes.insert(std::make_pair(attributeName, attribute));
@@ -123,7 +119,7 @@ void VertexAttributeBinding::addAttributes(std::initializer_list<std::string> at
 		addAttribute(attribute);
 }
 
-void VertexAttributeBinding::setVertexInputAttributeDescription(const std::string &attributeName, int size, u32 dataType, bool isNormalized) {
+void VertexAttributeBinding::setVertexInputAttributeDescription(const std::string &attributeName, int size, u32 dataType, bool normalized) {
 	if (_vertexAttributeOffset == 0)
 		_vertexAttributeOffset = getVertexLayoutOffset();
 
@@ -132,20 +128,20 @@ void VertexAttributeBinding::setVertexInputAttributeDescription(const std::strin
 		return;
 
 	VertexAttribute &attribute = iter->second;
-	attribute.isEnabled = true;
 	attribute.componentCount = size;
 	attribute.dataType = dataType;
-	attribute.isNormalized = isNormalized;
-	attribute.isCustomAttribute = true;
+	attribute.enabled = true;
+	attribute.normalized = normalized;
+	attribute.customized = true;
 	attribute.pointer = BUFFER_OFFSET(_vertexAttributeOffset);
 
-	_vertexAttributeOffset += DataTypeInfo::getElementSize(dataType) * size;
+	_vertexAttributeOffset += TypeInfo::getElementSize(dataType) * size;
 }
 
 void VertexAttributeBinding::enable(u32 byteStride) {
 	BOOST_FOREACH(VertexAttribute &attribute, _attributes | boost::adaptors::map_values) { 
-		if (attribute.isEnabled) {
-			Extensions::glVertexAttribPointerARB(attribute.location, attribute.componentCount, DataTypeInfo::toGL(attribute.dataType), attribute.isNormalized, byteStride, attribute.pointer);
+		if (attribute.enabled) {
+			Extensions::glVertexAttribPointerARB(attribute.location, attribute.componentCount, TypeUtils::toGL(attribute.dataType), attribute.normalized, byteStride, attribute.pointer);
 			Extensions::glEnableVertexAttribArrayARB(attribute.location);
 		}
 	}
@@ -153,7 +149,7 @@ void VertexAttributeBinding::enable(u32 byteStride) {
 
 void VertexAttributeBinding::disable() {
 	BOOST_FOREACH(VertexAttribute &attribute, _attributes | boost::adaptors::map_values) { 
-		if (attribute.isEnabled)
+		if (attribute.enabled)
 			Extensions::glDisableVertexAttribArrayARB(attribute.location);
 	}
 
@@ -164,12 +160,8 @@ u32 VertexAttributeBinding::getVertexLayoutOffset() const {
 	return _vertexLayoutOffset;
 }
 
-void VertexAttributeBinding::setShader(IShader *shader) {
-	_shader = shader;
-}
-
-IShader *VertexAttributeBinding::getShader() {
-	return _shader;
+void VertexAttributeBinding::setShaderProgram(ShaderProgram *program) {
+	_program = program;
 }
 
 void VertexAttributeBinding::setVertexDeclaration(boost::shared_ptr<VertexDeclaration> vertexDeclaration) {

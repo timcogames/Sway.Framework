@@ -17,7 +17,7 @@ public:
 	static PFNGLBUFFERSUBDATAARBPROC glBufferSubDataARB;
 	static PFNGLMAPBUFFERARBPROC glMapBufferARB;
 	static PFNGLUNMAPBUFFERARBPROC glUnmapBufferARB;
-
+	
 	static PFNGLCREATEPROGRAMOBJECTARBPROC glCreateProgramObjectARB;
 	static PFNGLCREATESHADEROBJECTARBPROC glCreateShaderObjectARB;
 	static PFNGLSHADERSOURCEARBPROC glShaderSourceARB;
@@ -26,24 +26,23 @@ public:
 	static PFNGLLINKPROGRAMARBPROC glLinkProgramARB;
 	static PFNGLUSEPROGRAMOBJECTARBPROC glUseProgramObjectARB;
 	static PFNGLGETUNIFORMLOCATIONARBPROC glGetUniformLocationARB;
-	static PFNGLDELETEPROGRAMSARBPROC glDeleteProgramsARB;
 	static PFNGLDETACHOBJECTARBPROC glDetachObjectARB;
 	static PFNGLDELETEOBJECTARBPROC glDeleteObjectARB;
 	static PFNGLVALIDATEPROGRAMARBPROC glValidateProgramARB;
 	static PFNGLUNIFORM4FARBPROC glUniform4fARB;
-	static PFNGLGETPROGRAMIVARBPROC glGetProgramivARB;
-	static PFNGLGETPROGRAMINFOLOGPROC glGetProgramInfoLog;
-	static PFNGLGETSHADERIVPROC glGetShaderiv;
-	static PFNGLGETSHADERINFOLOGPROC glGetShaderInfoLog;
 	static PFNGLGETOBJECTPARAMETERIVARBPROC glGetObjectParameterivARB;
 	static PFNGLGETINFOLOGARBPROC glGetInfoLogARB;
-
+	
+	static PFNGLDELETEPROGRAMSARBPROC glDeleteProgramsARB;
+	static PFNGLGETPROGRAMIVARBPROC glGetProgramivARB;
+	
+	static PFNGLENABLEVERTEXATTRIBARRAYARBPROC glEnableVertexAttribArrayARB;
 	static PFNGLDISABLEVERTEXATTRIBARRAYARBPROC glDisableVertexAttribArrayARB;
-	static PFNGLGETATTRIBLOCATIONARBPROC glGetAttribLocationARB;
 	static PFNGLVERTEXATTRIBPOINTERARBPROC glVertexAttribPointerARB;
-	static PFNGLENABLEVERTEXATTRIBARRAYARBPROC glEnableVertexAttribArrayARB;	
+	
+	static PFNGLGETATTRIBLOCATIONARBPROC glGetAttribLocationARB;
 
-	static b32 checkSupport(lpcstr extensions, lpcstr name);
+	static bool checkSupport(lpcstr extensions, lpcstr name);
 	static void define();
 };
 

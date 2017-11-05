@@ -1,7 +1,6 @@
 #ifndef SWAY_GL_VERTEXATTRIBUTE_H
 #define SWAY_GL_VERTEXATTRIBUTE_H
 
-#include "datatypeinfo.h"
 #include "glprereqs.h"
 
 NAMESPACE_BEGIN(sway)
@@ -12,9 +11,9 @@ struct VertexAttribute {
 	u32 dataType; /*!< Тип данных. */
 	int componentCount;
 	const void *pointer;
-	bool isNormalized;
-	bool isEnabled;
-	bool isCustomAttribute;
+	bool enabled;
+	bool normalized;
+	bool customized;
 };
 
 NAMESPACE_END(gl)

@@ -31,7 +31,7 @@ public:
 	 * \return
 	 *   Умный указатель на объект класса очереди.
 	 */
-	virtual RenderQueuePtr createQueue();
+	virtual RenderQueueRef_t createQueue();
 
 	/*!
 	 * \brief
@@ -43,13 +43,13 @@ public:
 	 * \return
 	 *   Умный указатель на объект класса очереди.
 	 */
-	virtual RenderQueuePtr getQueueByIdx(u32 index);
+	virtual RenderQueueRef_t getQueueByIdx(u32 index);
 
 	/*!
 	 * \brief
 	 *   Получает все очереди.
 	 */
-	virtual RenderQueueVec getQueues();
+	virtual RenderQueueRefVector_t getQueues();
 
 	/*!
 	 * \brief
@@ -64,10 +64,10 @@ public:
 	virtual void render();
 
 private:
-	void _renderSubqueues(RenderQueuePtr queue, u32 group);
+	void _renderSubqueues(RenderQueueRef_t queue, u32 group);
 
 private:
-	RenderQueueVec _queues; /*!< Контейнер очередей. */
+	RenderQueueRefVector_t _queues; /*!< Контейнер очередей. */
 };
 
 NAMESPACE_END(graphics)

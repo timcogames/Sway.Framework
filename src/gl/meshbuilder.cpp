@@ -25,9 +25,10 @@ GLenum MeshBuilder::getGLTopology(u32 topology) {
  *
  *   Выполняет инициализацию нового экземпляра класса.
  */
-MeshBuilder::MeshBuilder(const MeshCreateInfo &info)
-	: _topology(getGLTopology(info.topology))
-	, _indexed(info.indexed) {
+MeshBuilder::MeshBuilder(const MeshCreateInfo &info) {
+	_topology = getGLTopology(info.topology);
+	_indexed = info.indexed;
+
 	/* Получаем рекомендуемое максимальное количество кэшируемых вершин. */
 	glGetIntegerv(GL_MAX_ELEMENTS_VERTICES, &_maxElementsVertices);
 	/* Получаем рекомендуемое значение максимума количества индексов. */
@@ -46,11 +47,11 @@ MeshBuilder::~MeshBuilder() {
 	SAFE_DELETE(_bufferSet.vbo);
 }
 
-void MeshBuilder::create(const MeshCreateInfo &info, IShader *shader, VertexElementContainer_t vertexElements) {
+void MeshBuilder::create(const MeshCreateInfo &info, ShaderProgram *shader, VertexElementContainer_t vertexElements) {
 	_bufferSet.vbo = HardwareBuffer::create(info.buffers.vbo);
 
 	_vertexAttributeBinding = new VertexAttributeBinding();
-	_vertexAttributeBinding->setShader(shader);
+	_vertexAttributeBinding->setShaderProgram(shader);
 	_vertexAttributeBinding->setVertexDeclaration(boost::make_shared<VertexDeclaration>(vertexElements));
 	_vertexAttributeBinding->mergeLayout();
 
@@ -65,7 +66,7 @@ void MeshBuilder::create(const MeshCreateInfo &info, IShader *shader, VertexElem
 void MeshBuilder::draw() {
 	_bufferSet.vbo->bind();
 	_vertexAttributeBinding->enable(_bufferSet.vbo->getByteStride());
-	
+
 	if (_indexed)
 		_drawIndexedPrimitives();
 	else
@@ -87,33 +88,45 @@ u32 MeshBuilder::getTopology() const {
 	}
 }
 
-b32 MeshBuilder::hasIndexes() const {
+bool MeshBuilder::hasIndexes() const {
 	return _indexed;
 }
 
 /*!
  * \brief
- *   Выводит примитивы.
+ *   Выводит индексные примитивы по данным в массивах.
+ * 
+ * \sa
+ *   MeshBuilder::_drawPrimitives()
  */
 void MeshBuilder::_drawIndexedPrimitives() {
 	_bufferSet.ibo->bind();
 
-	glDrawElements(getGLTopology(_topology), _bufferSet.ibo->getCapacity(), DataTypeInfo::toGL(_bufferSet.ibo->getDataType()), NULL);
+	glDrawElements(_topology, _bufferSet.ibo->getCapacity(), TypeUtils::toGL(_bufferSet.ibo->getDataType()), NULL);
 	
 	_bufferSet.ibo->unbind();
 }
 
 /*!
  * \brief
- *   Выводит примитивы.
+ *   Выводит примитивы по данным в массивах.
+ * 
+ * \sa
+ *   MeshBuilder::_drawIndexedPrimitives()
  */
 void MeshBuilder::_drawPrimitives() {
-	glDrawArrays(getGLTopology(_topology), 0, _bufferSet.vbo->getCapacity());
+	glDrawArrays(_topology, 0, _bufferSet.vbo->getCapacity());
 }
 
 /*!
  * \brief
  *   Получает вершинный буфер.
+ * 
+ * \return
+ *   Вершинный буфер.
+ * 
+ * \sa
+ *   MeshBuilder::getIndexBuffer()
  */
 HardwareBuffer *MeshBuilder::getVertexBuffer() {
 	return _bufferSet.vbo;
@@ -122,6 +135,12 @@ HardwareBuffer *MeshBuilder::getVertexBuffer() {
 /*!
  * \brief
  *   Получает буфер индексов.
+ * 
+ * \return
+ *   Буфер индексов.
+ * 
+ * \sa
+ *   MeshBuilder::getVertexBuffer()
  */
 HardwareBuffer *MeshBuilder::getIndexBuffer() {
 	return _bufferSet.ibo;

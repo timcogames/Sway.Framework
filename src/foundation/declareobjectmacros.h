@@ -4,7 +4,7 @@
 #define DECLARE_OBJECT(TClass, TSuperClass)                                                                                \
 	public:                                                                                                                \
 	typedef TSuperClass Super;                                                                                             \
-	static const sway::foundation::ObjectMetadata *getObjectMetadata()                                                     \
+	static const sway::foundation::ObjectMetadata *getObjectMetadata() {                                                   \
 		static const sway::foundation::ObjectMetadata metadata(#TClass, Super::getObjectMetadata());                       \
 		return &metadata;                                                                                                  \
 	}                                                                                                                      \

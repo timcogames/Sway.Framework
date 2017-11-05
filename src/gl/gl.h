@@ -3,7 +3,11 @@
 
 #include "glprereqs.h"
 
-#include "shaderbuilder.h"
+#include "shadertypes.h"
+#include "shaderpreprocessor.h"
+#include "shaderobject.h"
+#include "shaderprogram.h"
+
 #include "hardwarebuffer.h"
 #include "vertexattribute.h"
 #include "vertexattributebinding.h"

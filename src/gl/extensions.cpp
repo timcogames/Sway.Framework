@@ -1,4 +1,5 @@
 #include "extensions.h"
+#include "extensionsupport.h"
 #include <string.h> // strstr
 
 NAMESPACE_BEGIN(sway)
@@ -22,81 +23,83 @@ PFNGLATTACHOBJECTARBPROC Extensions::glAttachObjectARB = NULL;
 PFNGLLINKPROGRAMARBPROC Extensions::glLinkProgramARB = NULL;
 PFNGLUSEPROGRAMOBJECTARBPROC Extensions::glUseProgramObjectARB = NULL;
 PFNGLGETUNIFORMLOCATIONARBPROC Extensions::glGetUniformLocationARB = NULL;
-PFNGLDELETEPROGRAMSARBPROC Extensions::glDeleteProgramsARB = NULL;
 PFNGLDETACHOBJECTARBPROC Extensions::glDetachObjectARB = NULL;
 PFNGLDELETEOBJECTARBPROC Extensions::glDeleteObjectARB = NULL;
 PFNGLVALIDATEPROGRAMARBPROC Extensions::glValidateProgramARB = NULL;
 PFNGLUNIFORM4FARBPROC Extensions::glUniform4fARB = NULL;
-PFNGLGETPROGRAMIVARBPROC Extensions::glGetProgramivARB = NULL;
-PFNGLGETPROGRAMINFOLOGPROC Extensions::glGetProgramInfoLog = NULL;
-PFNGLGETSHADERIVPROC Extensions::glGetShaderiv = NULL;
-PFNGLGETSHADERINFOLOGPROC Extensions::glGetShaderInfoLog = NULL;
 PFNGLGETOBJECTPARAMETERIVARBPROC Extensions::glGetObjectParameterivARB = NULL;
 PFNGLGETINFOLOGARBPROC Extensions::glGetInfoLogARB = NULL;
 
-PFNGLDISABLEVERTEXATTRIBARRAYARBPROC Extensions::glDisableVertexAttribArrayARB = NULL;
-PFNGLGETATTRIBLOCATIONARBPROC Extensions::glGetAttribLocationARB = NULL;
-PFNGLVERTEXATTRIBPOINTERARBPROC Extensions::glVertexAttribPointerARB = NULL;
-PFNGLENABLEVERTEXATTRIBARRAYARBPROC Extensions::glEnableVertexAttribArrayARB = NULL;	
+PFNGLDELETEPROGRAMSARBPROC Extensions::glDeleteProgramsARB = NULL;
+PFNGLGETPROGRAMIVARBPROC Extensions::glGetProgramivARB = NULL;
 
-b32 Extensions::checkSupport(lpcstr extensions, lpcstr name) {
+PFNGLENABLEVERTEXATTRIBARRAYARBPROC Extensions::glEnableVertexAttribArrayARB = NULL;
+PFNGLDISABLEVERTEXATTRIBARRAYARBPROC Extensions::glDisableVertexAttribArrayARB = NULL;
+PFNGLVERTEXATTRIBPOINTERARBPROC Extensions::glVertexAttribPointerARB = NULL;
+
+PFNGLGETATTRIBLOCATIONARBPROC Extensions::glGetAttribLocationARB = NULL;
+
+bool Extensions::checkSupport(lpcstr extensions, lpcstr name) {
 	if (NOT strstr(extensions, name)) {
-		printf("Extension %s is not supported.", name);
+		printf("Extension %s is not supported.\n", name);
 		return false;
 	}
 
 	return true;
 }
 
-struct ExtensionAvailability {
-	b32 GL_ARB_vertex_buffer_object_supported;
-	b32 GL_ARB_map_buffer_range_available;
-	b32 vertexArrayObject;
-	b32 drawElementsBaseVertex;
-	b32 fragmentProgram;
-};
-
 void Extensions::define() {
-	ExtensionAvailability availability;
+	ExtensionSupport support;
 	lpcstr extensions = (lpcstr) glGetString(GL_EXTENSIONS);
 
-	availability.GL_ARB_vertex_buffer_object_supported = checkSupport(extensions, "GL_ARB_vertex_buffer_object");
-	if (availability.GL_ARB_vertex_buffer_object_supported) {
-		glGenBuffersARB = (PFNGLGENBUFFERSARBPROC) glXGetProcAddressARB((const GLubyte*) "glGenBuffersARB");
-		glBindBufferARB = (PFNGLBINDBUFFERARBPROC) glXGetProcAddressARB((const GLubyte*) "glBindBufferARB");
-		glBufferDataARB = (PFNGLBUFFERDATAARBPROC) glXGetProcAddressARB((const GLubyte*) "glBufferDataARB");
-		glGetBufferParameterivARB = (PFNGLGETBUFFERPARAMETERIVARBPROC) glXGetProcAddressARB((const GLubyte*) "glGetBufferParameterivARB");
-		glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC) glXGetProcAddressARB((const GLubyte*) "glDeleteBuffersARB");
-		glIsBufferARB = (PFNGLISBUFFERARBPROC) glXGetProcAddressARB((const GLubyte*) "glIsBufferARB");
-		glBufferSubDataARB = (PFNGLBUFFERSUBDATAARBPROC) glXGetProcAddressARB((const GLubyte*) "glBufferSubDataARB");
-		glMapBufferARB = (PFNGLMAPBUFFERARBPROC) glXGetProcAddressARB((const GLubyte*) "glMapBufferARB");
-		glUnmapBufferARB = (PFNGLUNMAPBUFFERARBPROC) glXGetProcAddressARB((const GLubyte*) "glUnmapBufferARB");
+	support.GL_ARB_vertex_buffer_object_available = checkSupport(extensions, "GL_ARB_vertex_buffer_object");
+	if (support.GL_ARB_vertex_buffer_object_available) {
+		LOAD_EXTENSION(PFNGLGENBUFFERSARBPROC, glGenBuffersARB);
+		LOAD_EXTENSION(PFNGLBINDBUFFERARBPROC, glBindBufferARB);
+		LOAD_EXTENSION(PFNGLBUFFERDATAARBPROC, glBufferDataARB);
+		LOAD_EXTENSION(PFNGLGETBUFFERPARAMETERIVARBPROC, glGetBufferParameterivARB);
+		LOAD_EXTENSION(PFNGLDELETEBUFFERSARBPROC, glDeleteBuffersARB);
+		LOAD_EXTENSION(PFNGLISBUFFERARBPROC, glIsBufferARB);
+		LOAD_EXTENSION(PFNGLBUFFERSUBDATAARBPROC, glBufferSubDataARB);
+		LOAD_EXTENSION(PFNGLMAPBUFFERARBPROC, glMapBufferARB);
+		LOAD_EXTENSION(PFNGLUNMAPBUFFERARBPROC, glUnmapBufferARB);
 	}
 
-	glCreateProgramObjectARB = (PFNGLCREATEPROGRAMOBJECTARBPROC) glXGetProcAddressARB((const GLubyte*) "glCreateProgramObjectARB");
-	glCreateShaderObjectARB = (PFNGLCREATESHADEROBJECTARBPROC) glXGetProcAddressARB((const GLubyte*) "glCreateShaderObjectARB");
-	glShaderSourceARB = (PFNGLSHADERSOURCEARBPROC) glXGetProcAddressARB((const GLubyte*) "glShaderSourceARB");
-	glCompileShaderARB = (PFNGLCOMPILESHADERARBPROC) glXGetProcAddressARB((const GLubyte*) "glCompileShaderARB");
-	glAttachObjectARB = (PFNGLATTACHOBJECTARBPROC) glXGetProcAddressARB((const GLubyte*) "glAttachObjectARB");
-	glLinkProgramARB = (PFNGLLINKPROGRAMARBPROC) glXGetProcAddressARB((const GLubyte*) "glLinkProgramARB");
-	glUseProgramObjectARB = (PFNGLUSEPROGRAMOBJECTARBPROC) glXGetProcAddressARB((const GLubyte*) "glUseProgramObjectARB");
-	glGetUniformLocationARB = (PFNGLGETUNIFORMLOCATIONARBPROC) glXGetProcAddressARB((const GLubyte*) "glGetUniformLocationARB");
-	glDeleteProgramsARB = (PFNGLDELETEPROGRAMSARBPROC) glXGetProcAddressARB((const GLubyte*) "glDeleteProgramsARB");
-	glDetachObjectARB = (PFNGLDETACHOBJECTARBPROC) glXGetProcAddressARB((const GLubyte*) "glDetachObjectARB");
-	glDeleteObjectARB = (PFNGLDELETEOBJECTARBPROC) glXGetProcAddressARB((const GLubyte*) "glDeleteObjectARB");
-	glValidateProgramARB = (PFNGLVALIDATEPROGRAMARBPROC) glXGetProcAddressARB((const GLubyte*) "glValidateProgramARB");
-	glUniform4fARB = (PFNGLUNIFORM4FARBPROC) glXGetProcAddressARB((const GLubyte*) "glUniform4fARB");
-	glGetProgramivARB = (PFNGLGETPROGRAMIVARBPROC) glXGetProcAddressARB((const GLubyte*) "glGetProgramivARB");
-	glGetProgramInfoLog = (PFNGLGETPROGRAMINFOLOGPROC) glXGetProcAddressARB((const GLubyte*) "glGetProgramInfoLog");
-	glGetShaderiv = (PFNGLGETSHADERIVPROC) glXGetProcAddressARB((const GLubyte*) "glGetShaderiv");
-	glGetShaderInfoLog = (PFNGLGETSHADERINFOLOGPROC) glXGetProcAddressARB((const GLubyte*) "glGetShaderInfoLog");
-	glGetObjectParameterivARB = (PFNGLGETOBJECTPARAMETERIVARBPROC) glXGetProcAddressARB((const GLubyte*) "glGetObjectParameterivARB");
-	glGetInfoLogARB = (PFNGLGETINFOLOGARBPROC) glXGetProcAddressARB((const GLubyte*) "glGetInfoLogARB");
+	support.GL_ARB_shader_objects_available = checkSupport(extensions, "GL_ARB_shader_objects");
+	if (support.GL_ARB_shader_objects_available) {
+		LOAD_EXTENSION(PFNGLCREATEPROGRAMOBJECTARBPROC, glCreateProgramObjectARB);
+		LOAD_EXTENSION(PFNGLCREATESHADEROBJECTARBPROC, glCreateShaderObjectARB);
+		LOAD_EXTENSION(PFNGLSHADERSOURCEARBPROC, glShaderSourceARB);
+		LOAD_EXTENSION(PFNGLCOMPILESHADERARBPROC, glCompileShaderARB);
+		LOAD_EXTENSION(PFNGLATTACHOBJECTARBPROC, glAttachObjectARB);
+		LOAD_EXTENSION(PFNGLLINKPROGRAMARBPROC, glLinkProgramARB);
+		LOAD_EXTENSION(PFNGLUSEPROGRAMOBJECTARBPROC, glUseProgramObjectARB);
+		LOAD_EXTENSION(PFNGLGETUNIFORMLOCATIONARBPROC, glGetUniformLocationARB);
+		LOAD_EXTENSION(PFNGLDETACHOBJECTARBPROC, glDetachObjectARB);
+		LOAD_EXTENSION(PFNGLDELETEOBJECTARBPROC, glDeleteObjectARB);
+		LOAD_EXTENSION(PFNGLVALIDATEPROGRAMARBPROC, glValidateProgramARB);
+		LOAD_EXTENSION(PFNGLUNIFORM4FARBPROC, glUniform4fARB);
+		LOAD_EXTENSION(PFNGLGETOBJECTPARAMETERIVARBPROC, glGetObjectParameterivARB);
+		LOAD_EXTENSION(PFNGLGETINFOLOGARBPROC, glGetInfoLogARB);
+	}
 
-	glDisableVertexAttribArrayARB = (PFNGLDISABLEVERTEXATTRIBARRAYARBPROC) glXGetProcAddressARB((const GLubyte*) "glDisableVertexAttribArrayARB");
-	glGetAttribLocationARB = (PFNGLGETATTRIBLOCATIONARBPROC) glXGetProcAddressARB((const GLubyte*) "glGetAttribLocationARB");
-	glVertexAttribPointerARB = (PFNGLVERTEXATTRIBPOINTERARBPROC) glXGetProcAddressARB((const GLubyte*) "glVertexAttribPointerARB");
-	glEnableVertexAttribArrayARB = (PFNGLENABLEVERTEXATTRIBARRAYARBPROC) glXGetProcAddressARB((const GLubyte*) "glEnableVertexAttribArrayARB");
+	support.GL_ARB_fragment_program_available = checkSupport(extensions, "GL_ARB_fragment_program");
+	if (support.GL_ARB_fragment_program_available) {
+		LOAD_EXTENSION(PFNGLDELETEPROGRAMSARBPROC, glDeleteProgramsARB);
+		LOAD_EXTENSION(PFNGLGETPROGRAMIVARBPROC, glGetProgramivARB);
+	}
+
+	support.GL_ARB_vertex_program_available = checkSupport(extensions, "GL_ARB_vertex_program");
+	if (support.GL_ARB_vertex_program_available) {
+		LOAD_EXTENSION(PFNGLENABLEVERTEXATTRIBARRAYARBPROC, glEnableVertexAttribArrayARB);
+		LOAD_EXTENSION(PFNGLDISABLEVERTEXATTRIBARRAYARBPROC, glDisableVertexAttribArrayARB);
+		LOAD_EXTENSION(PFNGLVERTEXATTRIBPOINTERARBPROC, glVertexAttribPointerARB);
+	}
+
+	support.GL_ARB_vertex_shader_available = checkSupport(extensions, "GL_ARB_vertex_shader");
+	if (support.GL_ARB_vertex_shader_available) {
+		LOAD_EXTENSION(PFNGLGETATTRIBLOCATIONARBPROC, glGetAttribLocationARB);
+	}
 }
 
 NAMESPACE_END(gl)

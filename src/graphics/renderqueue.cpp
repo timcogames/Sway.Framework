@@ -33,7 +33,7 @@ RenderQueue::~RenderQueue() {
  * \param[in] subqueue
  *   Указатель на обьект класса подочереди, которой следует добавить в контейнер.
  */
-void RenderQueue::addSubqueue(const RenderSubqueuePtr &subqueue) {
+void RenderQueue::addSubqueue(const RenderSubqueueRef_t &subqueue) {
 	u32 groupIndex = subqueue->getGroupIdx();
 	if (groupIndex > RENDER_SUBQUEUE_GROUP_COUNT)
 		std::invalid_argument("groupIndex");
@@ -48,7 +48,7 @@ void RenderQueue::addSubqueue(const RenderSubqueuePtr &subqueue) {
  * \param[in] subqueue
  *   Указатель на обьект класса подочереди, которой следует удалить из контейнера.
  */
-void RenderQueue::removeSubqueue(const RenderSubqueuePtr &subqueue) {
+void RenderQueue::removeSubqueue(const RenderSubqueueRef_t &subqueue) {
 	u32 groupIndex = subqueue->getGroupIdx();
 	if (groupIndex > RENDER_SUBQUEUE_GROUP_COUNT)
 		std::invalid_argument("groupIndex");
@@ -63,7 +63,7 @@ void RenderQueue::removeSubqueue(const RenderSubqueuePtr &subqueue) {
  * \param[in] groupIdx
  *   Индекс группы.
  */
-RenderSubqueueVec &RenderQueue::getSubqueueGroupByIdx(u32 groupIdx) {
+RenderSubqueueRefVector_t &RenderQueue::getSubqueueGroupByIdx(u32 groupIdx) {
 	return _subqueues[groupIdx];
 }
 

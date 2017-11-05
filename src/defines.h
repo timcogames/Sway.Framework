@@ -1,29 +1,25 @@
 #ifndef SWAY_DEFINES_H
 #define SWAY_DEFINES_H
 
+/*!
+ * \brief
+ *   Логическая операция ИЛИ.
+ */
 #define OR  ||
+
+/*!
+ * \brief
+ *   Логическая операция И.
+ */
 #define AND &&
+
+/*!
+ * \brief
+ *   Логическая операция НЕ.
+ */
 #define NOT !
 
 #define DONT_CARE -1
-
-/*!
- * \brief
- *   Статус успеха.
- * 
- * \sa
- *   FAILURE_STATUS
- */
-#define SUCCESS_STATUS 0
-
-/*!
- * \brief
- *   Статус отказа.
- * 
- * \sa
- *   SUCCESS_STATUS
- */
-#define FAILURE_STATUS 1
 
 /*!
  * \brief

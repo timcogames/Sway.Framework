@@ -1,6 +1,4 @@
 #include "vertexdeclaration.h"
-#include "datatypeinfo.h"
-#include <algorithm> // std::find_if
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
@@ -15,7 +13,7 @@ VertexDeclaration::VertexDeclaration(VertexElementContainer_t elements)
 	: _elements(elements)
 	, _totalSize(0) {
 	for (auto element : elements)
-		_totalSize += DataTypeInfo::getElementSize(element.dataType);
+		_totalSize += TypeInfo::getElementSize(element.dataType);
 }
 
 /*!

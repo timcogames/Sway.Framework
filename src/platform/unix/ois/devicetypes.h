@@ -7,9 +7,6 @@ NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(ois)
 
 /*!
- * \enum
- *   DeviceTypes
- * 
  * \brief
  *   Перечисление типов устройств ввода.
  */

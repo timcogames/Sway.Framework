@@ -1,17 +1,20 @@
 #ifndef SWAY_GL_HARDWAREBUFFER_H
 #define SWAY_GL_HARDWAREBUFFER_H
 
+#include "resource.h"
 #include "hardwarebufferdescription.h"
 #include "hardwarebuffertargets.h"
 #include "primitivetopologies.h"
-#include "datatypeinfo.h"
-
 #include "glprereqs.h"
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
-class HardwareBuffer {
+/*!
+ * \brief
+ *   Представление аппаратного буфера.
+ */
+class HardwareBuffer : public Resource {
 public:
 	static GLenum getGLTarget(u32 target);
 
@@ -33,7 +36,7 @@ public:
 	 *
 	 *   Освобождает захваченные ресурсы.
 	 */
-	~HardwareBuffer();
+	virtual ~HardwareBuffer();
 
 	/*!
 	 * \brief
@@ -42,7 +45,7 @@ public:
 	 * \param[in] data
 	 *   Первоначальный данные.
 	 */
-	b32 allocate(const void *data);
+	bool allocate(const void *data);
 
 	/*!
 	 * \brief
@@ -56,6 +59,9 @@ public:
 	 * 
 	 * \param[in] source
 	 *   Область памяти, содержащая новые значения.
+	 * 
+	 * \sa
+	 *   HardwareBuffer::updateSubdata(const void *)
 	 */
 	void updateSubdata(u32 offset, u32 size, const void *source);
 
@@ -65,6 +71,9 @@ public:
 	 * 
 	 * \param[in] source
 	 *   Область памяти, содержащая новые значения.
+	 * 
+	 * \sa
+	 *   HardwareBuffer::updateSubdata(u32, u32, const void *)
 	 */
 	void updateSubdata(const void *source);
 
@@ -75,20 +84,20 @@ public:
 	/*!
 	 * \brief
 	 *   Делает буфер текущим.
+	 * 
+	 * \sa
+	 *   HardwareBuffer::unbind()
 	 */
 	void bind();
 
 	/*!
 	 * \brief
 	 *   Делает текущим пустой буфер.
+	 * 
+	 * \sa
+	 *   HardwareBuffer::bind()
 	 */
 	void unbind();
-
-	/*!
-	 * \brief
-	 *   Получает дескриптор буфера.
-	 */
-	HardwareBufferHandle_t getBufferHandle() const;
 
 	/*!
 	 * \brief
@@ -168,11 +177,13 @@ public:
 	/*!
 	 * \brief
 	 *   Получает тип данных.
+	 * 
+	 * \return
+	 *   Тип данных.
 	 */
 	u32 getDataType() const;
 
 private:
-	HardwareBufferHandle_t _bufferHandle; /*!< Идентификатор буфера. */
 	s32 _allocedSize;
 	u32 _target;
 	u32 _usage;

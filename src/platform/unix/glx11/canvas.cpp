@@ -398,7 +398,7 @@ void Canvas::hide() {
 
 /*!
  * \brief
- *   Получает Boolean значение видимости окна.
+ *   Получает значение видимости окна.
  *
  * \sa
  *   Canvas::show()
@@ -407,7 +407,7 @@ void Canvas::hide() {
 bool Canvas::visible() const {
 	XWindowAttributes attrs;
 	XGetWindowAttributes(_internalData.xDisplay, _internalData.xWindow, &attrs);
-	return attrs.map_state == IsViewable;
+	return (attrs.map_state == IsViewable);
 }
 
 /*!
