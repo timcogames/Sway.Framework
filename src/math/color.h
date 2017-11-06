@@ -74,9 +74,9 @@ public:
 	 *   Получает значение канала красного цвета.
 	 *
 	 * \sa
-	 *   TRect::getG() const
-	 *   TRect::getB() const
-	 *   TRect::getA() const
+	 *   getG() const
+	 *   getB() const
+	 *   getA() const
 	 */
 	type_t getR() const {
 		return _r;
@@ -87,9 +87,9 @@ public:
 	 *   Получает значение канала зеленого цвета.
 	 *
 	 * \sa
-	 *   TRect::getR() const
-	 *   TRect::getB() const
-	 *   TRect::getA() const
+	 *   getR() const
+	 *   getB() const
+	 *   getA() const
 	 */
 	type_t getG() const {
 		return _g;
@@ -100,9 +100,9 @@ public:
 	 *   Получает значение канала синего цвета.
 	 *
 	 * \sa
-	 *   TRect::getR() const
-	 *   TRect::getG() const
-	 *   TRect::getA() const
+	 *   getR() const
+	 *   getG() const
+	 *   getA() const
 	 */
 	type_t getB() const {
 		return _b;
@@ -113,9 +113,9 @@ public:
 	 *   Получает значение альфа-канала.
 	 *
 	 * \sa
-	 *   TRect::getR() const
-	 *   TRect::getG() const
-	 *   TRect::getB() const
+	 *   getR() const
+	 *   getG() const
+	 *   getB() const
 	 */
 	type_t getA() const {
 		return _a;

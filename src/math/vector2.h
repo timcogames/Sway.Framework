@@ -1,5 +1,5 @@
-#ifndef SWAY_MATH_VECTOR4_H
-#define SWAY_MATH_VECTOR4_H
+#ifndef SWAY_MATH_VECTOR2_H
+#define SWAY_MATH_VECTOR2_H
 
 #include "mathprereqs.h"
 
@@ -11,7 +11,7 @@ NAMESPACE_BEGIN(math)
  *   Шаблонный класс представления вектора из четырех компонентов.
  */
 template<typename type_t>
-class TVector4 final {
+class TVector2 final {
 public:
 	/*!
 	 * \brief 
@@ -19,8 +19,8 @@ public:
 	 *
 	 *   Выполняет инициализацию нового экземпляра класса.
 	 */
-	TVector4() {
-		_x = _y = _z = _w = (type_t)0;
+	TVector2() {
+		_x = _y = (type_t)0;
 	}
 
 	/*!
@@ -34,15 +34,9 @@ public:
 	 * 
 	 * \param[in] y
 	 *   Компонент Y вектора.
-	 * 
-	 * \param[in] z
-	 *   Компонент Z вектора.
-	 * 
-	 * \param[in] w
-	 *   Компонент W вектора.
 	 */
-	explicit TVector4(type_t x, type_t y, type_t z, type_t w) {
-		set(x, y, z, w);
+	explicit TVector2(type_t x, type_t y) {
+		set(x, y);
 	}
 
 	/*!
@@ -54,18 +48,10 @@ public:
 	 * 
 	 * \param[in] y
 	 *   Значение Y компонента.
-	 * 
-	 * \param[in] z
-	 *   Значение Z компонента.
-	 * 
-	 * \param[in] w
-	 *   Значение W компонента.
 	 */
-	void set(type_t x, type_t y, type_t z, type_t w) {
+	void set(type_t x, type_t y) {
 		_x = x;
 		_y = y;
-		_z = z;
-		_w = w;
 	}
 
 	/*!
@@ -74,8 +60,6 @@ public:
 	 *
 	 * \sa
 	 *   getY() const
-	 *   getZ() const
-	 *   getW() const
 	 */
 	type_t getX() const {
 		return _x;
@@ -87,44 +71,16 @@ public:
 	 *
 	 * \sa
 	 *   getX() const
-	 *   getZ() const
-	 *   getW() const
 	 */
 	type_t getY() const {
 		return _y;
 	}
 
-	/*!
-	 * \brief
-	 *   Получает значение Z компонента.
-	 *
-	 * \sa
-	 *   getX() const
-	 *   getY() const
-	 *   getW() const
-	 */
-	type_t getZ() const {
-		return _z;
-	}
-
-	/*!
-	 * \brief
-	 *   Получает значение W компонента.
-	 *
-	 * \sa
-	 *   getX() const
-	 *   getY() const
-	 *   getZ() const
-	 */
-	type_t getW() const {
-		return _w;
-	}
-
 private:
-	type_t _x, _y, _z, _w;
+	type_t _x, _y;
 };
 
 NAMESPACE_END(math)
 NAMESPACE_END(sway)
 
-#endif // SWAY_MATH_VECTOR4_H
+#endif // SWAY_MATH_VECTOR2_H

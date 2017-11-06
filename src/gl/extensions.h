@@ -1,6 +1,7 @@
 #ifndef SWAY_GL_EXTENSIONS_H
 #define SWAY_GL_EXTENSIONS_H
 
+#include "extensionsupport.h"
 #include "glprereqs.h"
 
 NAMESPACE_BEGIN(sway)
@@ -42,8 +43,10 @@ public:
 	
 	static PFNGLGETATTRIBLOCATIONARBPROC glGetAttribLocationARB;
 
+	static PFNGLACTIVETEXTUREARBPROC glActiveTextureARB;
+
 	static bool checkSupport(lpcstr extensions, lpcstr name);
-	static void define();
+	static ExtensionSupport define();
 };
 
 NAMESPACE_END(gl)

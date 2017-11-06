@@ -1,5 +1,7 @@
 #include "shaderprogram.h"
+#include "shaderexception.h"
 #include "extensions.h"
+#include <exception>
 #include <string.h>
 
 NAMESPACE_BEGIN(sway)
@@ -76,10 +78,12 @@ void ShaderProgram::detach(ShaderObject *shader) {
  */
 void ShaderProgram::link() {
 	Extensions::glLinkProgramARB(_resourceHandle);
-	_linked = _checkStatus(_resourceHandle, GL_OBJECT_LINK_STATUS_ARB);
-	if (NOT _linked) {
-		throw std::runtime_error("Fails to link shaders.");
-	}
+
+	int linkStatus;
+	Extensions::glGetObjectParameterivARB(_resourceHandle, GL_OBJECT_LINK_STATUS_ARB, &linkStatus);
+	_linked = (linkStatus == GL_TRUE);
+	if (NOT _linked)
+		throw ShaderLinkageException(ShaderUtils::getErrorInfo(_resourceHandle));
 }
 
 bool ShaderProgram::isLinked() const {
@@ -92,10 +96,12 @@ bool ShaderProgram::isLinked() const {
  */
 void ShaderProgram::validate() {
 	Extensions::glValidateProgramARB(_resourceHandle);
-	_validated = _checkStatus(_resourceHandle, GL_OBJECT_VALIDATE_STATUS_ARB);
-	if (NOT _validated) {
-		// Empty
-	}
+	
+	int validateStatus;
+	Extensions::glGetObjectParameterivARB(_resourceHandle, GL_OBJECT_VALIDATE_STATUS_ARB, &validateStatus);
+	_validated = (validateStatus == GL_TRUE);
+	if (NOT _validated)
+		throw ShaderValidationException(ShaderUtils::getErrorInfo(_resourceHandle));
 }
 
 bool ShaderProgram::isValidated() const {
@@ -129,25 +135,6 @@ void ShaderProgram::setUniformVector4(const std::string &uniform, const math::TV
 
 void ShaderProgram::setUniformColor(const std::string &uniform, const math::TColor<f32> &color) {
 	_uniformVec4fSets[uniform] = color.toVec4();
-}
-
-bool ShaderProgram::_checkStatus(ResourceHandle_t shader, u32 name) {
-	int status = 0, length = 0;
-
-	Extensions::glGetObjectParameterivARB(shader, name, &status);
-	if (NOT status) {
-		Extensions::glGetObjectParameterivARB(shader, GL_OBJECT_INFO_LOG_LENGTH_ARB, &length);
-		if (length > 1) {
-			lpstr info = (lpstr) malloc(length);
-			Extensions::glGetInfoLogARB(shader, length, NULL, info);
-			std::cerr << "Failed:\n" << info << std::endl;
-			free(info);
-		}
-
-		return false;
-	}
-
-	return true;
 }
 
 NAMESPACE_END(gl)

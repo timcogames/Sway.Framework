@@ -1,5 +1,4 @@
 #include "extensions.h"
-#include "extensionsupport.h"
 #include <string.h> // strstr
 
 NAMESPACE_BEGIN(sway)
@@ -39,6 +38,8 @@ PFNGLVERTEXATTRIBPOINTERARBPROC Extensions::glVertexAttribPointerARB = NULL;
 
 PFNGLGETATTRIBLOCATIONARBPROC Extensions::glGetAttribLocationARB = NULL;
 
+PFNGLACTIVETEXTUREARBPROC Extensions::glActiveTextureARB = NULL;
+
 bool Extensions::checkSupport(lpcstr extensions, lpcstr name) {
 	if (NOT strstr(extensions, name)) {
 		printf("Extension %s is not supported.\n", name);
@@ -48,7 +49,7 @@ bool Extensions::checkSupport(lpcstr extensions, lpcstr name) {
 	return true;
 }
 
-void Extensions::define() {
+ExtensionSupport Extensions::define() {
 	ExtensionSupport support;
 	lpcstr extensions = (lpcstr) glGetString(GL_EXTENSIONS);
 
@@ -100,6 +101,14 @@ void Extensions::define() {
 	if (support.GL_ARB_vertex_shader_available) {
 		LOAD_EXTENSION(PFNGLGETATTRIBLOCATIONARBPROC, glGetAttribLocationARB);
 	}
+
+
+	support.GL_ARB_multitexture_available = checkSupport(extensions, "GL_ARB_multitexture");
+	if (support.GL_ARB_multitexture_available) {
+		LOAD_EXTENSION(PFNGLACTIVETEXTUREARBPROC, glActiveTextureARB);
+	}
+
+	return support;
 }
 
 NAMESPACE_END(gl)

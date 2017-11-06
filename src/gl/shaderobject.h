@@ -41,7 +41,7 @@ public:
 	 *
 	 *   Освобождает захваченные ресурсы.
 	 */
-	~ShaderObject();
+	virtual ~ShaderObject();
 
 	/*!
 	 * \brief
@@ -62,13 +62,15 @@ public:
 	bool isCompiled() const;
 
 	/*!
-	 * brief
+	 * \brief
 	 *   Получает тип шейдерного объекта.
+	 * 
+	 * \return
+	 *   Тип шейдерного объекта.
 	 */
 	u32 getType() const;
 
-private:
-	bool _checkStatus(ResourceHandle_t shader, u32 name);
+	bool available() const;
 
 private:
 	u32 _type; /*!< Тип шейдера. */

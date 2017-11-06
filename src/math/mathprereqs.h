@@ -11,7 +11,9 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(math)
 
-struct ColorVertex;
+struct VertexPosition;
+struct VertexColor;
+struct VertexTexCoord;
 
 /*!
  * \brief
@@ -33,6 +35,13 @@ class TSize;
  */
 template<typename type>
 class TRect;
+
+/*!
+ * \brief
+ *   Шаблонный класс представления вектора из двух компонентов.
+ */
+template<typename type>
+class TVector2;
 
 /*!
  * \brief

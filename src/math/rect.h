@@ -93,11 +93,11 @@ public:
 	 *   Значение координаты позиции по оси X.
 	 *
 	 * \sa
-	 *   TRect::setT() const
-	 *   TRect::setR() const
-	 *   TRect::setB() const
-	 *   TRect::setW() const
-	 *   TRect::setH() const
+	 *   setT() const
+	 *   setR() const
+	 *   setB() const
+	 *   setW() const
+	 *   setH() const
 	 */
 	void setL(type_t x) {
 		_l = x;
@@ -115,11 +115,11 @@ public:
 	 *   Значение координаты позиции по оси Y.
 	 *
 	 * \sa
-	 *   TRect::setL() const
-	 *   TRect::setR() const
-	 *   TRect::setB() const
-	 *   TRect::setW() const
-	 *   TRect::setH() const
+	 *   setL() const
+	 *   setR() const
+	 *   setB() const
+	 *   setW() const
+	 *   setH() const
 	 */
 	void setT(type_t y) {
 		_t = y;
@@ -150,11 +150,11 @@ public:
 	 *   Получает ширину прямоугольной области.
 	 *
 	 * \sa
-	 *   TRect::getL() const
-	 *   TRect::getT() const
-	 *   TRect::getR() const
-	 *   TRect::getB() const
-	 *   TRect::getH() const
+	 *   getL() const
+	 *   getT() const
+	 *   getR() const
+	 *   getB() const
+	 *   getH() const
 	 */
 	type_t getW() const {
 		return _r - _l;
@@ -165,11 +165,11 @@ public:
 	 *   Получает высоту прямоугольной области.
 	 *
 	 * \sa
-	 *   TRect::getL() const
-	 *   TRect::getT() const
-	 *   TRect::getR() const
-	 *   TRect::getB() const
-	 *   TRect::getW() const
+	 *   getL() const
+	 *   getT() const
+	 *   getR() const
+	 *   getB() const
+	 *   getW() const
 	 */
 	type_t getH() const {
 		return _b - _t;

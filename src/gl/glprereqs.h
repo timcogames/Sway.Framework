@@ -56,6 +56,7 @@ struct HardwareBufferDescription;
 struct HardwareBufferCreateInfo;
 struct VertexAttribute;
 struct VertexElement;
+struct TextureCreateInfo;
 
 class ShaderPreprocessor;
 class ShaderObject;
@@ -63,6 +64,7 @@ class ShaderProgram;
 class HardwareBuffer;
 class VertexAttributeBinding;
 class VertexDeclaration;
+class Texture;
 
 /*!
  * \brief
@@ -74,7 +76,7 @@ typedef u32 ResourceHandle_t;
  * \brief
  *   Недопустимое значение дескриптора.
  */
-static const ResourceHandle_t INVALID_HANDLE = 0;
+static const ResourceHandle_t NULL_HANDLE = 0;
 
 typedef boost::shared_ptr<class ShaderPreprocessor> ShaderPreprocessorRef_t;
 typedef std::unordered_map<std::string, math::TVector4<f32>> UniformVec4fContainer_t;

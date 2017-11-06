@@ -66,8 +66,8 @@ public:
 	 *   Получает значение X компонента.
 	 *
 	 * \sa
-	 *   TRect::getY() const
-	 *   TRect::getZ() const
+	 *   getY() const
+	 *   getZ() const
 	 */
 	type_t getX() const {
 		return _x;
@@ -78,8 +78,8 @@ public:
 	 *   Получает значение Y компонента.
 	 *
 	 * \sa
-	 *   TRect::getX() const
-	 *   TRect::getZ() const
+	 *   getX() const
+	 *   getZ() const
 	 */
 	type_t getY() const {
 		return _y;
@@ -90,8 +90,8 @@ public:
 	 *   Получает значение Z компонента.
 	 *
 	 * \sa
-	 *   TRect::getX() const
-	 *   TRect::getY() const
+	 *   getX() const
+	 *   getY() const
 	 */
 	type_t getZ() const {
 		return _z;

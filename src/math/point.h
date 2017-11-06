@@ -66,7 +66,7 @@ public:
 	 *   Значение координаты по оси X.
 	 *
 	 * \sa 
-	 *   TPoint::setY() const
+	 *   setY() const
 	 */
 	void setX(type_t x) {
 		_x = x;
@@ -77,7 +77,7 @@ public:
 	 *   Получает значение координаты по оси X.
 	 *
 	 * \sa 
-	 *   TPoint::getY() const
+	 *   getY() const
 	 */
 	type_t getX() const {
 		return _x;
@@ -91,7 +91,7 @@ public:
 	 *   Значение координаты по оси Y.
 	 *
 	 * \sa 
-	 *   TPoint::setX() const
+	 *   setX() const
 	 */
 	void setY(type_t y) {
 		_y = y;
@@ -102,7 +102,7 @@ public:
 	 *   Получает значение координаты по оси Y.
 	 *
 	 * \sa 
-	 *   TPoint::getX() const
+	 *   getX() const
 	 */
 	type_t getY() const {
 		return _y;

@@ -1,9 +1,7 @@
 #ifndef SWAY_GL_RESOURCE_H
 #define SWAY_GL_RESOURCE_H
 
-#include "shadertypes.h"
 #include "glprereqs.h"
-#include "exportmacros.h"
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)

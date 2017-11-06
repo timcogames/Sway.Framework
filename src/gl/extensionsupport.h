@@ -13,6 +13,7 @@ struct ExtensionSupport {
 	bool GL_ARB_fragment_program_available;
 	bool GL_ARB_vertex_program_available;
 	bool GL_ARB_vertex_shader_available;
+	bool GL_ARB_multitexture_available;
 };
 
 NAMESPACE_END(gl)

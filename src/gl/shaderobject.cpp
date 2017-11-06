@@ -1,4 +1,6 @@
 #include "shaderobject.h"
+#include "shadertypes.h"
+#include "shaderexception.h"
 #include "extensions.h"
 #include <string.h>
 
@@ -66,11 +68,12 @@ ShaderObject::~ShaderObject() {
 void ShaderObject::compile(lpcstr source) {
 	Extensions::glShaderSourceARB(_resourceHandle, 1, &source, NULL);
 	Extensions::glCompileShaderARB(_resourceHandle);
-
-	_compiled = _checkStatus(_resourceHandle, GL_OBJECT_COMPILE_STATUS_ARB);
-	if (_compiled) {
-		// Empty
-	}
+	
+	int compileStatus;
+	Extensions::glGetObjectParameterivARB(_resourceHandle, GL_OBJECT_COMPILE_STATUS_ARB, &compileStatus);
+	_compiled = (compileStatus == GL_TRUE);
+	if (NOT _compiled)
+		throw ShaderCompilationException(ShaderUtils::getErrorInfo(_resourceHandle));
 }
 
 /*!
@@ -85,32 +88,19 @@ bool ShaderObject::isCompiled() const {
 }
 
 /*!
- * brief
+ * \brief
  *   Получает тип шейдерного объекта.
+ * 
+ * \return
+ *   Тип шейдерного объекта.
  */
 u32 ShaderObject::getType() const {
 	return _type;
 }
 
-//glGetShaderivARB
-//glGetShaderInfoLogARB
-bool ShaderObject::_checkStatus(ResourceHandle_t shader, u32 name) {
-	int status = 0, length = 0;
-
-	Extensions::glGetObjectParameterivARB(shader, name, &status);
-	if (NOT status) {
-		Extensions::glGetObjectParameterivARB(shader, GL_OBJECT_INFO_LOG_LENGTH_ARB, &length);
-		if (length > 1) {
-			lpstr info = (lpstr) malloc(length);
-			Extensions::glGetInfoLogARB(shader, length, NULL, info);
-			std::cerr << "Failed:\n" << info << std::endl;
-			free(info);
-		}
-
-		return false;
-	}
-
-	return true;
+bool ShaderObject::available() const {
+	ExtensionSupport support = Extensions::define();
+	return (support.GL_ARB_shader_objects_available == true);
 }
 
 NAMESPACE_END(gl)

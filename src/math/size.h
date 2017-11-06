@@ -74,7 +74,7 @@ public:
 	 *   Новое значение ширины.
 	 *
 	 * \sa
-	 *   TSize::setH(type_t)
+	 *   setH(type_t)
 	 */
 	void setW(type_t w) {
 		_w = w;
@@ -85,7 +85,7 @@ public:
 	 *   Получает значение ширины.
 	 *
 	 * \sa
-	 *   TSize::getH()
+	 *   getH()
 	 */
 	type_t getW() const {
 		return _w;
@@ -99,7 +99,7 @@ public:
 	 *   Новое значение высоты.
 	 *
 	 * \sa
-	 *   TSize::setW(type_t)
+	 *   setW(type_t)
 	 */
 	void setH(type_t h) {
 		_h = h;
@@ -110,7 +110,7 @@ public:
 	 *   Получает значение высоты.
 	 *
 	 * \sa
-	 *   TSize::getW()
+	 *   getW()
 	 */
 	type_t getH() const {
 		return _h;

@@ -31,7 +31,7 @@ public:
 	 *
 	 *   Освобождает захваченные ресурсы.
 	 */
-	~ShaderProgram();
+	virtual ~ShaderProgram();
 
 	/*!
 	 * \brief
@@ -82,9 +82,6 @@ public:
 	void setUniformVector4(const std::string &uniform, const math::TVector4<f32> &vector4);
 	
 	void setUniformColor(const std::string &uniform, const math::TColor<f32> &color);
-
-private:
-	bool _checkStatus(ResourceHandle_t shader, u32 name);
 
 private:
 	std::set<ShaderObject *> _shaders;
