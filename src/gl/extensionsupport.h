@@ -9,6 +9,7 @@ NAMESPACE_BEGIN(gl)
 
 struct ExtensionSupport {
 	bool GL_ARB_vertex_buffer_object_available;
+	bool GL_ARB_map_buffer_range_available;
 	bool GL_ARB_shader_objects_available;
 	bool GL_ARB_fragment_program_available;
 	bool GL_ARB_vertex_program_available;

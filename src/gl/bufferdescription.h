@@ -1,14 +1,13 @@
-#ifndef SWAY_GL_HARDWAREBUFFERDESCRIPTION_H
-#define SWAY_GL_HARDWAREBUFFERDESCRIPTION_H
+#ifndef SWAY_GL_BUFFERDESCRIPTION_H
+#define SWAY_GL_BUFFERDESCRIPTION_H
 
-#include "hardwarebufferusages.h"
 #include "../defines.h"
 #include "../types.h"
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
-struct HardwareBufferDescription {
+struct BufferDescription {
 	u32 target;
 	u32 usage;
 	s32 byteStride;
@@ -16,12 +15,12 @@ struct HardwareBufferDescription {
 	u32 datatype;   /*!< Тип данных. */
 };
 
-struct HardwareBufferCreateInfo {
-	HardwareBufferDescription description;
+struct BufferCreateInfo {
+	BufferDescription description;
 	const void *data; /*!< Первоначальный данные. */
 };
 
 NAMESPACE_END(gl)
 NAMESPACE_END(sway)
 
-#endif // SWAY_GL_HARDWAREBUFFERDESCRIPTION_H
+#endif // SWAY_GL_BUFFERDESCRIPTION_H

@@ -1,7 +1,7 @@
 #ifndef SWAY_GRAPHICS_RENDERQUEUE_H
 #define SWAY_GRAPHICS_RENDERQUEUE_H
 
-#include "prereqs.h"
+#include "graphicsprereqs.h"
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(graphics)
@@ -22,7 +22,7 @@ public:
 	 *
 	 *   Освобождает захваченные ресурсы.
 	 */
-	virtual ~RenderQueue();
+	~RenderQueue();
 
 	/*!
 	 * \brief
@@ -30,8 +30,11 @@ public:
 	 *
 	 * \param[in] subqueue
 	 *   Указатель на обьект класса подочереди, которой следует добавить в контейнер.
+	 * 
+	 * \sa
+	 *   removeSubqueue(const RenderSubqueueRef_t &)
 	 */
-	virtual void addSubqueue(const RenderSubqueueRef_t &subqueue);
+	void addSubqueue(const RenderSubqueueRef_t &subqueue);
 
 	/*!
 	 * \brief
@@ -39,8 +42,11 @@ public:
 	 *
 	 * \param[in] subqueue
 	 *   Указатель на обьект класса подочереди, которой следует удалить из контейнера.
+	 * 
+	 * \sa
+	 *   addSubqueue(const RenderSubqueueRef_t &)
 	 */
-	virtual void removeSubqueue(const RenderSubqueueRef_t &subqueue);
+	void removeSubqueue(const RenderSubqueueRef_t &subqueue);
 
 	/*!
 	 * \brief
@@ -49,19 +55,25 @@ public:
 	 * \param[in] groupIdx
 	 *   Индекс группы.
 	 */
-	virtual RenderSubqueueRefVector_t &getSubqueueGroupByIdx(u32 groupIdx);
+	RenderSubqueueRefVector_t &getSubqueueGroupByIdx(u32 groupIdx);
 
 	/*!
 	 * \brief
 	 *   Устанавливает значение приоритета.
+	 * 
+	 * \sa
+	 *   getPriority() const
 	 */
-	virtual void setPriority(u32 priority);
+	void setPriority(u32 priority);
 
 	/*!
 	 * \brief
 	 *   Получает значение приоритета.
+	 * 
+	 * \sa
+	 *   setPriority(u32)
 	 */
-	virtual u32 getPriority() const;
+	u32 getPriority() const;
 
 	struct PriorityInDescendingOrder {
 		bool operator()(const RenderQueueRef_t &lhs, const RenderQueueRef_t &rhs) const {

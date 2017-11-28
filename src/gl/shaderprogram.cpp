@@ -32,7 +32,7 @@ ShaderProgram::ShaderProgram()
  *   Освобождает захваченные ресурсы.
  */
 ShaderProgram::~ShaderProgram() {
-	std::for_each(_shaders.begin(), _shaders.end(), std::bind(&ShaderProgram::detach, this, std::placeholders::_1));
+	std::for_each(_shaderHandleSet.begin(), _shaderHandleSet.end(), std::bind(&ShaderProgram::detach, this, std::placeholders::_1));
 	Extensions::glDeleteProgramsARB(1, &_resourceHandle);
 }
 
@@ -44,16 +44,16 @@ ShaderProgram::~ShaderProgram() {
  *   Указатель на связываемый шейдерный объект.
  * 
  * \sa
- *   ShaderProgram::detach(ShaderObject *)
+ *   detach(ResourceHandle_t)
  */
 void ShaderProgram::attach(ShaderObject *shader) {
 	if (NOT shader) {
 		// Empty
 	}
 
-	Extensions::glAttachObjectARB(_resourceHandle, shader->getHandle());
-
-	_shaders.insert(shader);
+	auto result = _shaderHandleSet.insert(shader->getHandle());
+	if (result.second)
+		Extensions::glAttachObjectARB(_resourceHandle, *(result.first));
 }
 
 /*!
@@ -61,15 +61,14 @@ void ShaderProgram::attach(ShaderObject *shader) {
  *   Отсоединяет шейдерный объект от программного объекта.
  * 
  * \param[in] shader
- *   Указатель отвязываемого шейдерного объекта.
+ *   Отвязываемый шейдерный объект.
  * 
  * \sa
- *   ShaderProgram::attach(ShaderObject *)
+ *   attach(ShaderObject *)
  */
-void ShaderProgram::detach(ShaderObject *shader) {
-	Extensions::glDetachObjectARB(_resourceHandle, shader->getHandle());
-
-	_shaders.erase(shader);
+void ShaderProgram::detach(ResourceHandle_t handle) {
+	Extensions::glDetachObjectARB(_resourceHandle, handle);
+	_shaderHandleSet.erase(handle);
 }
 
 /*!

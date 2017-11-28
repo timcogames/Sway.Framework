@@ -1,7 +1,7 @@
 #ifndef SWAY_GRAPHICS_RENDERSUBSYSTEM_H
 #define SWAY_GRAPHICS_RENDERSUBSYSTEM_H
 
-#include "prereqs.h"
+#include "graphicsprereqs.h"
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(graphics)
@@ -22,7 +22,9 @@ public:
 	 *
 	 *   Освобождает захваченные ресурсы.
 	 */
-	virtual ~RenderSubsystem();
+	~RenderSubsystem();
+
+	DrawableRef_t createStaticDrawable(Material *material, bool indexed, const struct DrawableCreateInfo &info, gl::VertexElementContainer_t vertexElements);
 
 	/*!
 	 * \brief
@@ -31,7 +33,7 @@ public:
 	 * \return
 	 *   Умный указатель на объект класса очереди.
 	 */
-	virtual RenderQueueRef_t createQueue();
+	RenderQueueRef_t createQueue();
 
 	/*!
 	 * \brief
@@ -43,25 +45,25 @@ public:
 	 * \return
 	 *   Умный указатель на объект класса очереди.
 	 */
-	virtual RenderQueueRef_t getQueueByIdx(u32 index);
+	RenderQueueRef_t getQueueByIdx(u32 index);
 
 	/*!
 	 * \brief
 	 *   Получает все очереди.
 	 */
-	virtual RenderQueueRefVector_t getQueues();
+	RenderQueueRefVector_t getQueues();
 
 	/*!
 	 * \brief
 	 *   Сортирует очереди по приоритету.
 	 */
-	virtual void sortQueues();
+	void sortQueues();
 
 	/*!
 	 * \brief
 	 *   Метод отрисовки.
 	 */
-	virtual void render();
+	void render();
 
 private:
 	void _renderSubqueues(RenderQueueRef_t queue, u32 group);

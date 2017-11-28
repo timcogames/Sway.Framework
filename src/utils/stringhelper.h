@@ -7,6 +7,9 @@
 #include <cstring> // std::strcmp
 #include <sstream> // std::ostringstream
 #include <vector> // std::vector
+#include <cstdarg> // va_start, va_end, std::va_list
+#include <cstddef> // std::size_t
+#include <stdexcept> // std::runtime_error
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(utils)
@@ -15,6 +18,25 @@ class StringHelper {
 public:
 	static bool empty(lpcstr str) {
 		return NOT str OR NOT str[0];
+	}
+
+	static std::string format(lpcstr const format, ...) {
+		auto temp = std::vector<char>();
+		auto length = std::size_t(63);
+		std::va_list args;
+		while (temp.size() <= length) {
+			temp.resize(length + 1);
+			va_start(args, format);
+			const auto status = std::vsnprintf(temp.data(), temp.size(), format, args);
+			va_end(args);
+
+			if (status < 0)
+				throw std::runtime_error("String formatting error.");
+
+			length = static_cast<std::size_t>(status);
+		}
+
+		return std::string(temp.data(), length);
 	}
 	
 	static bool compare(lpcstr const s1, lpcstr const s2) {

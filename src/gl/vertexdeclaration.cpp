@@ -42,7 +42,7 @@ u32 VertexDeclaration::getTotalSize() const {
 	return _totalSize;
 }
 
-bool VertexDeclaration::hasElement(u32 stream, VertexElementSemantics semantic, u32 dataType) const {
+bool VertexDeclaration::hasElement(u32 stream, u32 semantic, u32 dataType) const {
 	/* Критерий поиска. */
 	auto pred = [stream, semantic, dataType](const VertexElement &element) {
 		return element.stream == stream AND element.semantic == semantic AND element.dataType == dataType;

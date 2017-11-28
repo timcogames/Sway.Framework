@@ -1,22 +1,34 @@
-#include "hardwarebuffer.h"
+#include "bufferobject.h"
+#include "buffertarget.h"
+#include "bufferusage.h"
+#include "bufferaccess.h"
 #include "extensions.h"
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
-GLenum HardwareBuffer::getGLTarget(u32 target) {
+GLenum BufferObject::translateTargetToGLenum(u32 target) {
 	switch (target) {
-	case kHardwareBufferTarget_Array: return GL_ARRAY_BUFFER_ARB;
-	case kHardwareBufferTarget_ElementArray: return GL_ELEMENT_ARRAY_BUFFER_ARB;
+	case kBufferTarget_Array: return GL_ARRAY_BUFFER_ARB;
+	case kBufferTarget_ElementArray: return GL_ELEMENT_ARRAY_BUFFER_ARB;
 	default: return INVALID_TYPE;
 	}
 }
 
-GLenum HardwareBuffer::getGLUsage(u32 usage) {
+GLenum BufferObject::translateUsageToGLenum(u32 usage) {
 	switch (usage) {
-	case kHardwareBufferUsage_Static: return GL_STATIC_DRAW_ARB;
-	case kHardwareBufferUsage_Dynamic: return GL_DYNAMIC_DRAW_ARB;
-	case kHardwareBufferUsage_Stream: return GL_STREAM_DRAW_ARB;
+	case kBufferUsage_Static: return GL_STATIC_DRAW_ARB;
+	case kBufferUsage_Dynamic: return GL_DYNAMIC_DRAW_ARB;
+	case kBufferUsage_Stream: return GL_STREAM_DRAW_ARB;
+	default: return INVALID_TYPE;
+	}
+}
+
+GLenum BufferObject::translateAccessToGLenum(u32 access) {
+	switch (access) {
+	case kBufferAccess_Read: return GL_READ_ONLY_ARB;
+	case kBufferAccess_Write: return GL_WRITE_ONLY_ARB;
+	case kBufferAccess_ReadWrite: return GL_READ_WRITE_ARB;
 	default: return INVALID_TYPE;
 	}
 }
@@ -25,8 +37,8 @@ GLenum HardwareBuffer::getGLUsage(u32 usage) {
  * \brief
  *   Создает аппаратный буфер.
  */
-HardwareBuffer *HardwareBuffer::create(const HardwareBufferCreateInfo &info) {
-	HardwareBuffer *instance = new HardwareBuffer(info.description);
+BufferObject *BufferObject::create(const BufferCreateInfo &info) {
+	BufferObject *instance = new BufferObject(info.description);
 	if (instance->allocate(info.data)) return instance;
 	SAFE_DELETE(instance);
 	return 0;
@@ -38,7 +50,7 @@ HardwareBuffer *HardwareBuffer::create(const HardwareBufferCreateInfo &info) {
  *
  *   Выполняет инициализацию нового экземпляра класса.
  */
-HardwareBuffer::HardwareBuffer(const HardwareBufferDescription &desc)
+BufferObject::BufferObject(const BufferDescription &desc)
 	: _allocedSize(0) {
 
 	setTarget(desc.target);
@@ -57,7 +69,7 @@ HardwareBuffer::HardwareBuffer(const HardwareBufferDescription &desc)
  *
  *   Освобождает захваченные ресурсы.
  */
-HardwareBuffer::~HardwareBuffer() {
+BufferObject::~BufferObject() {
 	/* Удаляет аппаратный буфер. */
 	Extensions::glDeleteBuffersARB(1, &_resourceHandle);
 }
@@ -69,7 +81,7 @@ HardwareBuffer::~HardwareBuffer() {
  * \param[in] data
  *   Первоначальный данные.
  */
-bool HardwareBuffer::allocate(const void *data) {
+bool BufferObject::allocate(const void *data) {
 	s32 dataSize = _capacity * _byteStride;
 
 	Extensions::glBindBufferARB(_target, _resourceHandle);
@@ -96,9 +108,9 @@ bool HardwareBuffer::allocate(const void *data) {
  *   Область памяти, содержащая новые значения.
  * 
  * \sa
- *   HardwareBuffer::updateSubdata(const void *)
+ *   updateSubdata(const void *)
  */
-void HardwareBuffer::updateSubdata(u32 offset, u32 size, const void *source) {
+void BufferObject::updateSubdata(u32 offset, u32 size, const void *source) {
 	if (Extensions::glIsBufferARB(_resourceHandle)) {
 		Extensions::glBindBufferARB(_target, _resourceHandle);
 		Extensions::glBufferSubDataARB(_target, offset, size, source);
@@ -114,13 +126,13 @@ void HardwareBuffer::updateSubdata(u32 offset, u32 size, const void *source) {
  *   Область памяти, содержащая новые значения.
  * 
  * \sa
- *   HardwareBuffer::updateSubdata(u32, u32, const void *)
+ *   updateSubdata(u32, u32, const void *)
  */
-void HardwareBuffer::updateSubdata(const void *source) {
+void BufferObject::updateSubdata(const void *source) {
 	updateSubdata(0, _capacity * _byteStride, source);
 }
 
-void *HardwareBuffer::map() {
+void *BufferObject::map() {
 	Extensions::glBindBufferARB(_target, _resourceHandle);
 	GLvoid *mapped = Extensions::glMapBufferARB(_target, GL_WRITE_ONLY_ARB);
 	if (NOT mapped)
@@ -130,7 +142,7 @@ void *HardwareBuffer::map() {
 	return mapped;
 }
 
-void HardwareBuffer::unmap() {
+void BufferObject::unmap() {
 	Extensions::glBindBufferARB(_target, _resourceHandle);
 	Extensions::glUnmapBufferARB(_target);
 	Extensions::glBindBufferARB(_target, 0);
@@ -141,9 +153,9 @@ void HardwareBuffer::unmap() {
  *   Делает буфер текущим.
  * 
  * \sa
- *   HardwareBuffer::unbind()
+ *   unbind()
  */
-void HardwareBuffer::bind() {
+void BufferObject::bind() {
 	Extensions::glBindBufferARB(_target, _resourceHandle);
 }
 
@@ -152,9 +164,9 @@ void HardwareBuffer::bind() {
  *   Делает текущим пустой буфер.
  * 
  * \sa
- *   HardwareBuffer::bind()
+ *   bind()
  */
-void HardwareBuffer::unbind() {
+void BufferObject::unbind() {
 	Extensions::glBindBufferARB(_target, 0);
 }
 
@@ -162,7 +174,7 @@ void HardwareBuffer::unbind() {
  * \brief
  *   Получает выделенный размер данных.
  */
-u32 HardwareBuffer::getAllocedSize() const {
+u32 BufferObject::getAllocedSize() const {
 	return _allocedSize;
 }
 
@@ -173,18 +185,18 @@ u32 HardwareBuffer::getAllocedSize() const {
  * \param[in] target
  *   Целевой тип буфера.
  */
-void HardwareBuffer::setTarget(u32 target) {
-	_target = getGLTarget(target);
+void BufferObject::setTarget(u32 target) {
+	_target = BufferObject::translateTargetToGLenum(target);
 }
 
 /*!
  * \brief
  *   Получает целевой тип буфера.
  */
-u32 HardwareBuffer::getTarget() const {
+u32 BufferObject::getTarget() const {
 	switch (_target) {
-	case GL_ARRAY_BUFFER_ARB: return kHardwareBufferTarget_Array;
-	case GL_ELEMENT_ARRAY_BUFFER_ARB: return kHardwareBufferTarget_ElementArray;
+	case GL_ARRAY_BUFFER_ARB: return kBufferTarget_Array;
+	case GL_ELEMENT_ARRAY_BUFFER_ARB: return kBufferTarget_ElementArray;
 	default: return INVALID_TYPE;
 	}
 }
@@ -196,19 +208,19 @@ u32 HardwareBuffer::getTarget() const {
  * \param[in] usage
  *   Режим работы.
  */
-void HardwareBuffer::setUsage(u32 usage) {
-	_usage = getGLUsage(usage);
+void BufferObject::setUsage(u32 usage) {
+	_usage = BufferObject::translateUsageToGLenum(usage);
 }
 
 /*!
  * \brief
 *   Получает режим работы с данными.
  */
-u32 HardwareBuffer::getUsage() const {
+u32 BufferObject::getUsage() const {
 	switch (_usage) {
-	case GL_STATIC_DRAW_ARB: return kHardwareBufferUsage_Static;
-	case GL_DYNAMIC_DRAW_ARB: return kHardwareBufferUsage_Dynamic;
-	case GL_STREAM_DRAW_ARB: return kHardwareBufferUsage_Stream;
+	case GL_STATIC_DRAW_ARB: return kBufferUsage_Static;
+	case GL_DYNAMIC_DRAW_ARB: return kBufferUsage_Dynamic;
+	case GL_STREAM_DRAW_ARB: return kBufferUsage_Stream;
 	default: return INVALID_TYPE;
 	}
 }
@@ -220,7 +232,7 @@ u32 HardwareBuffer::getUsage() const {
  * \param[in] capacity
  *   Количество элементов в массиве.
  */
-void HardwareBuffer::setCapacity(s32 capacity) {
+void BufferObject::setCapacity(s32 capacity) {
 	_capacity = capacity;
 }
 
@@ -228,7 +240,7 @@ void HardwareBuffer::setCapacity(s32 capacity) {
  * \brief
  *   Получает количество элементов в массиве.
  */
-s32 HardwareBuffer::getCapacity() const {
+s32 BufferObject::getCapacity() const {
 	return _capacity;
 }
 
@@ -239,7 +251,7 @@ s32 HardwareBuffer::getCapacity() const {
  * \param[in] byteStride
  *   Размер структуры.
  */
-void HardwareBuffer::setByteStride(s32 byteStride) {
+void BufferObject::setByteStride(s32 byteStride) {
 	_byteStride = byteStride;
 }
 
@@ -247,7 +259,7 @@ void HardwareBuffer::setByteStride(s32 byteStride) {
  * \brief
  *   Получает размер структуры данных.
  */
-s32 HardwareBuffer::getByteStride() const {
+s32 BufferObject::getByteStride() const {
 	return _byteStride;
 }
 
@@ -258,7 +270,7 @@ s32 HardwareBuffer::getByteStride() const {
  * \param[in] type
  *   Тип данных.
  */
-void HardwareBuffer::setDataType(u32 type) {
+void BufferObject::setDataType(u32 type) {
 	_datatype = type;
 }
 
@@ -269,7 +281,7 @@ void HardwareBuffer::setDataType(u32 type) {
  * \return
  *   Тип данных.
  */
-u32 HardwareBuffer::getDataType() const {
+u32 BufferObject::getDataType() const {
 	return _datatype;
 }
 

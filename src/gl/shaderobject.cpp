@@ -1,5 +1,5 @@
 #include "shaderobject.h"
-#include "shadertypes.h"
+#include "shadertype.h"
 #include "shaderexception.h"
 #include "extensions.h"
 #include <string.h>
@@ -7,7 +7,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
-GLenum ShaderObject::getGLType(u32 type) {
+GLenum ShaderObject::translateTypeToGLenum(u32 type) {
 	switch (type) {
 	case kShaderType_Vertex: return GL_VERTEX_SHADER_ARB;
 	case kShaderType_Fragment: return GL_FRAGMENT_SHADER_ARB;
@@ -42,7 +42,7 @@ ShaderObject::ShaderObject(const u32 type)
 	: _type(type)
 	, _compiled(false) {
 		
-	_resourceHandle = Extensions::glCreateShaderObjectARB(getGLType(_type));
+	_resourceHandle = Extensions::glCreateShaderObjectARB(ShaderObject::translateTypeToGLenum(_type));
 }
 
 /*!

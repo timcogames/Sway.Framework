@@ -1,10 +1,8 @@
-#ifndef SWAY_GL_HARDWAREBUFFER_H
-#define SWAY_GL_HARDWAREBUFFER_H
+#ifndef SWAY_GL_BUFFEROBJECT_H
+#define SWAY_GL_BUFFEROBJECT_H
 
 #include "resource.h"
-#include "hardwarebufferdescription.h"
-#include "hardwarebuffertargets.h"
-#include "primitivetopologies.h"
+#include "bufferdescription.h"
 #include "glprereqs.h"
 
 NAMESPACE_BEGIN(sway)
@@ -14,13 +12,15 @@ NAMESPACE_BEGIN(gl)
  * \brief
  *   Представление аппаратного буфера.
  */
-class HardwareBuffer : public Resource {
+class BufferObject : public Resource {
 public:
-	static GLenum getGLTarget(u32 target);
+	static GLenum translateTargetToGLenum(u32 target);
 
-	static GLenum getGLUsage(u32 usage);
+	static GLenum translateUsageToGLenum(u32 usage);
 
-	static HardwareBuffer *create(const HardwareBufferCreateInfo &info);
+	static GLenum translateAccessToGLenum(u32 access);
+
+	static BufferObject *create(const BufferCreateInfo &info);
 
 	/*!
 	 * \brief
@@ -28,7 +28,7 @@ public:
 	 *
 	 *   Выполняет инициализацию нового экземпляра класса.
 	 */
-	HardwareBuffer(const HardwareBufferDescription &desc);
+	BufferObject(const BufferDescription &desc);
 
 	/*!
 	 * \brief
@@ -36,7 +36,7 @@ public:
 	 *
 	 *   Освобождает захваченные ресурсы.
 	 */
-	virtual ~HardwareBuffer();
+	virtual ~BufferObject();
 
 	/*!
 	 * \brief
@@ -61,7 +61,7 @@ public:
 	 *   Область памяти, содержащая новые значения.
 	 * 
 	 * \sa
-	 *   HardwareBuffer::updateSubdata(const void *)
+	 *   updateSubdata(const void *)
 	 */
 	void updateSubdata(u32 offset, u32 size, const void *source);
 
@@ -73,7 +73,7 @@ public:
 	 *   Область памяти, содержащая новые значения.
 	 * 
 	 * \sa
-	 *   HardwareBuffer::updateSubdata(u32, u32, const void *)
+	 *   updateSubdata(u32, u32, const void *)
 	 */
 	void updateSubdata(const void *source);
 
@@ -86,7 +86,7 @@ public:
 	 *   Делает буфер текущим.
 	 * 
 	 * \sa
-	 *   HardwareBuffer::unbind()
+	 *   unbind()
 	 */
 	void bind();
 
@@ -95,7 +95,7 @@ public:
 	 *   Делает текущим пустой буфер.
 	 * 
 	 * \sa
-	 *   HardwareBuffer::bind()
+	 *   bind()
 	 */
 	void unbind();
 
@@ -195,4 +195,4 @@ private:
 NAMESPACE_END(gl)
 NAMESPACE_END(sway)
 
-#endif // SWAY_GL_HARDWAREBUFFER_H
+#endif // SWAY_GL_BUFFEROBJECT_H

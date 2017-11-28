@@ -1,7 +1,7 @@
 #ifndef SWAY_GRAPHICS_RENDERSUBQUEUE_H
 #define SWAY_GRAPHICS_RENDERSUBQUEUE_H
 
-#include "prereqs.h"
+#include "graphicsprereqs.h"
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(graphics)
@@ -22,28 +22,43 @@ public:
 	 *
 	 *   Освобождает захваченные ресурсы.
 	 */
-	virtual ~RenderSubqueue();
+	~RenderSubqueue();
+
+	/*!
+	 * \brief
+	 *   Конструктор класса.
+	 *
+	 *   Выполняет инициализацию нового экземпляра класса.
+	 * 
+	 * \param[in] groupIdx
+	 *   Индекс группы.
+	 */
+	explicit RenderSubqueue(u32 groupIdx);
+
+	void addDrawable(DrawableRef_t drawable);
 
 	/*!
 	 * \brief
 	 *   Метод отрисовки.
 	 */
-	virtual void render();
+	void render();
 
 	/*!
 	 * \brief
 	 *   Устанавливает индекс группы.
 	 */
-	virtual void setGroupIdx(u32 groupIdx);
+	void setGroupIdx(u32 groupIdx);
 
 	/*!
 	 * \brief
 	 *   Получает индекс группы.
 	 */
-	virtual u32 getGroupIdx() const;
+	u32 getGroupIdx() const;
 
 private:
 	u32 _group; /*!< Индекс группы подочереди. */
+	DrawableRefVector_t _drawables;
+	gl::BufferDrawCall _drawCall;
 };
 
 NAMESPACE_END(graphics)

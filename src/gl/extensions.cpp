@@ -14,6 +14,8 @@ PFNGLBUFFERSUBDATAARBPROC Extensions::glBufferSubDataARB = NULL;
 PFNGLMAPBUFFERARBPROC Extensions::glMapBufferARB = NULL;
 PFNGLUNMAPBUFFERARBPROC Extensions::glUnmapBufferARB = NULL;
 
+PFNGLMAPBUFFERRANGEPROC Extensions::glMapBufferRange = NULL;
+
 PFNGLCREATEPROGRAMOBJECTARBPROC Extensions::glCreateProgramObjectARB = NULL;
 PFNGLCREATESHADEROBJECTARBPROC Extensions::glCreateShaderObjectARB = NULL;
 PFNGLSHADERSOURCEARBPROC Extensions::glShaderSourceARB = NULL;
@@ -64,6 +66,11 @@ ExtensionSupport Extensions::define() {
 		LOAD_EXTENSION(PFNGLBUFFERSUBDATAARBPROC, glBufferSubDataARB);
 		LOAD_EXTENSION(PFNGLMAPBUFFERARBPROC, glMapBufferARB);
 		LOAD_EXTENSION(PFNGLUNMAPBUFFERARBPROC, glUnmapBufferARB);
+	}
+
+	support.GL_ARB_map_buffer_range_available = checkSupport(extensions, "GL_ARB_map_buffer_range");
+	if (support.GL_ARB_map_buffer_range_available) {
+		LOAD_EXTENSION(PFNGLMAPBUFFERRANGEPROC, glMapBufferRange);
 	}
 
 	support.GL_ARB_shader_objects_available = checkSupport(extensions, "GL_ARB_shader_objects");

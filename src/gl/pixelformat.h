@@ -1,12 +1,12 @@
-#ifndef SWAY_GL_PIXELFORMATS_H
-#define SWAY_GL_PIXELFORMATS_H
+#ifndef SWAY_GL_PIXELFORMAT_H
+#define SWAY_GL_PIXELFORMAT_H
 
 #include "glprereqs.h"
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
-enum PixelFormats {
+enum PixelFormat {
 	kPixelFormat_R       = 0xEAE9,
 	kPixelFormat_R32F    = 0xC561,
 	kPixelFormat_RG      = 0x579C,
@@ -25,4 +25,4 @@ enum PixelFormats {
 NAMESPACE_END(gl)
 NAMESPACE_END(sway)
 
-#endif // SWAY_GL_PIXELFORMATS_H
+#endif // SWAY_GL_PIXELFORMAT_H

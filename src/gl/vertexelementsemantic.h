@@ -1,12 +1,12 @@
-#ifndef SWAY_GL_VERTEXELEMENTSEMANTICS_H
-#define SWAY_GL_VERTEXELEMENTSEMANTICS_H
+#ifndef SWAY_GL_VERTEXELEMENTSEMANTIC_H
+#define SWAY_GL_VERTEXELEMENTSEMANTIC_H
 
 #include "../defines.h"
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
-enum VertexElementSemantics {
+enum VertexElementSemantic {
 	kVertexElementSemantic_Position = 0x0605,
 	kVertexElementSemantic_Color    = 0x3407,
 	kVertexElementSemantic_TexCoord = 0x309F,
@@ -18,4 +18,4 @@ enum VertexElementSemantics {
 NAMESPACE_END(gl)
 NAMESPACE_END(sway)
 
-#endif // SWAY_GL_VERTEXELEMENTSEMANTICS_H
+#endif // SWAY_GL_VERTEXELEMENTSEMANTIC_H

@@ -1,12 +1,12 @@
-#ifndef SWAY_GL_TEXTURETARGETS_H
-#define SWAY_GL_TEXTURETARGETS_H
+#ifndef SWAY_GL_TEXTURETARGET_H
+#define SWAY_GL_TEXTURETARGET_H
 
 #include "glprereqs.h"
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
-enum TextureTargets {
+enum TextureTarget {
 	kTextureTarget_2D                   = 0xF2DF, /*!< Двухмерная текстура. */
 	kTextureTarget_2D_Array             = 0x347E,
 	kTextureTarget_2D_MultiSample       = 0x14F1,
@@ -18,4 +18,4 @@ enum TextureTargets {
 NAMESPACE_END(gl)
 NAMESPACE_END(sway)
 
-#endif // SWAY_GL_TEXTURETARGETS_H
+#endif // SWAY_GL_TEXTURETARGET_H

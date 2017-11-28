@@ -20,7 +20,7 @@ struct ShaderObjectCreateInfo {
  */
 class ShaderObject : public Resource {
 public:
-	static GLenum getGLType(u32 type);
+	static GLenum translateTypeToGLenum(u32 type);
 
 	static ShaderObject *create(const ShaderObjectCreateInfo &createInfo);
 

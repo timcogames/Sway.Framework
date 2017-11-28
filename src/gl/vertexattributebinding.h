@@ -2,7 +2,6 @@
 #define SWAY_GL_VERTEXATTRIBUTEBINDING_H
 
 #include "shaderprogram.h"
-#include "vertexelementsemantics.h"
 #include "vertexattribute.h"
 #include "typeutils.h"
 #include "glprereqs.h"
@@ -48,21 +47,21 @@ public:
 
 	boost::shared_ptr<VertexDeclaration> getVertexDeclaration();
 
-	void setAttributes(VertexAttributeContainer_t attributes);
+	void setAttributes(VertexAttributeUmap_t attributes);
 
-	VertexAttributeContainer_t getAttributes();
+	VertexAttributeUmap_t getAttributes();
 
 	void setMaxVertexAttributes(int maxVertexAttributes);
 
 	int getMaxVertexAttributes();
 
 protected:
-	std::string getAttributeNameBySemantic(VertexElementSemantics semantic) const;
+	std::string getAttributeNameBySemantic(u32 semantic) const;
 
 private:
 	ShaderProgram *_program;
 	boost::shared_ptr<VertexDeclaration> _vertexDeclaration;
-	VertexAttributeContainer_t _attributes;
+	VertexAttributeUmap_t _attributes;
 	int _maxVertexAttributes;
 
 	u32 _vertexLayoutOffset;

@@ -7,7 +7,7 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
-enum ShaderProfiles {
+enum ShaderProfile {
 	kShaderProfile_Core,
 	kShaderProfile_Es
 };

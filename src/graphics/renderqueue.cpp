@@ -1,4 +1,5 @@
 #include "renderqueue.h"
+#include "renderqueuepriority.h"
 #include "rendersubqueue.h"
 
 NAMESPACE_BEGIN(sway)
@@ -32,6 +33,9 @@ RenderQueue::~RenderQueue() {
  *
  * \param[in] subqueue
  *   Указатель на обьект класса подочереди, которой следует добавить в контейнер.
+ * 
+ * \sa
+ *   removeSubqueue(const RenderSubqueueRef_t &)
  */
 void RenderQueue::addSubqueue(const RenderSubqueueRef_t &subqueue) {
 	u32 groupIndex = subqueue->getGroupIdx();
@@ -47,6 +51,9 @@ void RenderQueue::addSubqueue(const RenderSubqueueRef_t &subqueue) {
  *
  * \param[in] subqueue
  *   Указатель на обьект класса подочереди, которой следует удалить из контейнера.
+ * 
+ * \sa
+ *   addSubqueue(const RenderSubqueueRef_t &)
  */
 void RenderQueue::removeSubqueue(const RenderSubqueueRef_t &subqueue) {
 	u32 groupIndex = subqueue->getGroupIdx();
@@ -70,6 +77,9 @@ RenderSubqueueRefVector_t &RenderQueue::getSubqueueGroupByIdx(u32 groupIdx) {
 /*!
  * \brief
  *   Устанавливает значение приоритета.
+ * 
+ * \sa
+ *   getPriority() const
  */
 void RenderQueue::setPriority(u32 priority) {
 	_priority = priority;
@@ -78,6 +88,9 @@ void RenderQueue::setPriority(u32 priority) {
 /*!
  * \brief
  *   Получает значение приоритета.
+ * 
+ * \sa
+ *   setPriority(u32)
  */
 u32 RenderQueue::getPriority() const {
 	return _priority;

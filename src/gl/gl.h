@@ -5,21 +5,22 @@
 
 #include "viewport.h"
 
-#include "shadertypes.h"
+#include "shadertype.h"
 #include "shaderexception.h"
 #include "shaderpreprocessor.h"
 #include "shaderobject.h"
 #include "shaderprogram.h"
 
-#include "hardwarebuffer.h"
+#include "bufferobject.h"
+#include "bufferdrawcall.h"
 #include "vertexattribute.h"
 #include "vertexattributebinding.h"
 #include "vertexdeclaration.h"
-#include "meshbuilder.h"
 
-#include "pixelformats.h"
-#include "texturetargets.h"
+#include "pixelformat.h"
+#include "texturetarget.h"
 #include "texturecreateinfo.h"
-#include "texture.h"
+#include "textureobject.h"
+#include "texturesampler.h"
 
 #endif // SWAY_GL_GL_H

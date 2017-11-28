@@ -26,6 +26,7 @@
 
 #include "../math/math.h"
 #include "../memory/safedeletemacros.h"
+#include "../exception.h"
 #include "../defines.h"
 #include "../types.h"
 
@@ -43,6 +44,7 @@
 #include <boost/make_shared.hpp> // boost::make_shared
 #include <boost/foreach.hpp> // BOOST_FOREACH
 #include <boost/range/adaptor/map.hpp> // boost::adaptors::map_values
+#include <boost/unordered_map.hpp> // boost::unordered_map
 
 #include <GL/gl.h>
 #include <GL/glx.h>
@@ -52,8 +54,8 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
-struct HardwareBufferDescription;
-struct HardwareBufferCreateInfo;
+struct BufferDescription;
+struct BufferCreateInfo;
 struct VertexAttribute;
 struct VertexElement;
 struct TextureCreateInfo;
@@ -61,10 +63,12 @@ struct TextureCreateInfo;
 class ShaderPreprocessor;
 class ShaderObject;
 class ShaderProgram;
-class HardwareBuffer;
+class BufferObject;
+class BufferDrawCall;
 class VertexAttributeBinding;
 class VertexDeclaration;
-class Texture;
+class TextureObject;
+class TextureSampler;
 
 /*!
  * \brief
@@ -79,8 +83,8 @@ typedef u32 ResourceHandle_t;
 static const ResourceHandle_t NULL_HANDLE = 0;
 
 typedef boost::shared_ptr<class ShaderPreprocessor> ShaderPreprocessorRef_t;
-typedef std::unordered_map<std::string, math::TVector4<f32>> UniformVec4fContainer_t;
-typedef std::unordered_map<std::string, VertexAttribute> VertexAttributeContainer_t;
+typedef boost::unordered_map<std::string, math::TVector4<f32>> UniformVec4fUmap_t;
+typedef boost::unordered_map<std::string, VertexAttribute> VertexAttributeUmap_t;
 typedef std::vector<VertexElement> VertexElementContainer_t;
 
 NAMESPACE_END(gl)

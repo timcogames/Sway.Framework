@@ -3,7 +3,7 @@
 
 #include "../math/math.h"
 #include "shaderobject.h"
-#include "shadertypes.h"
+#include "shadertype.h"
 #include "glprereqs.h"
 
 #include <set>
@@ -41,7 +41,7 @@ public:
 	 *   Указатель на связываемый шейдерный объект.
 	 * 
 	 * \sa
-	 *   ShaderProgram::detach(ShaderObject *)
+	 *   detach(ResourceHandle_t)
 	 */
 	void attach(ShaderObject *shader);
 
@@ -49,13 +49,13 @@ public:
 	 * \brief
 	 *   Отсоединяет шейдерный объект от программного объекта.
 	 * 
-	 * \param[in] shader
-	 *   Указатель отвязываемого шейдерного объекта.
+	 * \param[in] handle
+	 *   Отвязываемый шейдерный объект.
 	 * 
 	 * \sa
-	 *   ShaderProgram::attach(ShaderObject *)
+	 *   attach(ShaderObject *)
 	 */
-	void detach(ShaderObject *shader);
+	void detach(ResourceHandle_t handle);
 	
 	/*!
 	 * \brief
@@ -84,12 +84,12 @@ public:
 	void setUniformColor(const std::string &uniform, const math::TColor<f32> &color);
 
 private:
-	std::set<ShaderObject *> _shaders;
+	std::set<u32> _shaderHandleSet;
 
 	bool _linked;
 	bool _validated;
 
-	UniformVec4fContainer_t _uniformVec4fSets;
+	UniformVec4fUmap_t _uniformVec4fSets;
 
 	s32 _numActiveUniforms;
 	s32 _numActiveAttributes;
