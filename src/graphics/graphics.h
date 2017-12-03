@@ -6,6 +6,7 @@
 #include "material.h"
 #include "drawabledescription.h"
 #include "drawable.h"
+#include "staticmesh.h"
 #include "renderqueuepriority.h"
 #include "renderqueue.h"
 #include "rendersubqueuegroup.h"

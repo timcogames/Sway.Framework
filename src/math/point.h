@@ -11,7 +11,7 @@ NAMESPACE_BEGIN(math)
  *   Шаблонный класс представления точки.
  */
 template<typename type_t>
-class TPoint final {
+class TPoint {
 public:
 	/*!
 	 * \brief 
@@ -126,7 +126,7 @@ public:
 		return !operator==(compare);
 	}
 
-private:
+protected:
 	type_t _x, _y;
 };
 

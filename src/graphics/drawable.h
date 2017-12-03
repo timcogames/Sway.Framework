@@ -31,18 +31,36 @@ public:
 
 	void create(const struct DrawableCreateInfo &info, gl::VertexElementContainer_t vertexElements);
 
+	/*!
+	 * \brief 
+	 *   Получает указатель на объект вершинного буфера.
+	 *
+	 * \sa 
+	 *   getIBO()
+	 */
 	gl::BufferObject *getVBO();
 
+	/*!
+	 * \brief 
+	 *   Получает указатель на объект индексного буфера.
+	 *
+	 * \sa 
+	 *   getVBO()
+	 */
 	gl::BufferObject *getIBO();
 
 	gl::VertexAttributeBinding *getVertexAttributeBinding();
 	
+	/*!
+	 * \brief 
+	 *   Получает указатель на материал.
+	 */
 	Material *getMaterial();
 
 	bool hasIndexes() const;
 
 private:
-	std::string _uniqueId;  /*!< Уникальный идентификатор. */
+	std::string _uniqueId; /*!< Уникальный идентификатор. */
 	gl::BufferObject *_vbo; /*!< Объект буфера вершин. */
 	gl::BufferObject *_ibo; /*!< Объект буфера индексов. */
 	gl::VertexAttributeBinding *_vertexAttributeBinding;

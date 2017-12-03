@@ -3,7 +3,6 @@
 #include "renderqueuepriority.h"
 #include "rendersubqueue.h"
 #include "rendersubqueuegroup.h"
-#include "drawable.h"
 
 #include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
@@ -17,7 +16,7 @@ NAMESPACE_BEGIN(graphics)
  *
  *   Выполняет инициализацию нового экземпляра класса.
  */
-RenderSubsystem::RenderSubsystem() {
+RenderSubsystem::RenderSubsystem(foundation::Context *context) : foundation::Object(context) {
 	// Empty
 }
 
@@ -29,13 +28,6 @@ RenderSubsystem::RenderSubsystem() {
  */
 RenderSubsystem::~RenderSubsystem() {
 	_queues.clear();
-}
-
-DrawableRef_t RenderSubsystem::createStaticDrawable(Material *material, bool indexed, const struct DrawableCreateInfo &info, gl::VertexElementContainer_t vertexElements) {
-	auto drawable = boost::make_shared<Drawable>(material, indexed);
-	drawable->create(info, vertexElements);
-	
-	return drawable;
 }
 
 /*!

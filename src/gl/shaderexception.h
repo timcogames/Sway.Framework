@@ -4,24 +4,26 @@
 #include "extensions.h"
 #include "glprereqs.h"
 
+#include <boost/make_unique.hpp> // boost::make_unique
+
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(gl)
 
 class ShaderUtils {
 public:
 	static std::string getErrorInfo(ResourceHandle_t handle) {
-		int maxLength = 0;
-		std::string info;
+		std::string result;
+		GLint logLength;
+		
+		Extensions::glGetObjectParameterivARB(handle, GL_OBJECT_INFO_LOG_LENGTH_ARB, &logLength);
+		if (logLength > 0) {
+			const auto logInfo = boost::make_unique<GLchar[]>(logLength);
+			Extensions::glGetInfoLogARB(handle, logLength, NULL, logInfo.get());
 
-		Extensions::glGetObjectParameterivARB(handle, GL_OBJECT_INFO_LOG_LENGTH_ARB, &maxLength);
-		if (maxLength > 0) {
-			lpstr buf = (lpstr) malloc(maxLength);
-			Extensions::glGetInfoLogARB(handle, maxLength, NULL, buf);
-			info = std::string(buf);
-			free(buf);
+			result = std::string(logInfo.get());
 		}
 
-		return info;
+		return result;
 	}
 };
 

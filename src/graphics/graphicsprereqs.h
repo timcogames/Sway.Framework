@@ -21,6 +21,7 @@ struct DrawableCreateInfo;
 
 class Material;
 class Drawable;
+class StaticMesh;
 class RenderSubqueue;
 class RenderQueue;
 class RenderSubsystem;

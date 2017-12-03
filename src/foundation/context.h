@@ -11,8 +11,8 @@
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(foundation)
 
-typedef std::map<std::string, Object *> ObjectMap;
-typedef std::map<std::string, Object *>::const_iterator ObjectMapConstIter;
+typedef std::map<std::string, Object *> ObjectMap_t;
+typedef std::map<std::string, Object *>::const_iterator ObjectMapConstIter_t;
 
 class Context {
 public:
@@ -40,7 +40,7 @@ public:
 	 *   Указатель на объект, который следует добавить в контейнер.
 	 * 
 	 * \sa
-	 *   Context::unregisterObject(const std::string &)
+	 *   unregisterObject(const std::string &)
 	 */
 	virtual void registerObject(Object *object);
 
@@ -52,7 +52,7 @@ public:
 	 *   Тип объекта.
 	 * 
 	 * \sa
-	 *   Context::registerObject(Object *)
+	 *   registerObject(Object *)
 	 */
 	virtual void unregisterObject(const std::string &objectType);
 
@@ -72,7 +72,7 @@ public:
 	virtual u32 getObjectCount() const;
 
   private:
-	ObjectMap _objects; /*!< Контейнер объектов. */
+	ObjectMap_t _objects; /*!< Контейнер объектов. */
 };
 
 NAMESPACE_END(foundation)

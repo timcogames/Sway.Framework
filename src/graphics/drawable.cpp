@@ -45,10 +45,24 @@ void Drawable::create(const struct DrawableCreateInfo &info, gl::VertexElementCo
 	_vertexAttributeBinding->mergeLayout();
 }
 
+/*!
+ * \brief 
+ *   Получает указатель на объект вершинного буфера.
+ *
+ * \sa 
+ *   getIBO()
+ */
 gl::BufferObject *Drawable::getVBO() {
 	return _vbo;
 }
 
+/*!
+ * \brief 
+ *   Получает указатель на объект индексного буфера.
+ *
+ * \sa 
+ *   getVBO()
+ */
 gl::BufferObject *Drawable::getIBO() {
 	return _ibo;
 }
@@ -57,6 +71,10 @@ gl::VertexAttributeBinding *Drawable::getVertexAttributeBinding() {
 	return _vertexAttributeBinding;
 }
 
+/*!
+ * \brief 
+ *   Получает указатель на материал.
+ */
 Material *Drawable::getMaterial() {
 	return _material;
 }

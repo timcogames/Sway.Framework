@@ -2,11 +2,16 @@
 #define SWAY_GRAPHICS_RENDERSUBSYSTEM_H
 
 #include "graphicsprereqs.h"
+#include "../foundation/object.h"
+#include "../foundation/context.h"
+#include "../foundation/declareobjectmacros.h"
 
 NAMESPACE_BEGIN(sway)
 NAMESPACE_BEGIN(graphics)
 
-class RenderSubsystem {
+class RenderSubsystem : public foundation::Object {
+	DECLARE_OBJECT(RenderSubsystem, foundation::Object)
+
 public:
 	/*!
 	 * \brief
@@ -14,7 +19,7 @@ public:
 	 *
 	 *   Выполняет инициализацию нового экземпляра класса.
 	 */
-	RenderSubsystem();
+	RenderSubsystem(foundation::Context *context);
 
 	/*!
 	 * \brief
@@ -22,9 +27,7 @@ public:
 	 *
 	 *   Освобождает захваченные ресурсы.
 	 */
-	~RenderSubsystem();
-
-	DrawableRef_t createStaticDrawable(Material *material, bool indexed, const struct DrawableCreateInfo &info, gl::VertexElementContainer_t vertexElements);
+	virtual ~RenderSubsystem();
 
 	/*!
 	 * \brief

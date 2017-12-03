@@ -111,8 +111,11 @@ void ShaderProgram::use() {
 	if (_resourceHandle > 0 AND NOT isUsed()) {
 		Extensions::glUseProgramObjectARB(_resourceHandle);
 
-		for (auto iter : _uniformVec4fSets)
-			Extensions::glUniform4fARB(Extensions::glGetUniformLocationARB(_resourceHandle, iter.first.c_str()), iter.second.getX(), iter.second.getY(), iter.second.getZ(), iter.second.getW());
+		for (auto iter : _uniformVec4fSets) {
+			s32 location = Extensions::glGetUniformLocationARB(_resourceHandle, iter.first.c_str());
+			if (location != -1)
+				Extensions::glUniform4fARB(location, iter.second.getX(), iter.second.getY(), iter.second.getZ(), iter.second.getW());
+		}
 	}
 }
 

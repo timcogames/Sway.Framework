@@ -9,9 +9,7 @@ NAMESPACE_BEGIN(foundation)
  *
  *   Выполняет инициализацию нового экземпляра класса.
  */
-Context::Context() {
-	// Empty
-}
+Context::Context() = default;
 
 /*!
  * \brief
@@ -31,7 +29,7 @@ Context::~Context() {
  *   Указатель на объект, который следует добавить в контейнер.
  * 
  * \sa
- *   Context::unregisterObject(const std::string &)
+ *   unregisterObject(const std::string &)
  */
 void Context::registerObject(Object *object) {
 	if (NOT object)
@@ -48,10 +46,10 @@ void Context::registerObject(Object *object) {
  *   Тип объекта.
  * 
  * \sa
- *   Context::registerObject(Object *)
+ *   registerObject(Object *)
  */
 void Context::unregisterObject(const std::string &objectType) {
-	ObjectMapConstIter iter = _objects.find(objectType);
+	ObjectMapConstIter_t iter = _objects.find(objectType);
 	if (iter != _objects.end())
 		_objects.erase(iter);
 }
@@ -64,7 +62,7 @@ void Context::unregisterObject(const std::string &objectType) {
  *   Тип объекта.
  */
 Object *Context::getObject(const std::string &objectType) const {
-	ObjectMapConstIter iter = _objects.find(objectType);
+	ObjectMapConstIter_t iter = _objects.find(objectType);
 	if (iter != _objects.end())
 		return iter->second;
 
